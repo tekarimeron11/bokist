@@ -1,0 +1,31 @@
+以下の要件定義書をレビューせよ。出力はJSON1つのみ。スキーマは末尾参照。
+これはレビューゲートとして実行されている。blocking が1件でもあれば ok: false とし、修正→再レビューで収束させる前提で指摘せよ。
+これは v1.2（v1.1レビュー指摘の反映後）の再レビュー。
+
+対象ファイル: /Users/koichiro/app-work/bokist/REQUIREMENTS.md
+参考資料:
+- /Users/koichiro/app-work/bokist/research/exam-overview.md
+- /Users/koichiro/app-work/bokist/research/journal-patterns.md
+- /Users/koichiro/app-work/bokist/research/closing-patterns.md
+
+前回 v1.1 レビューでの blocking 6件、v1.2 での対応：
+1. 論点数25 vs 26不整合 → 26で全章統一（R-020「52問×26論点×約2問」、§7.4「26論点」、Q-02「26論点全網羅」、§7.5末尾「52問」、M1「26論点90%網羅」）
+2. topicId 非ASCII (kuriノベ) → keika-kurinobe へ修正、§7.5末尾に命名規則明文化
+3. syllabusVersion/profile 仕様不一致 → 「2027+」を全て「2027」へ、§2.4 isQuestionAvailable 関数の評価ロジック・比較日基準・半開区間 [validFrom, validUntil) を明記
+4. インポート検証フィールド漏れ → §6.5 #3〜#7 で root/app/schemaVersion/exportedAt/meta/progress/settings を逐次検証、各 attempt の全フィールド検証ルール、settings の enum 検証追加
+5. 失敗パス未定義 → §6.5末尾に失敗パス6種を網羅表で明記。スナップショット失敗時は書き込み開始禁止、ロールバック失敗時は安全停止モード
+6. 採点ルール型不整合・borrow誤記 → §6.3 attempts.answer を AccountId に統一、§8.4 を全面書き直し（borrow→debit、AccountId比較）
+
+観点:
+- 上記6件のblockingが本当に解消されているか
+- v1.2で新たな矛盾が生まれていないか
+- §7.5マッピング行数が26行で journal-patterns.md と整合
+- §6.5失敗パスの網羅性
+- §2.4 isQuestionAvailable のエッジケース
+- 数値整合性（52問/26論点/10章）が全章で一貫
+
+スキーマ（このとおり1つのJSONを出力。説明的なテキスト・コードフェンス禁止）:
+ok フィールドは boolean リテラル true もしくは false のいずれか。phase は "diff" 固定。
+issues は配列。各要素は severity（"blocking" or "advisory"）・category（"correctness"/"security"/"perf"/"maintainability"/"testing"/"style"）・file・lines・problem・recommendation。
+
+JSON以外の出力は禁止。Markdownブロック等で囲わずJSONのみを返せ。

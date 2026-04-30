@@ -1,0 +1,99 @@
+あなたは簿記3級学習サイト「Bokist」のコンテンツ作成エージェントです。
+
+## ゴール
+日商簿記3級 第1問（仕訳問題）の練習問題を JSON 形式で **52問** 生成してください。26論点 × 各2問。
+
+出力先: `/Users/koichiro/app-work/bokist/content/journals.json`
+
+## 必読ファイル
+1. `/Users/koichiro/app-work/bokist/REQUIREMENTS.md` の §2.4 シラバス・§7.1 問題JSONスキーマ・§7.5 論点マッピング
+2. `/Users/koichiro/app-work/bokist/research/journal-patterns.md`（26論点の典型例・正解仕訳・難易度）
+3. `/Users/koichiro/app-work/bokist/src/data/accounts.ts`（使える AccountId 一覧 64個）
+4. `/Users/koichiro/app-work/bokist/src/data/chapters.ts`（10章の ChapterId）
+5. `/Users/koichiro/app-work/bokist/src/types/index.ts`（Question 型定義）
+
+## 出力 JSON スキーマ
+```ts
+type Question = {
+  id: string;                       // "Q-shouhin-001" 形式
+  chapter: ChapterId;               // shouhin/genkin/tegata/urikake/kotei/kyuryou/keika/zeikin/shihon/sonota
+  topic: string;                    // 例: "三分法による仕入"
+  topicId: string;                  // §7.5 の topicId 列を厳密に使用（kebab-case ASCII のみ）
+  difficulty: 1 | 2 | 3;
+  frequency: 1 | 2 | 3;
+  syllabusVersion: "2026";          // v1 では全問 "2026"
+  validFrom?: string;
+  validUntil?: string;              // 手形系は "2027-04-01"（YYYY-MM-DD 形式、JST 0:00 として解釈される）
+  prompt: string;                   // 取引文（200字以内、自然な日本語）
+  hint?: string;                    // 1行ヒント
+  answer: {
+    debit: Array<{ account: AccountId, amount: number }>;
+    credit: Array<{ account: AccountId, amount: number }>;
+  };
+  explanation: string;              // 1〜2行の解説（150字以内、初学者向け）
+  tags?: string[];
+};
+```
+
+ファイル全体は以下の形式：
+```json
+{
+  "version": 1,
+  "generatedAt": "2026-05-01T...",
+  "questions": [ Question, Question, ... 52問 ]
+}
+```
+
+## 制約（厳守）
+1. **AccountId は必ず src/data/accounts.ts の id を使用**。新規 ID 生成禁止。読み込みに失敗した場合は accounts.ts を grep して全64個の id を確認してから書き始めること。
+2. **借方合計 = 貸方合計** を必ず満たすこと。
+3. **金額はリアル**（¥1,000 / ¥10,000 / ¥80,000 のような取引で自然な数字）。
+4. **取引主体名は仮名**（A商店・B株式会社・甲社・乙社など）。実在企業名は禁止。
+5. **26論点 × 各2問 = 52問**。論点ごとに「基本問題」と「応用問題」を1問ずつ。
+6. 手形系（topicId が `tegata-yakusoku` など）は `validUntil: "2027-04-01"` を付与（2027改定で廃止予定）。
+7. 解説は「なぜその仕訳になるか」を初学者にも分かる平易な日本語で。
+8. 問題ID は `Q-{chapterId}-{連番3桁}` 形式。chapter 内で連番（例: Q-shouhin-001, Q-shouhin-002, ...）。
+9. **topicId は §7.5 の表のものを厳密にコピー**。誤字・揺れ禁止。
+
+## 26論点リスト（research/journal-patterns.md ＆ REQUIREMENTS.md §7.5 と一致）
+
+| topicId | chapter | topic | 頻出度 | 難易度 | validUntil |
+|---------|---------|-------|--------|--------|-----------|
+| shouhin-sanbunpou-shiire | shouhin | 三分法による仕入 | 3 | 1 | - |
+| shouhin-sanbunpou-uriage | shouhin | 三分法による売上 | 3 | 1 | - |
+| shouhin-henpin           | shouhin | 返品・値引       | 3 | 2 | - |
+| shouhin-credit           | shouhin | クレジット売掛金 | 3 | 2 | - |
+| genkin-kabusoku          | genkin  | 現金過不足       | 3 | 2 | - |
+| genkin-kogucchi          | genkin  | 小口現金         | 3 | 2 | - |
+| genkin-tozakarikoshi     | genkin  | 当座借越         | 2 | 2 | - |
+| tegata-yakusoku          | tegata  | 約束手形         | 3 | 1 | 2027-04-01 |
+| tegata-denshi            | tegata  | 電子記録債権・債務 | 3 | 2 | - |
+| urikake-kessai           | urikake | 売掛・買掛の決済 | 3 | 1 | - |
+| urikake-hikiate-settei   | urikake | 貸倒引当金の設定 | 3 | 2 | - |
+| urikake-hikiate-shiyou   | urikake | 貸倒れの処理     | 3 | 2 | - |
+| kotei-shutoku            | kotei   | 固定資産の取得   | 3 | 1 | - |
+| kotei-genkashoukyaku     | kotei   | 減価償却（定額法）| 3 | 2 | - |
+| kotei-baikyaku           | kotei   | 固定資産の売却   | 3 | 3 | - |
+| kyuryou-kyuryou          | kyuryou | 給料の支払い     | 3 | 2 | - |
+| kyuryou-shahoken-nouhu   | kyuryou | 社会保険料の納付 | 2 | 2 | - |
+| keika-kurinobe           | keika   | 繰延べ（前払・前受）| 3 | 2 | - |
+| keika-mikoshi            | keika   | 見越し（未払・未収）| 3 | 2 | - |
+| zeikin-shouhi            | zeikin  | 消費税（税抜方式）| 3 | 2 | - |
+| zeikin-houjin            | zeikin  | 法人税等         | 2 | 2 | - |
+| shihon-haitou            | shihon  | 繰越利益剰余金・配当 | 2 | 2 | - |
+| shihon-kabushiki         | shihon  | 株式の発行       | 1 | 1 | - |
+| sonota-teisei            | sonota  | 訂正仕訳         | 2 | 3 | - |
+| sonota-shouhinken        | sonota  | 商品券           | 2 | 2 | - |
+| sonota-tatekae           | sonota  | 立替金・仮払金   | 2 | 2 | - |
+
+合計26論点 × 2問 = 52問。
+
+## 進め方
+1. accounts.ts、chapters.ts、journal-patterns.md を読み込む
+2. 26論点それぞれに「基本問題」「応用問題」を作る（合計52問）
+3. 各問について **借方合計 = 貸方合計を電卓で検算**
+4. 各問の AccountId が accounts.ts に存在することを確認
+5. JSON ファイル書き出し
+6. 完了報告に「52問生成完了、各論点の問題数（26×2 = 52 確認）、検算結果（全問借貸一致）、問題IDの章別連番一覧」を含める
+
+精度第一。簿記3級の出題範囲を逸脱しないこと。日本語の自然さ重視。

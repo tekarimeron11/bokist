@@ -1,0 +1,28 @@
+以下の要件定義書をレビューせよ。出力はJSON1つのみ。スキーマは末尾参照。
+これはレビューゲートとして実行されている。blocking が1件でもあれば ok: false とせよ。
+これは v1.3（v1.2レビュー指摘の反映後）の再レビュー。
+
+対象ファイル: /Users/koichiro/app-work/bokist/REQUIREMENTS.md
+参考資料:
+- /Users/koichiro/app-work/bokist/research/exam-overview.md
+- /Users/koichiro/app-work/bokist/research/journal-patterns.md
+- /Users/koichiro/app-work/bokist/research/closing-patterns.md
+
+前回 v1.2 レビューでの blocking 3件 + advisory 1件、v1.3 での対応：
+1. R-023の問題数不整合（+50問/100問 vs +52問/104問） → R-023を「+52問（合計104問、26論点×各4問）」へ修正、Q-03/§7.5/M1と統一
+2. isQuestionAvailable の日付判定がUTC/JST 矛盾 → §2.4 に「parseSyllabusDate 仕様」を新設。`YYYY-MM-DD` は JST 00:00 (+09:00) として明示的に正規化、TZ省略の日時は禁止（Invalid Date 扱い）、Invalid Date は出題候補から除外、半開区間 [from, until) を ms 単位の数値比較で判定。
+3. 失敗パス一覧に「ファイル読込失敗・サイズ超過」が無い → §6.5 検証フェーズ #1 を「1.1 5MB超過」「1.2 FileReader失敗」に分割、失敗パス一覧表に「ファイルサイズ超過」「ファイル読込失敗」「未知 AccountId」を追加、再試行列を追加。
+4. (advisory) attempt の account が既知 AccountId 限定でない → §6.5 検証ルール #6 で「account は §7.2 勘定科目マスタに存在する AccountId のみ許可」と明文化。
+
+観点:
+- 上記 4件が解消されているか
+- v1.3 で新たな矛盾が発生していないか
+- §2.4 parseSyllabusDate 仕様のエッジケース（タイムゾーン無し日時、未知形式、Invalid Date 等）
+- 数値整合性（v1=52問、v1.5=合計104問、26論点、10章）の全章一貫
+- インポート契約・失敗パスの抜け漏れ
+
+スキーマ（このとおり1つのJSONを出力。説明的なテキスト・コードフェンス禁止）:
+ok フィールドは boolean リテラル true もしくは false のいずれか。phase は "diff" 固定。
+issues は配列。各要素は severity（"blocking" or "advisory"）・category（"correctness"/"security"/"perf"/"maintainability"/"testing"/"style"）・file・lines・problem・recommendation。
+
+JSON以外の出力は禁止。Markdownブロック等で囲わずJSONのみを返せ。
