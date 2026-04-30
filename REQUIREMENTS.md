@@ -1,8 +1,8 @@
-# Bokist 要件定義書 v1.4
+# Bokist 要件定義書 v2.0
 
 > 日商簿記3級学習サイト
 > 主人 → 先輩（20代女性）への個人プレゼント
-> 2026-05-01 v1 起草 → v1.1 → v1.2 → v1.3 → v1.4（codex-review v1.3 反映） / Stella
+> 2026-05-01 v1 起草 → v1.1〜v1.4（codex-review 反映）→ v2.0（記事機能追加・Round 2反映） / Stella
 
 ---
 
@@ -114,7 +114,7 @@ function isQuestionAvailable(q: Question, profile: SyllabusProfile, now: Date): 
 | UC-01 | 仕訳ドリルを5問だけサクッとやる | 通学電車の中（2〜3分） |
 | UC-02 | 章を選んで集中的に練習 | 自宅・カフェで腰を据えて |
 | UC-03 | 苦手論点だけ復習 | 試験直前 |
-| UC-04 | 解説を読んで理解する | 間違えた直後・スライド参照 |
+| UC-04 | 関連記事を読んで理解する | 間違えた直後・気になる論点を深掘り |
 | UC-05 | 学習進捗を確認してモチベ維持 | 毎朝の習慣チェック |
 | UC-06 | データをエクスポートしてバックアップ | 端末変更前・週次定期 |
 | UC-07 | バックアップをインポートして復元 | 端末変更後・データ消失時 |
@@ -158,14 +158,21 @@ function isQuestionAvailable(q: Question, profile: SyllabusProfile, now: Date): 
 | R-033 | 週次の学習量（解いた問題数）をバーチャートで可視化する | 必須 |
 | R-034 | 統計値は attempts から動的に集計する。キャッシュは v1 では持たない（パフォーマンス問題が出てから検討） | 必須 |
 
-#### スライド（フェーズ1.5以降）
+#### 解説記事（フェーズ1.5以降）
+学習補助として、初学者向けの**読み物形式の解説記事**を提供する。
+スライドではなく、スマホでスクロール読みできるブログ記事スタイル。
+
 | ID | 要件 | 優先度 |
 |----|------|--------|
-| R-040 | 章ごとに解説スライド（5〜8枚）を提供し、ページめくりUIで閲覧できる | 任意 |
-| R-041 | スライドは Markdown 駆動で軽量自作実装（reveal.js は採用しない、軽量重視） | 任意 |
-| R-042 | スライド表示中、関連する練習問題への遷移リンクを提供する | 任意 |
+| R-040 | 解説記事を `content/articles/*.md` に Markdown で執筆し、ビルド時に HTML 変換する | 必須 |
+| R-041 | 記事はカテゴリ：(a) 試験概要・受験手続き、(b) 合格戦略、(c) 簿記の基本（5分類・借方/貸方）、(d) 各章の要点、(e) よくある落とし穴、(f) 試験前日チェックリスト の6カテゴリで提供 | 必須 |
+| R-042 | 記事一覧画面 / 記事個別画面を提供する | 必須 |
+| R-043 | **問題の結果画面**に、当該問題の `topicId` / `chapterId` で紐付く関連記事へのリンクを表示する（学習動線の中核） | 必須 |
+| R-044 | **記事個別画面**の末尾に、紐付く `topicIds` の練習問題への遷移ボタンを表示する（記事 → 問題への逆動線） | 必須 |
+| R-045 | 記事のサポートライブラリは `marked`（軽量・約20KB）を採用、reveal.js は不採用 | 必須 |
+| R-046 | 記事執筆優先度：M2リリース時は最低 6記事（試験概要・合格戦略・5分類入門・借方貸方の覚え方・10章のうち頻出3章の要点・試験前日チェックリスト）を含める | 必須 |
 
-> **R-040〜R-042 は v1 スコープ外。フェーズ1.5 で先輩フィードバック後に判断**
+> **R-040〜R-046 は v1 スコープ外**。M2（フェーズ1完了）と同時リリース、フェーズ1.5で記事追加。
 
 #### バックアップ・ITP対策
 | ID | 要件 | 優先度 |
@@ -206,7 +213,7 @@ function isQuestionAvailable(q: Question, profile: SyllabusProfile, now: Date): 
 │ 3. 進捗                  │
 │ 4. 設定                  │
 └──────────────────────────┘
-（スライドはフェーズ1.5でドリル内のサブ画面として）
+（記事一覧/個別はフェーズ1.5以降。結果画面 S-04 から関連記事へ遷移）
 ```
 
 | 画面ID | 画面名 | 主機能 |
@@ -214,9 +221,11 @@ function isQuestionAvailable(q: Question, profile: SyllabusProfile, now: Date): 
 | S-01 | ホーム | 連続学習バッジ、今日の進捗、続きから再開、クイックドリル入口、最終バックアップ表示 |
 | S-02 | 章一覧 | 章別の正答率と進捗、章選択 |
 | S-03 | 問題（Quiz） | 取引文表示、勘定科目選択、金額入力、答え合わせ |
-| S-04 | 結果 | 正誤、解説、次の問題へ |
+| S-04 | 結果 | 正誤、解説、関連記事リンク（R-043）、次の問題へ |
 | S-05 | 進捗ダッシュボード | 週次バーチャート、章別正答率、苦手論点リスト |
 | S-06 | 設定 | エクスポート/インポート、学習モード切替、シラバスプロファイル（拡張余地） |
+| S-07 | 記事一覧 | カテゴリ別の記事リスト、検索（フェーズ1.5） |
+| S-08 | 記事個別 | Markdown→HTML レンダリング、末尾に該当 topicId 問題への CTA（R-044） |
 
 ---
 
@@ -499,6 +508,45 @@ const CHAPTERS: Chapter[] = [
 - 識別子は日本語のローマ字表記（ヘボン式または訓令式）。長音は省略（例: `kogucchi`、`shouhin`）。
 - 数字・アンダースコア・非ASCII文字は禁止
 
+### 7.6 記事スキーマ（フェーズ1.5）
+
+```ts
+type ArticleCategory =
+  | "exam-overview"   // (a) 試験概要・受験手続き
+  | "strategy"        // (b) 合格戦略
+  | "basics"          // (c) 簿記の基本
+  | "chapter-guide"   // (d) 各章の要点
+  | "pitfalls"        // (e) よくある落とし穴
+  | "checklist";      // (f) 試験前日チェックリスト
+
+type Article = {
+  slug: string;             // ASCII kebab-case（URLパス）
+  title: string;            // 記事タイトル
+  description?: string;     // 1行サマリ
+  category: ArticleCategory;
+  chapter?: ChapterId;      // 章解説の場合
+  topicIds: string[];       // 紐付ける論点（複数可、配列空でも可）
+  body: string;             // Markdown 本文
+  readingMinutes: number;   // 推定読了時間（分）
+  publishedAt: string;      // ISO8601
+  updatedAt: string;        // ISO8601
+};
+```
+
+### 7.7 記事 ↔ 問題の双方向リンク仕様
+
+**結果画面 (S-04) からの順方向リンク（R-043）**：
+- 解いた問題の `topicId` で `articles` を検索
+- ヒットした記事を最大3件、関連記事として表示（並び順は `updatedAt` 降順）
+- ヒット0件のときは「関連記事は準備中」と表示
+
+**記事画面 (S-08) からの逆方向リンク（R-044）**：
+- 記事の `topicIds` 配列を順に走査
+- 各 topicId に紐付く問題を1問ずつ抽出（同じ問題の重複は除く）
+- 「この記事の例題に挑戦（N問）」ボタンを末尾に表示、タップで問題ドリル開始
+
+紐付けは `topicId` を主キーとする逆引きマップで O(1) アクセス。
+
 ---
 
 ## 8. 出題ロジック
@@ -577,8 +625,8 @@ credit: [{ account: "accounts_payable", amount: 80000 }]
 
 ### 9.6 ホスティング
 - GitHub Pages（無料、HTTPS自動）
-- リポジトリ: `koichiro/bokist`（public）
-- 公開URL: `https://koichiro.github.io/bokist/`
+- リポジトリ: `tekarimeron11/bokist`（public）
+- 公開URL: `https://tekarimeron11.github.io/bokist/`
 
 ---
 
@@ -594,6 +642,7 @@ credit: [{ account: "accounts_payable", amount: 80000 }]
 | ストレージ | localStorage（抽象化レイヤー越し） | 将来 Supabase 移行余地 |
 | PWA | vite-plugin-pwa | manifest + SW |
 | アイコン | 自作SVG / 絵文字 | 軽量重視 |
+| Markdown→HTML | marked（約20KB gzipped） | 記事レンダリング用、フェーズ1.5 |
 
 ---
 
@@ -627,12 +676,12 @@ credit: [{ account: "accounts_payable", amount: 80000 }]
 
 | ID | 項目 | 決定 |
 |----|------|------|
-| Q-01 | スライド機能を v1 に含めるか | **B: 後追加（フェーズ1.5）**。v1 は問題ドリル中心に集中 |
+| Q-01 | スライド機能を v1 に含めるか | **B: 後追加（フェーズ1.5）→ v2.0で解説記事に変更**（§4.1 R-040〜R-046） |
 | Q-02 | 章構成 | **B: 26論点全網羅 = 10章構成**（§7.4） |
 | Q-03 | 問題数 | **v1 は52問、フェーズ1.5 で+52問の段階リリース** |
 | Q-04 | 受験タイミング | **2026年度試験（〜2027年2月）想定**。syllabusVersion で将来対応（§2.3） |
-| Q-05 | リポジトリ公開設定 | **A: public** |
-| Q-06 | スライド実装 | **B: 自作軽量実装**（reveal.js 不採用） |
+| Q-05 | リポジトリ公開設定 | **A: public**（`tekarimeron11/bokist`） |
+| Q-06 | 学習補助コンテンツの実装 | **解説記事（Markdown + marked）**（v2.0で確定） |
 
 ---
 
@@ -654,4 +703,4 @@ credit: [{ account: "accounts_payable", amount: 80000 }]
 | v1.2 | 2026-05-01 | codex-review v1.1 反映：(1)論点数を26に統一（journal-patterns.md整合）、(2)topicId 命名規則明文化＋ASCII違反修正（kuriノベ→kurinobe）、(3)syllabusVersion値を `2026/2027` 単一仕様化＋有効性判定アルゴリズム明記、(4)インポート検証を全フィールド網羅・enum検証強化、(5)失敗パス6種を網羅表で明文化、(6)採点ルールをAccountIdベースに型整合・borrow→debit 修正。 |
 | v1.3 | 2026-05-01 | codex-review v1.2 反映：(1)R-023 の問題数を「+52問（合計104問）」に揃えて Q-03/§7.5 と整合、(2)`parseSyllabusDate` 仕様を新設し YYYY-MM-DD は JST 00:00 へ明示正規化、Invalid Date は出題候補から除外を明記、(3)失敗パス一覧にファイルサイズ超過・ファイル読込失敗・未知 AccountId を追加、再試行方針列を追加、(4)attempt 検証で `account` を勘定科目マスタ既知 AccountId のみ許可と明文化。 |
 | v1.4 | 2026-05-01 | codex-review v1.3 反映：`isQuestionAvailable` 疑似コードに `Number.isNaN(parsed.getTime())` の Invalid Date 判定を明示追加（仕様文と一致）。 |
-| v2.0 | （予定） | Round 2 コンテンツ生成結果を反映。問題ID・解説の最終仕様。 |
+| v2.0 | 2026-05-01 | 主人指示で **スライド機能を解説記事に置換**。R-040〜R-046 を新設し、記事スキーマ（§7.6）・問題↔記事の双方向リンク（§7.7）・marked 採用を要件化。Round 2 コンテンツ生成結果（52問）を反映、リポジトリ名を `tekarimeron11/bokist` に確定。 |

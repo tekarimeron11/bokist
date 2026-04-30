@@ -1,0 +1,51 @@
+以下の要件定義書 v2.0 をレビューせよ。出力はJSON1つのみ。スキーマは末尾参照。
+これはレビューゲートとして実行されている。blocking が1件でもあれば ok: false とせよ。
+
+## 対象ファイル
+/Users/koichiro/app-work/bokist/REQUIREMENTS.md
+/Users/koichiro/app-work/bokist/content/journals.json （Round 2 生成 52問）
+
+## v2.0 で追加された主要変更
+
+### 機能追加（記事機能）
+- §4.1「解説記事（フェーズ1.5以降）」セクション新設、R-040〜R-046 を追加：
+  - R-040 content/articles/*.md で Markdown 記事を提供
+  - R-041 6カテゴリ（試験概要・合格戦略・基本・各章要点・落とし穴・前日チェック）
+  - R-042 記事一覧画面 / 個別画面
+  - R-043 結果画面に関連記事リンク（topicId/chapter で逆引き）
+  - R-044 記事末尾に練習問題への遷移ボタン（topicIds → 問題）
+  - R-045 marked（軽量・約20KB gzipped）採用、reveal.js 不採用
+  - R-046 M2 リリース時に最低6記事
+
+### スキーマ追加
+- §7.6 Article 型定義（slug/title/category/chapter/topicIds/body/readingMinutes/publishedAt/updatedAt）
+- §7.7 記事 ↔ 問題の双方向リンク仕様（topicId 逆引きマップ）
+
+### 画面追加
+- S-07 記事一覧、S-08 記事個別
+- S-04 結果画面に「関連記事」セクション追加
+
+### 確定事項更新
+- Q-01 / Q-06 を「記事化（Markdown + marked）」に変更
+- Q-05 リポジトリ名を `tekarimeron11/bokist` に確定
+
+### Round 2 反映
+- §15 改版履歴に「Round 2 生成結果（52問）反映」と記述
+
+## 観点
+- 記事スキーマと問題スキーマの整合（topicId が両方で同じ意味で使われているか）
+- §7.7 双方向リンクのアルゴリズムが O(1) アクセス保証されているか
+- 記事の存在しない topicId に対する fallback（R-043 「準備中」表示）の妥当性
+- 既存仕様（v1.4 まで）と矛盾していないか
+- M2 リリース時の必須記事6本のスコープ妥当性（過剰でないか）
+- content/journals.json と要件のクロスチェック：
+  - 全 questions が ChapterId enum 10値のいずれかに属しているか
+  - topicId が §7.5 の26種と完全一致しているか
+  - 全 AccountId が src/data/accounts.ts の定義に存在するか
+  - 全問の借方合計 = 貸方合計 か
+- 改版履歴の記述粒度
+
+## スキーマ
+{"ok": boolean, "phase": "diff", "summary": "...", "issues": [{"severity": "blocking"or"advisory", "category": "correctness"等, "file": "...", "lines": "...", "problem": "...", "recommendation": "..."}], "notes_for_next_review": "..."}
+
+JSON以外の出力は禁止。Markdownブロック等で囲わずJSONのみを返せ。

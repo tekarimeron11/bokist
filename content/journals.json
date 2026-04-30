@@ -1,0 +1,953 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-01T09:00:00+09:00",
+  "questions": [
+    {
+      "id": "Q-shouhin-001",
+      "chapter": "shouhin",
+      "topic": "三分法による仕入",
+      "topicId": "shouhin-sanbunpou-shiire",
+      "difficulty": 1,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "A商店から商品¥80,000を仕入れ、代金は掛けとした。",
+      "hint": "三分法では商品を「仕入」勘定で処理する。",
+      "answer": {
+        "debit":  [{ "account": "purchase", "amount": 80000 }],
+        "credit": [{ "account": "accounts_payable", "amount": 80000 }]
+      },
+      "explanation": "三分法では仕入は費用「仕入」で計上する。掛け仕入なので相手勘定は負債の「買掛金」となる。",
+      "tags": ["三分法", "掛仕入"]
+    },
+    {
+      "id": "Q-shouhin-002",
+      "chapter": "shouhin",
+      "topic": "三分法による仕入",
+      "topicId": "shouhin-sanbunpou-shiire",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "B商店から商品¥50,000を仕入れ、引取運賃¥2,000を現金で支払った。商品代金は掛けとした。",
+      "hint": "引取運賃などの仕入諸掛りは「仕入」に含めて計上する。",
+      "answer": {
+        "debit":  [{ "account": "purchase", "amount": 52000 }],
+        "credit": [
+          { "account": "accounts_payable", "amount": 50000 },
+          { "account": "cash", "amount": 2000 }
+        ]
+      },
+      "explanation": "仕入諸掛り（引取運賃）は仕入原価に算入するため、仕入勘定は¥52,000となる。代金内訳は買掛金¥50,000と現金支払¥2,000。",
+      "tags": ["三分法", "仕入諸掛り"]
+    },
+    {
+      "id": "Q-shouhin-003",
+      "chapter": "shouhin",
+      "topic": "三分法による売上",
+      "topicId": "shouhin-sanbunpou-uriage",
+      "difficulty": 1,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "C商店に商品¥120,000を販売し、代金は掛けとした。",
+      "hint": "売上は収益、掛け売上の相手勘定は売掛金。",
+      "answer": {
+        "debit":  [{ "account": "accounts_receivable", "amount": 120000 }],
+        "credit": [{ "account": "sales", "amount": 120000 }]
+      },
+      "explanation": "三分法では販売を収益「売上」で計上する。代金は後日回収の掛け売りなので資産「売掛金」を借方に立てる。",
+      "tags": ["三分法", "掛売上"]
+    },
+    {
+      "id": "Q-shouhin-004",
+      "chapter": "shouhin",
+      "topic": "三分法による売上",
+      "topicId": "shouhin-sanbunpou-uriage",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "D商店に商品¥200,000を販売し、代金のうち¥50,000は同店振出しの小切手で受け取り、残額は掛けとした。",
+      "hint": "他人振出しの小切手は通貨代用証券として「現金」で処理する。",
+      "answer": {
+        "debit":  [
+          { "account": "cash", "amount": 50000 },
+          { "account": "accounts_receivable", "amount": 150000 }
+        ],
+        "credit": [{ "account": "sales", "amount": 200000 }]
+      },
+      "explanation": "他店振出しの小切手は受け取り時点で現金扱い。売上は総額¥200,000で、内訳は現金¥50,000と売掛金¥150,000となる。",
+      "tags": ["三分法", "小切手"]
+    },
+    {
+      "id": "Q-shouhin-005",
+      "chapter": "shouhin",
+      "topic": "返品・値引",
+      "topicId": "shouhin-henpin",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "先日A商店から掛けで仕入れた商品のうち¥10,000を品質不良のため返品した。",
+      "hint": "仕入戻しは仕入勘定を取り消す。",
+      "answer": {
+        "debit":  [{ "account": "accounts_payable", "amount": 10000 }],
+        "credit": [{ "account": "purchase", "amount": 10000 }]
+      },
+      "explanation": "仕入戻しは仕入の減少と、対応する買掛金の取消し。借方の買掛金が減り、貸方の仕入が減る。",
+      "tags": ["仕入戻し"]
+    },
+    {
+      "id": "Q-shouhin-006",
+      "chapter": "shouhin",
+      "topic": "返品・値引",
+      "topicId": "shouhin-henpin",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "先日C商店に掛けで販売した商品のうち¥15,000が品違いにより返品された。",
+      "hint": "売上戻りは売上勘定を取り消す。",
+      "answer": {
+        "debit":  [{ "account": "sales", "amount": 15000 }],
+        "credit": [{ "account": "accounts_receivable", "amount": 15000 }]
+      },
+      "explanation": "売上戻りは売上の減少と売掛金の減少。借方に売上、貸方に売掛金を立てて取引を取り消す。",
+      "tags": ["売上戻り"]
+    },
+    {
+      "id": "Q-shouhin-007",
+      "chapter": "shouhin",
+      "topic": "クレジット売掛金",
+      "topicId": "shouhin-credit",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "商品¥100,000をクレジットカード払いで販売した。信販会社への手数料は販売代金の3%であり、販売時に計上する。",
+      "hint": "クレジット売掛金は手数料控除後の金額、手数料は支払手数料で計上。",
+      "answer": {
+        "debit":  [
+          { "account": "credit_receivable", "amount": 97000 },
+          { "account": "commission_fee", "amount": 3000 }
+        ],
+        "credit": [{ "account": "sales", "amount": 100000 }]
+      },
+      "explanation": "売上は総額¥100,000。信販会社手数料3%（¥3,000）を支払手数料に計上し、差額¥97,000をクレジット売掛金とする。",
+      "tags": ["クレジット", "手数料"]
+    },
+    {
+      "id": "Q-shouhin-008",
+      "chapter": "shouhin",
+      "topic": "クレジット売掛金",
+      "topicId": "shouhin-credit",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "先月クレジット払いで販売した代金¥97,000（手数料控除後）が、本日普通預金口座に入金された。",
+      "hint": "クレジット売掛金の回収は資産の振替。",
+      "answer": {
+        "debit":  [{ "account": "savings", "amount": 97000 }],
+        "credit": [{ "account": "credit_receivable", "amount": 97000 }]
+      },
+      "explanation": "信販会社からの入金によりクレジット売掛金が消滅し、普通預金が増加する。手数料は販売時に計上済みのため再計上しない。",
+      "tags": ["クレジット", "回収"]
+    },
+    {
+      "id": "Q-genkin-001",
+      "chapter": "genkin",
+      "topic": "現金過不足",
+      "topicId": "genkin-kabusoku",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "決算日において、現金の帳簿残高は¥50,000、実際有高を数えたところ¥52,000であった。差額は原因不明のため、適切な勘定に振り替える。",
+      "hint": "決算時に原因不明の過剰額は雑益（収益）へ。",
+      "answer": {
+        "debit":  [{ "account": "cash", "amount": 2000 }],
+        "credit": [{ "account": "misc_income", "amount": 2000 }]
+      },
+      "explanation": "決算時に現金が¥2,000過剰で原因不明のため、現金（資産）を増やし、相手勘定を雑益（収益）として処理する。",
+      "tags": ["現金過不足", "雑益", "決算整理"]
+    },
+    {
+      "id": "Q-genkin-002",
+      "chapter": "genkin",
+      "topic": "現金過不足",
+      "topicId": "genkin-kabusoku",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "決算において、現金過不足勘定の借方残高¥2,000は原因が判明しなかったため、適切な勘定に振り替える。",
+      "hint": "原因不明の不足額（借方残）は雑損へ。",
+      "answer": {
+        "debit":  [{ "account": "misc_loss", "amount": 2000 }],
+        "credit": [{ "account": "cash_discrepancy", "amount": 2000 }]
+      },
+      "explanation": "現金過不足勘定が借方残（不足）のまま決算を迎えた場合、決算整理で原因不明分を費用「雑損」に振り替えて現金過不足を消去する。",
+      "tags": ["現金過不足", "雑損", "決算整理"]
+    },
+    {
+      "id": "Q-genkin-003",
+      "chapter": "genkin",
+      "topic": "小口現金",
+      "topicId": "genkin-kogucchi",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "小口現金係から、消耗品費¥3,000、旅費交通費¥2,000、通信費¥1,500の支払報告を受け、ただちに同額の小切手を振り出して補給した。",
+      "hint": "報告と補給を同時に処理する場合、貸方は当座預金。",
+      "answer": {
+        "debit":  [
+          { "account": "supplies_fee", "amount": 3000 },
+          { "account": "travel_fee", "amount": 2000 },
+          { "account": "comm_fee", "amount": 1500 }
+        ],
+        "credit": [{ "account": "checking", "amount": 6500 }]
+      },
+      "explanation": "報告と補給を同時に処理する場合、各費用を借方に計上し、補給に使った当座預金を貸方に立てる（合計¥6,500）。",
+      "tags": ["小口現金", "補給"]
+    },
+    {
+      "id": "Q-genkin-004",
+      "chapter": "genkin",
+      "topic": "小口現金",
+      "topicId": "genkin-kogucchi",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "定額資金前渡制を採用し、小口現金として小切手¥30,000を振り出して庶務係に前渡しした。",
+      "hint": "小口現金は資産。当座預金から振り替える。",
+      "answer": {
+        "debit":  [{ "account": "petty_cash", "amount": 30000 }],
+        "credit": [{ "account": "checking", "amount": 30000 }]
+      },
+      "explanation": "小口現金（資産）を借方に増やし、振り出した小切手分の当座預金（資産）を貸方で減らす資産間の振替仕訳。",
+      "tags": ["小口現金", "前渡し"]
+    },
+    {
+      "id": "Q-genkin-005",
+      "chapter": "genkin",
+      "topic": "当座借越",
+      "topicId": "genkin-tozakarikoshi",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "A商店から商品¥80,000を仕入れ、代金は小切手を振り出して支払った。振り出し直前の当座預金残高は¥60,000で、銀行と借越限度額¥200,000の当座借越契約を結んでいる。",
+      "hint": "預金残高を超えた部分は当座借越（負債）で処理。",
+      "answer": {
+        "debit":  [{ "account": "purchase", "amount": 80000 }],
+        "credit": [
+          { "account": "checking", "amount": 60000 },
+          { "account": "overdraft", "amount": 20000 }
+        ]
+      },
+      "explanation": "当座預金残高¥60,000を使い切り、超過分¥20,000は当座借越（負債）として計上する。",
+      "tags": ["当座借越", "二勘定制"]
+    },
+    {
+      "id": "Q-genkin-006",
+      "chapter": "genkin",
+      "topic": "当座借越",
+      "topicId": "genkin-tozakarikoshi",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "得意先より売掛金¥50,000が当座預金口座に振り込まれた。当社の当座借越残高は¥30,000である。",
+      "hint": "まず当座借越（負債）を返済し、残額が当座預金へ。",
+      "answer": {
+        "debit":  [
+          { "account": "overdraft", "amount": 30000 },
+          { "account": "checking", "amount": 20000 }
+        ],
+        "credit": [{ "account": "accounts_receivable", "amount": 50000 }]
+      },
+      "explanation": "入金額¥50,000はまず当座借越¥30,000の返済に充当し、残り¥20,000を当座預金の増加として計上する。",
+      "tags": ["当座借越", "回収"]
+    },
+    {
+      "id": "Q-tegata-001",
+      "chapter": "tegata",
+      "topic": "約束手形",
+      "topicId": "tegata-yakusoku",
+      "difficulty": 1,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "validUntil": "2027-04-01",
+      "prompt": "D商店から商品¥200,000を仕入れ、代金として約束手形を振り出して交付した。",
+      "hint": "約束手形を振り出すと「支払手形」（負債）が増える。",
+      "answer": {
+        "debit":  [{ "account": "purchase", "amount": 200000 }],
+        "credit": [{ "account": "notes_payable", "amount": 200000 }]
+      },
+      "explanation": "約束手形の振出しは将来の支払義務であり、負債「支払手形」を貸方に計上する。仕入は費用として借方。",
+      "tags": ["約束手形", "振出"]
+    },
+    {
+      "id": "Q-tegata-002",
+      "chapter": "tegata",
+      "topic": "約束手形",
+      "topicId": "tegata-yakusoku",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "validUntil": "2027-04-01",
+      "prompt": "E商店に商品¥150,000を販売し、代金として同店振出しの約束手形を受け取った。",
+      "hint": "約束手形を受け取ると「受取手形」（資産）が増える。",
+      "answer": {
+        "debit":  [{ "account": "notes_receivable", "amount": 150000 }],
+        "credit": [{ "account": "sales", "amount": 150000 }]
+      },
+      "explanation": "他社振出の約束手形を受け取ると、将来の受領権利として資産「受取手形」を借方に計上する。",
+      "tags": ["約束手形", "受取"]
+    },
+    {
+      "id": "Q-tegata-003",
+      "chapter": "tegata",
+      "topic": "電子記録債権・債務",
+      "topicId": "tegata-denshi",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "F商店に対する売掛金¥80,000について、取引銀行を通じて電子記録債権の発生記録を行った。",
+      "hint": "売掛金を電子記録債権に振り替える。",
+      "answer": {
+        "debit":  [{ "account": "electronic_receivable", "amount": 80000 }],
+        "credit": [{ "account": "accounts_receivable", "amount": 80000 }]
+      },
+      "explanation": "売掛金（資産）を電子記録債権（資産）に振り替える資産間の取引。借方に電子記録債権、貸方に売掛金を立てる。",
+      "tags": ["電子記録債権"]
+    },
+    {
+      "id": "Q-tegata-004",
+      "chapter": "tegata",
+      "topic": "電子記録債権・債務",
+      "topicId": "tegata-denshi",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "G商店に対する買掛金¥60,000について、取引銀行を通じて電子記録債務の発生記録が行われた。",
+      "hint": "買掛金を電子記録債務に振り替える。",
+      "answer": {
+        "debit":  [{ "account": "accounts_payable", "amount": 60000 }],
+        "credit": [{ "account": "electronic_payable", "amount": 60000 }]
+      },
+      "explanation": "買掛金（負債）を電子記録債務（負債）に振り替える負債間の取引。借方で買掛金を消し、貸方で電子記録債務を発生させる。",
+      "tags": ["電子記録債務"]
+    },
+    {
+      "id": "Q-urikake-001",
+      "chapter": "urikake",
+      "topic": "売掛・買掛の決済",
+      "topicId": "urikake-kessai",
+      "difficulty": 1,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "F商店に対する売掛金¥100,000を、同店振出しの小切手で回収した。",
+      "hint": "他店振出しの小切手は現金として処理。",
+      "answer": {
+        "debit":  [{ "account": "cash", "amount": 100000 }],
+        "credit": [{ "account": "accounts_receivable", "amount": 100000 }]
+      },
+      "explanation": "他店振出しの小切手は通貨代用証券のため現金として受け入れる。売掛金が消滅し現金が増える。",
+      "tags": ["売掛金回収"]
+    },
+    {
+      "id": "Q-urikake-002",
+      "chapter": "urikake",
+      "topic": "売掛・買掛の決済",
+      "topicId": "urikake-kessai",
+      "difficulty": 1,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "G商店に対する買掛金¥70,000を、小切手を振り出して支払った。",
+      "hint": "自店振出しの小切手は当座預金の減少。",
+      "answer": {
+        "debit":  [{ "account": "accounts_payable", "amount": 70000 }],
+        "credit": [{ "account": "checking", "amount": 70000 }]
+      },
+      "explanation": "自社振出しの小切手は当座預金口座から引き落とされる。買掛金（負債）を借方で減らし、当座預金（資産）を貸方で減らす。",
+      "tags": ["買掛金支払"]
+    },
+    {
+      "id": "Q-urikake-003",
+      "chapter": "urikake",
+      "topic": "貸倒引当金の設定",
+      "topicId": "urikake-hikiate-settei",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "決算につき、売掛金期末残高¥500,000に対して2%の貸倒引当金を差額補充法により設定する。貸倒引当金の残高は¥3,000である。",
+      "hint": "必要額¥10,000から残高¥3,000を控除した差額を繰入れる。",
+      "answer": {
+        "debit":  [{ "account": "doubtful_provision", "amount": 7000 }],
+        "credit": [{ "account": "allowance_doubtful", "amount": 7000 }]
+      },
+      "explanation": "必要額¥500,000×2%=¥10,000、現在残高¥3,000なので不足¥7,000を貸倒引当金繰入（費用）として計上し、引当金を増やす。",
+      "tags": ["貸倒引当金", "差額補充法", "決算整理"]
+    },
+    {
+      "id": "Q-urikake-004",
+      "chapter": "urikake",
+      "topic": "貸倒引当金の設定",
+      "topicId": "urikake-hikiate-settei",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "決算につき、受取手形¥200,000および売掛金¥300,000の合計に対して3%の貸倒引当金を差額補充法により設定する。貸倒引当金の残高はない。",
+      "hint": "売上債権合計に率をかけ、全額繰入れる。",
+      "answer": {
+        "debit":  [{ "account": "doubtful_provision", "amount": 15000 }],
+        "credit": [{ "account": "allowance_doubtful", "amount": 15000 }]
+      },
+      "explanation": "(受取手形¥200,000＋売掛金¥300,000)×3%=¥15,000。残高¥0なので全額を貸倒引当金繰入として計上する。",
+      "tags": ["貸倒引当金", "差額補充法"]
+    },
+    {
+      "id": "Q-urikake-005",
+      "chapter": "urikake",
+      "topic": "貸倒れの処理",
+      "topicId": "urikake-hikiate-shiyou",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "前期に発生した売掛金¥30,000が、得意先の倒産により回収不能となった。貸倒引当金の残高は¥40,000ある。",
+      "hint": "前期発生分は引当金で充当する。",
+      "answer": {
+        "debit":  [{ "account": "allowance_doubtful", "amount": 30000 }],
+        "credit": [{ "account": "accounts_receivable", "amount": 30000 }]
+      },
+      "explanation": "前期売掛金は前期末に引当金が設定されているため、貸倒引当金を取り崩して充当する。引当金残高内なので貸倒損失は発生しない。",
+      "tags": ["貸倒れ", "引当金充当"]
+    },
+    {
+      "id": "Q-urikake-006",
+      "chapter": "urikake",
+      "topic": "貸倒れの処理",
+      "topicId": "urikake-hikiate-shiyou",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "当期に販売した得意先への売掛金¥20,000が貸倒れとなった。貸倒引当金には残高があるが、当期発生債権のため使えない。",
+      "hint": "当期発生分は貸倒損失として直接費用計上。",
+      "answer": {
+        "debit":  [{ "account": "doubtful_loss", "amount": 20000 }],
+        "credit": [{ "account": "accounts_receivable", "amount": 20000 }]
+      },
+      "explanation": "当期発生の売掛金は前期末の引当金対象外。回収不能額は全額「貸倒損失」（費用）として計上する。",
+      "tags": ["貸倒れ", "貸倒損失"]
+    },
+    {
+      "id": "Q-kotei-001",
+      "chapter": "kotei",
+      "topic": "固定資産の取得",
+      "topicId": "kotei-shutoku",
+      "difficulty": 1,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "営業用の備品¥500,000を購入し、設置費用¥20,000とともに現金で支払った。",
+      "hint": "付随費用は取得原価に含める。",
+      "answer": {
+        "debit":  [{ "account": "equipment", "amount": 520000 }],
+        "credit": [{ "account": "cash", "amount": 520000 }]
+      },
+      "explanation": "設置費用などの付随費用は取得原価に算入する。備品は¥520,000で計上され、支払いの現金が同額減少する。",
+      "tags": ["固定資産", "取得原価"]
+    },
+    {
+      "id": "Q-kotei-002",
+      "chapter": "kotei",
+      "topic": "固定資産の取得",
+      "topicId": "kotei-shutoku",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "建物¥3,000,000を購入し、仲介手数料¥150,000とともに代金は月末に支払うこととした。",
+      "hint": "営業活動以外の未払いは「未払金」を使う。",
+      "answer": {
+        "debit":  [{ "account": "building", "amount": 3150000 }],
+        "credit": [{ "account": "other_payable", "amount": 3150000 }]
+      },
+      "explanation": "仲介手数料は付随費用なので建物の取得原価に含めて¥3,150,000で計上。商品売買以外の未払いは「未払金」を用いる。",
+      "tags": ["固定資産", "未払金"]
+    },
+    {
+      "id": "Q-kotei-003",
+      "chapter": "kotei",
+      "topic": "減価償却（定額法）",
+      "topicId": "kotei-genkashoukyaku",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "決算につき、期首に取得した備品（取得原価¥300,000、残存価額¥0、耐用年数5年）の減価償却を定額法・間接法により行う。",
+      "hint": "(取得原価−残存価額)÷耐用年数。間接法は累計額勘定を使う。",
+      "answer": {
+        "debit":  [{ "account": "depreciation", "amount": 60000 }],
+        "credit": [{ "account": "accumulated_dep", "amount": 60000 }]
+      },
+      "explanation": "減価償却費＝(¥300,000−¥0)÷5年＝¥60,000。間接法では費用「減価償却費」を借方、評価勘定「減価償却累計額」を貸方に計上する。",
+      "tags": ["減価償却", "定額法", "間接法", "決算整理"]
+    },
+    {
+      "id": "Q-kotei-004",
+      "chapter": "kotei",
+      "topic": "減価償却（定額法）",
+      "topicId": "kotei-genkashoukyaku",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "決算（3月31日）につき、当期12月1日に取得した車両運搬具（取得原価¥600,000、残存価額¥0、耐用年数5年）について定額法・間接法で月割計算により減価償却を行う。",
+      "hint": "12月から3月の4ヶ月分を月割計算する。",
+      "answer": {
+        "debit":  [{ "account": "depreciation", "amount": 40000 }],
+        "credit": [{ "account": "accumulated_dep", "amount": 40000 }]
+      },
+      "explanation": "年額¥600,000÷5年＝¥120,000。当期使用は12〜3月の4ヶ月なので¥120,000×4/12＝¥40,000を計上する。",
+      "tags": ["減価償却", "月割", "決算整理"]
+    },
+    {
+      "id": "Q-kotei-005",
+      "chapter": "kotei",
+      "topic": "固定資産の売却",
+      "topicId": "kotei-baikyaku",
+      "difficulty": 3,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "備品（取得原価¥600,000、減価償却累計額¥200,000）を¥450,000で売却し、代金は月末に受け取ることとした。",
+      "hint": "帳簿価額と売却価額の差で売却損益を計算する。",
+      "answer": {
+        "debit":  [
+          { "account": "other_receivable", "amount": 450000 },
+          { "account": "accumulated_dep", "amount": 200000 }
+        ],
+        "credit": [
+          { "account": "equipment", "amount": 600000 },
+          { "account": "fixed_asset_gain", "amount": 50000 }
+        ]
+      },
+      "explanation": "帳簿価額¥600,000−¥200,000＝¥400,000。売却価額¥450,000との差¥50,000が売却益。代金は商品売買以外なので未収入金で処理する。",
+      "tags": ["固定資産売却", "売却益"]
+    },
+    {
+      "id": "Q-kotei-006",
+      "chapter": "kotei",
+      "topic": "固定資産の売却",
+      "topicId": "kotei-baikyaku",
+      "difficulty": 3,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "車両運搬具（取得原価¥800,000、減価償却累計額¥500,000）を¥250,000で売却し、代金は現金で受け取った。",
+      "hint": "帳簿価額¥300,000より売却価額が少なければ売却損。",
+      "answer": {
+        "debit":  [
+          { "account": "cash", "amount": 250000 },
+          { "account": "accumulated_dep", "amount": 500000 },
+          { "account": "fixed_asset_loss", "amount": 50000 }
+        ],
+        "credit": [{ "account": "vehicle", "amount": 800000 }]
+      },
+      "explanation": "帳簿価額¥800,000−¥500,000＝¥300,000。売却価額¥250,000との差¥50,000が売却損。借方に現金・累計額・売却損、貸方に車両運搬具を計上。",
+      "tags": ["固定資産売却", "売却損"]
+    },
+    {
+      "id": "Q-kyuryou-001",
+      "chapter": "kyuryou",
+      "topic": "給料の支払い",
+      "topicId": "kyuryou-kyuryou",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "従業員に対し給料総額¥300,000について、源泉所得税¥20,000および従業員負担分の社会保険料¥25,000を控除し、残額を普通預金から振り込んだ。",
+      "hint": "預り金は負債、振込額は手取り。",
+      "answer": {
+        "debit":  [{ "account": "salary", "amount": 300000 }],
+        "credit": [
+          { "account": "income_tax_withhold", "amount": 20000 },
+          { "account": "social_ins_withhold", "amount": 25000 },
+          { "account": "savings", "amount": 255000 }
+        ]
+      },
+      "explanation": "給料総額を費用として計上し、源泉徴収分は預り金（負債）、差引手取¥255,000を普通預金で支給する。",
+      "tags": ["給料", "源泉徴収", "預り金"]
+    },
+    {
+      "id": "Q-kyuryou-002",
+      "chapter": "kyuryou",
+      "topic": "給料の支払い",
+      "topicId": "kyuryou-kyuryou",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "従業員へ給料¥250,000を支給するにあたり、源泉所得税¥15,000を控除し、さらに以前従業員に立て替えていた¥5,000を差し引いて、残額を現金で支払った。",
+      "hint": "立替金の精算分は資産の減少。",
+      "answer": {
+        "debit":  [{ "account": "salary", "amount": 250000 }],
+        "credit": [
+          { "account": "income_tax_withhold", "amount": 15000 },
+          { "account": "advance_payment", "amount": 5000 },
+          { "account": "cash", "amount": 230000 }
+        ]
+      },
+      "explanation": "立替金は給料から精算するため資産（立替金）の減少として処理する。差引手取は¥230,000で現金支給。",
+      "tags": ["給料", "立替金精算"]
+    },
+    {
+      "id": "Q-kyuryou-003",
+      "chapter": "kyuryou",
+      "topic": "社会保険料の納付",
+      "topicId": "kyuryou-shahoken-nouhu",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "社会保険料¥50,000を現金で納付した。内訳は従業員負担分¥25,000（給料天引で預かり済み）と会社負担分¥25,000である。",
+      "hint": "会社負担分は法定福利費（費用）。",
+      "answer": {
+        "debit":  [
+          { "account": "social_ins_withhold", "amount": 25000 },
+          { "account": "legal_welfare", "amount": 25000 }
+        ],
+        "credit": [{ "account": "cash", "amount": 50000 }]
+      },
+      "explanation": "従業員負担分は預り金の精算（負債の減少）、会社負担分は法定福利費（費用）として計上し、合計¥50,000を現金で納付する。",
+      "tags": ["社会保険料", "法定福利費"]
+    },
+    {
+      "id": "Q-kyuryou-004",
+      "chapter": "kyuryou",
+      "topic": "社会保険料の納付",
+      "topicId": "kyuryou-shahoken-nouhu",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "社会保険料¥80,000（従業員負担分¥40,000、会社負担分¥40,000）を普通預金口座から納付した。",
+      "hint": "会社負担分は法定福利費。",
+      "answer": {
+        "debit":  [
+          { "account": "social_ins_withhold", "amount": 40000 },
+          { "account": "legal_welfare", "amount": 40000 }
+        ],
+        "credit": [{ "account": "savings", "amount": 80000 }]
+      },
+      "explanation": "預り金（従業員分）と法定福利費（会社分）を借方に計上し、納付に使った普通預金を貸方に立てる。",
+      "tags": ["社会保険料", "普通預金"]
+    },
+    {
+      "id": "Q-keika-001",
+      "chapter": "keika",
+      "topic": "繰延べ（前払・前受）",
+      "topicId": "keika-kurinobe",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "決算（3月31日）につき、当期7月1日に向こう1年分として支払った保険料¥24,000のうち、翌期分（4〜6月の3か月分）を繰り延べる。",
+      "hint": "翌期に属する3ヶ月分を前払保険料へ。",
+      "answer": {
+        "debit":  [{ "account": "prepaid_insurance", "amount": 6000 }],
+        "credit": [{ "account": "insurance_fee", "amount": 6000 }]
+      },
+      "explanation": "¥24,000×3/12＝¥6,000を翌期分として繰延べ、当期費用から控除する。借方に前払保険料（資産）、貸方に保険料（費用）。",
+      "tags": ["繰延べ", "前払費用", "決算整理"]
+    },
+    {
+      "id": "Q-keika-002",
+      "chapter": "keika",
+      "topic": "繰延べ（前払・前受）",
+      "topicId": "keika-kurinobe",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "決算（3月31日）につき、当期2月1日に向こう半年分として受け取った地代¥60,000のうち、翌期分（4〜7月の4か月分）を繰り延べる。",
+      "hint": "翌期分の収益を前受地代（負債）へ。",
+      "answer": {
+        "debit":  [{ "account": "rent_income", "amount": 40000 }],
+        "credit": [{ "account": "received_land_rent", "amount": 40000 }]
+      },
+      "explanation": "¥60,000×4/6＝¥40,000を翌期収益として繰延べる。借方で受取地代（収益）を減らし、貸方に前受地代（負債）を計上する。",
+      "tags": ["繰延べ", "前受収益", "決算整理"]
+    },
+    {
+      "id": "Q-keika-003",
+      "chapter": "keika",
+      "topic": "見越し（未払・未収）",
+      "topicId": "keika-mikoshi",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "決算（3月31日）につき、給料は月末締め翌月10日払いのため、3月分給料¥200,000が未払いとなっている。これを見越計上する。",
+      "hint": "発生済みだが未払いの費用は未払給料へ。",
+      "answer": {
+        "debit":  [{ "account": "salary", "amount": 200000 }],
+        "credit": [{ "account": "accrued_salary", "amount": 200000 }]
+      },
+      "explanation": "当期に発生した3月分給料を費用として計上し、まだ支払っていない¥200,000を未払給料（負債）として貸方に立てる。",
+      "tags": ["見越し", "未払費用", "決算整理"]
+    },
+    {
+      "id": "Q-keika-004",
+      "chapter": "keika",
+      "topic": "見越し（未払・未収）",
+      "topicId": "keika-mikoshi",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "決算（3月31日）につき、貸付金¥500,000（年利2%、利払日は9月末・3月末）の利息のうち、当期分6か月分が未収である。",
+      "hint": "発生済みだが未収の収益は未収利息へ。",
+      "answer": {
+        "debit":  [{ "account": "accrued_interest_recv", "amount": 5000 }],
+        "credit": [{ "account": "interest_income", "amount": 5000 }]
+      },
+      "explanation": "¥500,000×2%×6/12＝¥5,000。当期発生分の利息を未収利息（資産）として借方に立て、受取利息（収益）を貸方に計上する。",
+      "tags": ["見越し", "未収収益", "決算整理"]
+    },
+    {
+      "id": "Q-zeikin-001",
+      "chapter": "zeikin",
+      "topic": "消費税（税抜方式）",
+      "topicId": "zeikin-shouhi",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "商品¥100,000を販売し、消費税¥10,000を含めた¥110,000を現金で受け取った。税抜方式で処理する。",
+      "hint": "預かった消費税は仮受消費税（負債）。",
+      "answer": {
+        "debit":  [{ "account": "cash", "amount": 110000 }],
+        "credit": [
+          { "account": "sales", "amount": 100000 },
+          { "account": "temp_received_tax", "amount": 10000 }
+        ]
+      },
+      "explanation": "税抜方式では本体価格を売上、消費税を仮受消費税（負債）として区分計上する。受取現金は税込額¥110,000。",
+      "tags": ["消費税", "税抜方式", "仮受消費税"]
+    },
+    {
+      "id": "Q-zeikin-002",
+      "chapter": "zeikin",
+      "topic": "消費税（税抜方式）",
+      "topicId": "zeikin-shouhi",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "決算につき、仮受消費税¥80,000と仮払消費税¥50,000を相殺し、差額を未払消費税として計上する。",
+      "hint": "仮受−仮払＝納付額。",
+      "answer": {
+        "debit":  [{ "account": "temp_received_tax", "amount": 80000 }],
+        "credit": [
+          { "account": "temp_sales_tax", "amount": 50000 },
+          { "account": "accrued_sales_tax", "amount": 30000 }
+        ]
+      },
+      "explanation": "決算時に仮受消費税と仮払消費税を相殺し、差額¥30,000を納付すべき未払消費税（負債）として確定計上する。",
+      "tags": ["消費税", "決算整理", "未払消費税"]
+    },
+    {
+      "id": "Q-zeikin-003",
+      "chapter": "zeikin",
+      "topic": "法人税等",
+      "topicId": "zeikin-houjin",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "法人税の中間申告を行い、¥150,000を現金で納付した。",
+      "hint": "中間納付は仮払法人税等（資産）。",
+      "answer": {
+        "debit":  [{ "account": "temp_corp_tax", "amount": 150000 }],
+        "credit": [{ "account": "cash", "amount": 150000 }]
+      },
+      "explanation": "中間申告で納付した法人税は確定税額が決まる前の概算払いのため、資産「仮払法人税等」で処理する。",
+      "tags": ["法人税", "中間申告"]
+    },
+    {
+      "id": "Q-zeikin-004",
+      "chapter": "zeikin",
+      "topic": "法人税等",
+      "topicId": "zeikin-houjin",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "決算につき、法人税、住民税及び事業税の年間確定税額¥320,000が算定された。なお、中間申告で¥150,000を仮払いしている。",
+      "hint": "確定額から仮払を差し引いた残額が未払法人税等。",
+      "answer": {
+        "debit":  [{ "account": "corp_tax_expense", "amount": 320000 }],
+        "credit": [
+          { "account": "temp_corp_tax", "amount": 150000 },
+          { "account": "accrued_corp_tax", "amount": 170000 }
+        ]
+      },
+      "explanation": "確定税額¥320,000を費用計上し、中間納付済み¥150,000を仮払法人税等から取り崩す。差額¥170,000は未払法人税等（負債）。",
+      "tags": ["法人税", "決算整理", "未払法人税等"]
+    },
+    {
+      "id": "Q-shihon-001",
+      "chapter": "shihon",
+      "topic": "繰越利益剰余金・配当",
+      "topicId": "shihon-haitou",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "株主総会で繰越利益剰余金の処分が決議された。内訳は株主配当金¥200,000、利益準備金の積立¥20,000である。",
+      "hint": "繰越利益剰余金から取り崩す。",
+      "answer": {
+        "debit":  [{ "account": "retained_earnings", "amount": 220000 }],
+        "credit": [
+          { "account": "unpaid_dividend", "amount": 200000 },
+          { "account": "legal_reserve", "amount": 20000 }
+        ]
+      },
+      "explanation": "繰越利益剰余金（純資産）を¥220,000減らし、配当は未払配当金（負債）、積立は利益準備金（純資産）に振り替える。",
+      "tags": ["剰余金処分", "配当"]
+    },
+    {
+      "id": "Q-shihon-002",
+      "chapter": "shihon",
+      "topic": "繰越利益剰余金・配当",
+      "topicId": "shihon-haitou",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "先の株主総会で決議していた未払配当金¥200,000を、本日普通預金口座から株主に支払った。",
+      "hint": "未払配当金（負債）の支払い。",
+      "answer": {
+        "debit":  [{ "account": "unpaid_dividend", "amount": 200000 }],
+        "credit": [{ "account": "savings", "amount": 200000 }]
+      },
+      "explanation": "決議時に計上した未払配当金（負債）を取り崩し、普通預金から支払う。",
+      "tags": ["配当支払"]
+    },
+    {
+      "id": "Q-shihon-003",
+      "chapter": "shihon",
+      "topic": "株式の発行",
+      "topicId": "shihon-kabushiki",
+      "difficulty": 1,
+      "frequency": 1,
+      "syllabusVersion": "2026",
+      "prompt": "会社設立にあたり、株式100株を1株¥50,000で発行し、払込金が当座預金に入金された。資本金には全額を計上する。",
+      "hint": "払込金は資本金（純資産）。",
+      "answer": {
+        "debit":  [{ "account": "checking", "amount": 5000000 }],
+        "credit": [{ "account": "capital", "amount": 5000000 }]
+      },
+      "explanation": "100株×¥50,000＝¥5,000,000の払込金を当座預金で受け入れ、全額を資本金とする原則的処理。",
+      "tags": ["株式発行", "設立"]
+    },
+    {
+      "id": "Q-shihon-004",
+      "chapter": "shihon",
+      "topic": "株式の発行",
+      "topicId": "shihon-kabushiki",
+      "difficulty": 1,
+      "frequency": 1,
+      "syllabusVersion": "2026",
+      "prompt": "増資のため新たに株式200株を1株¥30,000で発行し、払込金が普通預金に入金された。資本金には全額を計上する。",
+      "hint": "増資も払込金は資本金へ。",
+      "answer": {
+        "debit":  [{ "account": "savings", "amount": 6000000 }],
+        "credit": [{ "account": "capital", "amount": 6000000 }]
+      },
+      "explanation": "200株×¥30,000＝¥6,000,000の払込金を普通預金で受け入れ、全額を資本金として計上する。",
+      "tags": ["株式発行", "増資"]
+    },
+    {
+      "id": "Q-sonota-001",
+      "chapter": "sonota",
+      "topic": "訂正仕訳",
+      "topicId": "sonota-teisei",
+      "difficulty": 3,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "消耗品¥5,000を購入して現金で支払った際、誤って消耗品費¥500/現金¥500と仕訳していたことが判明した。これを訂正する。",
+      "hint": "正しい金額との差額のみ追加計上する。",
+      "answer": {
+        "debit":  [{ "account": "supplies_fee", "amount": 4500 }],
+        "credit": [{ "account": "cash", "amount": 4500 }]
+      },
+      "explanation": "正しくは¥5,000なので不足分¥4,500を追加計上する。逆仕訳と正仕訳をまとめると、消耗品費¥4,500/現金¥4,500となる。",
+      "tags": ["訂正仕訳", "金額誤り"]
+    },
+    {
+      "id": "Q-sonota-002",
+      "chapter": "sonota",
+      "topic": "訂正仕訳",
+      "topicId": "sonota-teisei",
+      "difficulty": 3,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "売掛金¥40,000を現金で回収した取引について、誤って借方を「現金」、貸方を「売上」と記帳していたことが判明した。これを訂正する。",
+      "hint": "誤った貸方を取り消し、本来の貸方を立てる。",
+      "answer": {
+        "debit":  [{ "account": "sales", "amount": 40000 }],
+        "credit": [{ "account": "accounts_receivable", "amount": 40000 }]
+      },
+      "explanation": "誤計上の売上を取り消し（借方）、本来計上すべきだった売掛金の減少（貸方）を立てる。借方の現金は誤・正で同じため相殺される。",
+      "tags": ["訂正仕訳", "勘定科目誤り"]
+    },
+    {
+      "id": "Q-sonota-003",
+      "chapter": "sonota",
+      "topic": "商品券",
+      "topicId": "sonota-shouhinken",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "H商店発行の商品券¥30,000と現金¥10,000を受け取り、商品¥40,000を販売した。",
+      "hint": "他店発行の商品券は受取商品券（資産）。",
+      "answer": {
+        "debit":  [
+          { "account": "gift_voucher", "amount": 30000 },
+          { "account": "cash", "amount": 10000 }
+        ],
+        "credit": [{ "account": "sales", "amount": 40000 }]
+      },
+      "explanation": "他店発行の商品券は資産「受取商品券」で計上する。販売額¥40,000を売上、内訳は商品券¥30,000＋現金¥10,000。",
+      "tags": ["受取商品券"]
+    },
+    {
+      "id": "Q-sonota-004",
+      "chapter": "sonota",
+      "topic": "商品券",
+      "topicId": "sonota-shouhinken",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "保有していたH商店発行の商品券¥30,000について、発行元のH商店に請求し、現金¥30,000を受け取った。",
+      "hint": "受取商品券（資産）が現金に振り替わる。",
+      "answer": {
+        "debit":  [{ "account": "cash", "amount": 30000 }],
+        "credit": [{ "account": "gift_voucher", "amount": 30000 }]
+      },
+      "explanation": "発行元から商品券の精算を受け、受取商品券（資産）が消滅し現金（資産）が増加する資産間の振替。",
+      "tags": ["受取商品券", "精算"]
+    },
+    {
+      "id": "Q-sonota-005",
+      "chapter": "sonota",
+      "topic": "立替金・仮払金",
+      "topicId": "sonota-tatekae",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "従業員の出張に際し、旅費の概算額¥30,000を現金で渡した。用途はまだ確定していない。",
+      "hint": "用途未確定の前渡しは仮払金（資産）。",
+      "answer": {
+        "debit":  [{ "account": "temp_payment", "amount": 30000 }],
+        "credit": [{ "account": "cash", "amount": 30000 }]
+      },
+      "explanation": "出張前の概算払いは用途確定前のため、資産「仮払金」で処理し、後日報告を受けて精算する。",
+      "tags": ["仮払金", "出張前渡し"]
+    },
+    {
+      "id": "Q-sonota-006",
+      "chapter": "sonota",
+      "topic": "立替金・仮払金",
+      "topicId": "sonota-tatekae",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "出張から戻った従業員より、先に渡した概算払い¥30,000について旅費交通費¥25,000を使用した旨の報告を受け、残額¥5,000は現金で返金された。",
+      "hint": "仮払金を取り崩して旅費交通費と返金を計上。",
+      "answer": {
+        "debit":  [
+          { "account": "travel_fee", "amount": 25000 },
+          { "account": "cash", "amount": 5000 }
+        ],
+        "credit": [{ "account": "temp_payment", "amount": 30000 }]
+      },
+      "explanation": "報告により仮払金¥30,000を取り崩し、使用分を旅費交通費（費用）に振替、残額は現金で受け取って精算する。",
+      "tags": ["仮払金精算"]
+    }
+  ]
+}

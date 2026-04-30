@@ -3,6 +3,7 @@ import type { Account } from '../types'
 export const ACCOUNTS: Account[] = [
   // 資産
   { id: 'cash',                name: '現金',              category: 'asset' },
+  { id: 'cash_discrepancy',    name: '現金過不足',        category: 'asset' },
   { id: 'checking',            name: '当座預金',          category: 'asset' },
   { id: 'savings',             name: '普通預金',          category: 'asset' },
   { id: 'petty_cash',          name: '小口現金',          category: 'asset' },
