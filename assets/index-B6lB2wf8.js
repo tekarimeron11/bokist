@@ -185,6 +185,128 @@ updatedAt: "2026-05-01T09:00:00+09:00"
 - **借方／貸方**: 仕訳の左側／右側のこと。読み方は「かりかた／かしかた」
 - **CBT**: PCで受ける試験形式。ネット試験のこと
 - **統一試験**: 紙で一斉に受ける従来形式の試験
+`,"../../content/articles/account-name.md":`---
+slug: account-name
+title: 勘定科目とは
+description: 「現金」「売上」「給料」みたいな名前。お金の動きにつける「名札」の話と、3級で出てくる代表的な科目をまとめました。
+category: basics
+chapter: null
+topicIds: []
+readingMinutes: 7
+publishedAt: "2026-05-01T09:00:00+09:00"
+updatedAt: "2026-05-01T09:00:00+09:00"
+---
+
+# 勘定科目とは
+
+> 仕訳に出てくる「現金」「売上」「買掛金」みたいなやつ、まとめて勘定科目と呼びます。最初は数の多さに圧倒されますが、コツがあります。
+
+## A. ストーリー
+
+「商品80,000円を仕入れて、代金は掛けにした」という取引を仕訳にすると、こうなります。
+
+\`\`\`
+借方: 仕入   80,000
+貸方: 買掛金 80,000
+\`\`\`
+
+この **「仕入」と「買掛金」** が勘定科目です。商品を買ったから「仕入」、ツケで払う約束ができたから「買掛金」。お金や物の動きそれぞれに **わかりやすい名札** を貼って、あとから集計しやすくする。これが勘定科目の役割です。
+
+簿記3級で覚える勘定科目は60〜70個ほど。多く見えますが、**5つのカテゴリに分けて整理する** とぐっとラクになります。
+
+## B. 用語の整理
+
+- **勘定科目（かんじょうかもく）**: お金や物の動きにつける名札。「現金」「売上」「給料」などひとつひとつが勘定科目です。
+- **5分類**: すべての勘定科目を「資産・負債・純資産・収益・費用」の5カテゴリに分ける考え方。詳しくは [5分類のホームポジション](/articles/home-position) で。
+- **資産（しさん）**: 会社が持っているお金・物・あとでもらえる権利。
+- **負債（ふさい）**: 会社があとで払う義務・返す義務。
+- **純資産（じゅんしさん）**: 会社の元手と、これまで稼いで積み立てたお金。
+- **収益（しゅうえき）**: 商売で稼いだお金。
+- **費用（ひよう）**: 商売のために使ったお金・コスト。
+- **評価勘定（ひょうかかんじょう）**: 通常の勘定の金額を補正（マイナス側で表示）する特殊な勘定。貸倒引当金や減価償却累計額がこれにあたります。
+
+## C. 本論
+
+### 勘定科目は「名札」
+
+勘定科目を難しく考える必要はありません。**お金や物の動きを分類するための名札** だと思ってください。
+
+レストランの伝票を想像してみてください。「コーヒー」「ケーキ」「サンドイッチ」と書いてあれば、合計だけでなく **何にいくら使ったか** がわかります。これと同じで、簿記では「現金」「仕入」「給料」と書き分けることで、会社のお金が **何に使われ、何で稼いだか** が見える化されます。
+
+### どんな勘定科目があるか
+
+3級で出てくる代表的な勘定科目を、5分類で整理してみました。
+
+<svg viewBox="0 0 440 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="5分類別の代表的な勘定科目">
+  <rect x="0" y="0" width="440" height="320" fill="#fff5ec"/>
+  <text x="220" y="22" text-anchor="middle" font-size="13" font-weight="bold" fill="#2a1f2a">3級で出てくる勘定科目（抜粋）</text>
+  <rect x="20" y="40" width="400" height="50" fill="#dfead0" stroke="#4a6b5a" stroke-width="1.5" rx="6"/>
+  <text x="40" y="60" font-size="12" font-weight="bold" fill="#2a1f2a">資産</text>
+  <text x="40" y="78" font-size="10" fill="#4a6b5a">現金 / 普通預金 / 当座預金 / 売掛金 / 受取手形 / 商品 / 備品 / 建物 / 土地</text>
+  <rect x="20" y="100" width="400" height="50" fill="#ffd2c8" stroke="#c66454" stroke-width="1.5" rx="6"/>
+  <text x="40" y="120" font-size="12" font-weight="bold" fill="#2a1f2a">負債</text>
+  <text x="40" y="138" font-size="10" fill="#c66454">買掛金 / 支払手形 / 借入金 / 未払金 / 預り金 / 当座借越</text>
+  <rect x="20" y="160" width="400" height="40" fill="#e3d7f0" stroke="#6e5689" stroke-width="1.5" rx="6"/>
+  <text x="40" y="180" font-size="12" font-weight="bold" fill="#2a1f2a">純資産</text>
+  <text x="40" y="195" font-size="10" fill="#6e5689">資本金 / 利益準備金 / 繰越利益剰余金</text>
+  <rect x="20" y="210" width="400" height="40" fill="#fcf2dc" stroke="#8a6a2c" stroke-width="1.5" rx="6"/>
+  <text x="40" y="230" font-size="12" font-weight="bold" fill="#2a1f2a">収益</text>
+  <text x="40" y="245" font-size="10" fill="#8a6a2c">売上 / 受取利息 / 受取地代 / 雑益</text>
+  <rect x="20" y="260" width="400" height="50" fill="#f0e7e2" stroke="#7a5a45" stroke-width="1.5" rx="6"/>
+  <text x="40" y="280" font-size="12" font-weight="bold" fill="#2a1f2a">費用</text>
+  <text x="40" y="298" font-size="10" fill="#7a5a45">仕入 / 給料 / 旅費交通費 / 通信費 / 保険料 / 減価償却費 / 支払手数料</text>
+</svg>
+
+ぱっと見ても多いですが、**普段の生活で名前を聞いたことがあるもの** が結構ありませんか？「現金」「給料」「保険料」「通信費」あたりは、家計簿でも使う言葉です。
+
+### 同じ意味でも、簿記用の名前を使う
+
+家計簿で「ツケ」と書く動きは、簿記では **買掛金（仕入のツケ）** または **売掛金（売上のツケ）** と呼びます。「いつでもお金を引き出せる銀行口座」は **普通預金** か **当座預金**。意味としては同じものでも、簿記の世界では **決まった名札を使う** のがルールです。
+
+なぜ決まった名札を使うかというと、答えはひとつ。**集計するときに同じ名前でないと合計できないから**。仕訳に「ツケ」と「買掛金」が混在していたら、後で買掛金の総額がいくらか出せません。
+
+### 勘定科目の見つけ方（3級の出題形式）
+
+3級の試験では、問題ごとに **使う勘定科目の選択肢** が示されます。たとえばこんな感じ：
+
+> 次の取引の仕訳を、下の勘定科目から選んで答えなさい。
+> 〔勘定科目: 現金 / 売掛金 / 売上 / 仕入 / 買掛金〕
+
+つまり「全部の勘定科目を完全に暗記する」必要はありません。**問題文を読んで、与えられた選択肢から正しいものを選ぶ** のが本番です。とはいえ、5分類のどれに属するかはわかるようになっておきたいので、最初は **代表的な30個ほど** を5分類でグルーピングして覚えるのがおすすめです。
+
+### 評価勘定という変わり種
+
+ほとんどの勘定科目は5分類のどれかにすっぽり入りますが、**評価勘定** という少し変わった種類があります。
+
+代表が **貸倒引当金** と **減価償却累計額** です。これらは「資産から差し引く側」で表示する勘定で、貸倒引当金は **売掛金から差し引く備え**、減価償却累計額は **備品や建物から差し引く価値減少分** です。
+
+> **貸倒引当金（かしだおれひきあてきん）**: 売掛金が回収できなくなる事態に備えて準備しておくお金。資産マイナス側で表示。
+> **減価償却累計額**: 備品や建物の価値が使うことで減ったぶんの累計。本体から差し引いて表示。
+
+評価勘定はちょっと変則ですが、3級では2つしか出てこないので、出てきたときだけ思い出せばOKです。
+
+### 勘定科目の覚え方
+
+- **5分類で覚える**: 個別に丸暗記より、「これは資産」「これは費用」とカテゴリで覚えるほうが定着します。
+- **動詞とセットで**: 「**仕入** れる」「**売上** が立つ」「**給料** を払う」のように、勘定科目とそれが登場する動作をセットで覚えると忘れにくい。
+- **ドリルで反復**: 結局これがいちばん早いです。問題を解くと自然と分類が体にしみます。
+
+## D. ポイント整理
+
+- 勘定科目は **お金や物の動きにつける名札**
+- 3級で扱うのは **60〜70個** ほど。最初は代表的な30個から
+- すべての勘定科目は **5分類（資産・負債・純資産・収益・費用）** のどれかに属する
+- **同じ意味でも簿記用の決まった名前を使う**（ツケ→買掛金 など）
+- **評価勘定**（貸倒引当金・減価償却累計額）だけ少し特殊
+- 試験では **問題ごとに選択肢が示される** ので完全暗記は不要
+
+## E. 関連記事
+
+- [複式簿記とはなにか](/articles/double-entry) — そもそも仕訳とは
+- [借方・貸方の本当の意味](/articles/debit-credit) — 仕訳の左右の話
+- [5分類のホームポジション](/articles/home-position) — 5カテゴリの増減ルール
+- [借方／貸方が一発でわかる！5分類で覚える簿記の基本](/articles/5-categories) — 5分類の入門記事
+- [商品売買の仕訳パターン徹底解説](/articles/chapter-shouhin) — 仕入・売上系の代表的な勘定科目の使い方
 `,"../../content/articles/chapter-shouhin.md":`---
 slug: chapter-shouhin
 title: 商品売買の仕訳パターン徹底解説
@@ -314,6 +436,123 @@ updatedAt: "2026-05-01T09:00:00+09:00"
 - **諸掛り**: 引取運賃など商品取引の付随費用
 - **クレジット売掛金**: クレカ決済の売上で使う専用勘定
 - **支払手数料**: 信販会社などに払う手数料（費用）
+`,"../../content/articles/debit-credit.md":`---
+slug: debit-credit
+title: 借方・貸方の本当の意味
+description: 「借りる」「貸す」とは関係ありません。借方は左、貸方は右。それだけです。なぜそんな名前なのかも含めてゆっくり。
+category: basics
+chapter: null
+topicIds: []
+readingMinutes: 6
+publishedAt: "2026-05-01T09:00:00+09:00"
+updatedAt: "2026-05-01T09:00:00+09:00"
+---
+
+# 借方・貸方の本当の意味
+
+> 「借方ってどっち？借りるって意味じゃないの？」とつまずく人、めちゃくちゃ多いです。結論：**位置の名前**であって、借りる・貸すの意味とはほぼ関係ありません。
+
+## A. ストーリー
+
+簿記の本を開くと最初に出てくるのが「借方（かりかた）」と「貸方（かしかた）」。日本語の感覚だと「借りる側」「貸す側」と読めてしまうので、何かを借りたり貸したりしている取引なんだろう、と先輩は思うかもしれません。
+
+実は違います。**「借方」は仕訳の左側の欄の名前**、**「貸方」は右側の欄の名前**。それ以上でも以下でもありません。読み方さえ覚えてしまえば、あとは「左／右」と思って大丈夫です。
+
+## B. 用語の整理
+
+- **仕訳（しわけ）**: 取引を「左に書く分」と「右に書く分」に振り分ける作業。詳しくは [複式簿記とはなにか](/articles/double-entry) を読んでみてください。
+- **借方（かりかた）**: 仕訳の **左側** に書く欄のこと。読み方は「かりかた」。「借りる」とは無関係です。
+- **貸方（かしかた）**: 仕訳の **右側** に書く欄のこと。読み方は「かしかた」。これも「貸す」とは無関係。
+- **5分類**: 簿記で使うすべての勘定科目を分けるカテゴリ（資産・負債・純資産・収益・費用）の総称。詳しくは [5分類のホームポジション](/articles/home-position) で扱います。
+
+## C. 本論
+
+### まずは読み方から
+
+意外と読み間違える人が多いので、最初に固定しておきましょう。
+
+| 漢字 | 読み | 位置 |
+|-----|-----|------|
+| 借方 | **かりかた** | 仕訳の **左側** |
+| 貸方 | **かしかた** | 仕訳の **右側** |
+
+「貸し方（かしかた）」とひらがなで書くこともあります。本によって表記がブレますが、読み方は同じです。
+
+### 「借りる／貸す」の意味は捨てていい
+
+日本語の感覚を引きずると、こう考えてしまいがちです。
+
+> ❌「借方は『借りた側』だから、自分が借金したときに使うんでしょ？」
+
+これは間違いです。たとえば「銀行から100万円を借りた」という取引の仕訳はこうなります。
+
+\`\`\`
+借方: 現金     1,000,000
+貸方: 借入金   1,000,000
+\`\`\`
+
+借金したのに、借入金は **貸方** にあるのが見えるでしょうか。「借方＝借りる」という連想は、ここで早くも破綻します。
+
+**借方／貸方は、取引のなかで「お金や権利が動いた方向」とは関係なく、ただの欄の名前** だと割り切ってください。
+
+### じゃあなぜそんな名前？
+
+歴史的な話を少しだけ。簿記は中世イタリアの商人が広めた技法で、もともとは **「他人から借りている分」と「他人に貸している分」** を区別する帳簿として始まりました。その名残で、今も「借方／貸方」という名前が残っています。
+
+ただ、現代の簿記では取引の意味がぐっと広がり、「貸し借り」という元の意味は薄れました。**今は単に「左／右」を表す位置の名前**だと思ってください。実際、英語でも左を Debit、右を Credit と呼びますが、これも本来の意味とは違う使われ方をしています。
+
+> 豆知識: テキストや問題集では「借方／貸方」と書いていても、頭の中では **「左／右」** と読み替えるのがオススメです。それだけで混乱が減ります。
+
+### 左と右、どっちに何を書く？
+
+これは簡単な話ではないので、別記事 [5分類のホームポジション](/articles/home-position) でじっくり扱います。ざっくりだけ書いておくと：
+
+- **資産**（現金・売掛金など）が **増えたら** → 借方（左）
+- **負債**（買掛金・借入金など）が **増えたら** → 貸方（右）
+- **収益**（売上など）が **増えたら** → 貸方（右）
+- **費用**（仕入・給料など）が **増えたら** → 借方（左）
+
+増えたか減ったかと、そのお金がどの分類に属するかで、左右が決まります。
+
+<svg viewBox="0 0 440 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="借方と貸方の位置関係">
+  <rect x="0" y="0" width="440" height="200" fill="#fff5ec"/>
+  <text x="220" y="26" text-anchor="middle" font-size="13" font-weight="bold" fill="#2a1f2a">仕訳の見た目</text>
+  <line x1="60" y1="50" x2="380" y2="50" stroke="#5a544c" stroke-width="1"/>
+  <line x1="60" y1="170" x2="380" y2="170" stroke="#5a544c" stroke-width="1"/>
+  <line x1="220" y1="50" x2="220" y2="170" stroke="#5a544c" stroke-width="1"/>
+  <text x="140" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="#4a6b5a">借方（かりかた）</text>
+  <text x="140" y="95" text-anchor="middle" font-size="11" fill="#4a6b5a">＝ 左側</text>
+  <text x="140" y="120" text-anchor="middle" font-size="11" fill="#2a1f2a">資産↑ ／ 費用↑</text>
+  <text x="140" y="140" text-anchor="middle" font-size="11" fill="#2a1f2a">負債↓ ／ 収益↓</text>
+  <text x="300" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="#c66454">貸方（かしかた）</text>
+  <text x="300" y="95" text-anchor="middle" font-size="11" fill="#c66454">＝ 右側</text>
+  <text x="300" y="120" text-anchor="middle" font-size="11" fill="#2a1f2a">負債↑ ／ 収益↑</text>
+  <text x="300" y="140" text-anchor="middle" font-size="11" fill="#2a1f2a">資産↓ ／ 費用↓</text>
+  <text x="220" y="190" text-anchor="middle" font-size="10" fill="#5a544c">どちらも「位置の名前」。意味は気にしないでOK</text>
+</svg>
+
+### 覚え方のコツ
+
+借方／貸方の位置を瞬時に思い出すコツを3つ。
+
+1. **書いて覚える**: 「**か**りかたは **か**ぎかっこの開く向き＝左」と語呂合わせ。
+2. **入力UIで覚える**: このサイトのドリルでは、左の欄が借方、右の欄が貸方です。何度か入力するうちに体が覚えます。
+3. **読み方を口に出す**: 「かりかた、左」「かしかた、右」と声に出すだけで定着が早い。
+
+## D. ポイント整理
+
+- 借方は **かりかた**、ただの **左の欄の名前**
+- 貸方は **かしかた**、ただの **右の欄の名前**
+- 「借りる／貸す」という日本語の意味とは **無関係**
+- 歴史的な名残で残っている呼び名なので、「左／右」と思っていい
+- どちらに何を書くかは [5分類のホームポジション](/articles/home-position) で機械的に決まる
+
+## E. 関連記事
+
+- [複式簿記とはなにか](/articles/double-entry) — そもそもなぜ左右に分けるのか
+- [5分類のホームポジション](/articles/home-position) — 借方／貸方の振り分けルール
+- [勘定科目とは](/articles/account-name) — 借方・貸方に書く「中身」の話
+- [借方／貸方が一発でわかる！5分類で覚える簿記の基本](/articles/5-categories) — 既存の入門記事
 `,"../../content/articles/double-entry.md":`---
 slug: double-entry
 title: 複式簿記とはなにか
@@ -433,6 +672,186 @@ updatedAt: "2026-05-01T09:00:00+09:00"
 - [5分類のホームポジション](/articles/home-position) — 5カテゴリと借方／貸方の決まり方
 - [仕訳から財務諸表まで](/articles/from-journal-to-statements) — 仕訳がどう集計されて B/S・P/L になるか
 - [借方／貸方が一発でわかる！5分類で覚える簿記の基本](/articles/5-categories) — 5分類の入門記事（既存）
+`,"../../content/articles/home-position.md":`---
+slug: home-position
+title: 5分類のホームポジション
+description: 資産は左、負債は右。なぜそう決まっているのか、どう覚えるのか。仕訳のすべての出発点になる「増減ルール」をじっくり。
+category: basics
+chapter: null
+topicIds: []
+readingMinutes: 8
+publishedAt: "2026-05-01T09:00:00+09:00"
+updatedAt: "2026-05-01T09:00:00+09:00"
+---
+
+# 5分類のホームポジション
+
+> 仕訳でいちばん大事なのが **「増えたら左、増えたら右」** の振り分けルール。これさえ体に入れば、半分は終わったも同然です。
+
+## A. ストーリー
+
+仕訳を書こうとしたとき、毎回つまずくのが **「これって左？右？」** という疑問。実はこの判断、**機械的なルールで決まっています**。考える必要はなく、覚えるだけ。
+
+そのルールが「**5分類のホームポジション**」です。野球の守備位置みたいに、それぞれの分類には **本来いるべき側（ホーム）** が決まっていて、増えたらホームに書き、減ったらホームの反対側に書く。たったそれだけ。
+
+ホームポジションを **理屈とセットで** 覚えれば、本番で迷ったときも「えっと、資産は左がホームだから……」と自分で導けるようになります。今日はそこを目指しましょう。
+
+## B. 用語の整理
+
+- **5分類**: 簿記で扱うすべての勘定科目を分けるカテゴリ。**資産・負債・純資産・収益・費用** の5つです。
+- **資産**: 会社が持っているお金・物・あとでもらえる権利（現金、売掛金、備品など）。
+- **負債**: 会社があとで払う義務・返す義務（買掛金、借入金など）。
+- **純資産**: 会社の元手と、これまで稼いで積み立てたお金（資本金、繰越利益剰余金）。
+- **収益**: 商売で稼いだお金（売上、受取利息など）。
+- **費用**: 商売のためにかかったお金・コスト（仕入、給料、保険料など）。
+- **借方／貸方**: 仕訳の **左側／右側** の欄の名前。詳しくは [借方・貸方の本当の意味](/articles/debit-credit) で。
+- **会計等式**: 「資産＝負債＋純資産」という、簿記の根っこにある関係式。あとで出てきます。
+
+## C. 本論
+
+### ホームポジション一覧
+
+まずは結論から。これが本記事のすべてです。
+
+| 分類 | ホーム（増えたら） | 反対側（減ったら） |
+|-----|----------------|-----------------|
+| **資産** | **借方**（左） | 貸方（右） |
+| **負債** | **貸方**（右） | 借方（左） |
+| **純資産** | **貸方**（右） | 借方（左） |
+| **収益** | **貸方**（右） | 借方（左） |
+| **費用** | **借方**（左） | 貸方（右） |
+
+借方（左）が **資産・費用**。貸方（右）が **負債・純資産・収益**。**2対3** の振り分けです。
+
+<svg viewBox="0 0 440 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="5分類のホームポジション">
+  <rect x="0" y="0" width="440" height="280" fill="#fff5ec"/>
+  <text x="220" y="24" text-anchor="middle" font-size="13" font-weight="bold" fill="#2a1f2a">増えたとき、ホームポジション側に書く</text>
+  <line x1="220" y1="50" x2="220" y2="260" stroke="#5a544c" stroke-width="1.5"/>
+  <text x="115" y="68" text-anchor="middle" font-size="13" font-weight="bold" fill="#4a6b5a">借方（左）がホーム</text>
+  <text x="325" y="68" text-anchor="middle" font-size="13" font-weight="bold" fill="#c66454">貸方（右）がホーム</text>
+  <rect x="30" y="85" width="170" height="55" fill="#dfead0" stroke="#4a6b5a" stroke-width="2" rx="6"/>
+  <text x="115" y="108" text-anchor="middle" font-size="13" font-weight="bold" fill="#2a1f2a">資産</text>
+  <text x="115" y="128" text-anchor="middle" font-size="10" fill="#4a6b5a">現金・売掛金・備品</text>
+  <rect x="30" y="155" width="170" height="55" fill="#f0e7e2" stroke="#7a5a45" stroke-width="2" rx="6"/>
+  <text x="115" y="178" text-anchor="middle" font-size="13" font-weight="bold" fill="#2a1f2a">費用</text>
+  <text x="115" y="198" text-anchor="middle" font-size="10" fill="#7a5a45">仕入・給料・保険料</text>
+  <rect x="240" y="85" width="170" height="40" fill="#ffd2c8" stroke="#c66454" stroke-width="2" rx="6"/>
+  <text x="325" y="108" text-anchor="middle" font-size="13" font-weight="bold" fill="#2a1f2a">負債</text>
+  <text x="325" y="121" text-anchor="middle" font-size="10" fill="#c66454">買掛金・借入金</text>
+  <rect x="240" y="138" width="170" height="40" fill="#e3d7f0" stroke="#6e5689" stroke-width="2" rx="6"/>
+  <text x="325" y="161" text-anchor="middle" font-size="13" font-weight="bold" fill="#2a1f2a">純資産</text>
+  <text x="325" y="174" text-anchor="middle" font-size="10" fill="#6e5689">資本金・剰余金</text>
+  <rect x="240" y="191" width="170" height="40" fill="#fcf2dc" stroke="#8a6a2c" stroke-width="2" rx="6"/>
+  <text x="325" y="214" text-anchor="middle" font-size="13" font-weight="bold" fill="#2a1f2a">収益</text>
+  <text x="325" y="227" text-anchor="middle" font-size="10" fill="#8a6a2c">売上・受取利息</text>
+  <text x="220" y="262" text-anchor="middle" font-size="10" fill="#5a544c">減ったときは反対側</text>
+</svg>
+
+### なぜ「資産は左」「負債は右」なのか
+
+ただ覚えるだけだと忘れやすいので、**理屈** を入れておきましょう。これは簿記の根っこにある **会計等式** から導けます。
+
+\`\`\`
+資産 ＝ 負債 ＋ 純資産
+\`\`\`
+
+「会社が持っているもの（資産）は、人から借りた分（負債）と、自分で出した分（純資産）の合計」という関係式です。家を買うときの「ローン＋頭金＝家の値段」と同じ発想ですね。
+
+これを左右に書き分けるとこうなります。
+
+\`\`\`
+（左）資産  ＝  （右）負債 ＋ 純資産
+\`\`\`
+
+つまり **資産は左** が定位置、**負債と純資産は右** が定位置。これがそのまま借方／貸方のホームポジションになっています。
+
+### では収益と費用は？
+
+収益と費用は、最終的に **純資産を増やしたり減らしたり** する役割を持ちます。
+
+- 売上（収益）が立つと、会社の儲けが増える → 純資産が増える
+- 給料（費用）を払うと、会社の儲けが減る → 純資産が減る
+
+純資産は **右がホーム**。なので：
+
+- **収益** は純資産を増やす方向 → **右がホーム**（純資産と同じ側）
+- **費用** は純資産を減らす方向 → **左がホーム**（純資産の反対側）
+
+つまり収益は右、費用は左。これで5つすべて説明がつきます。
+
+### 機械的に使う：例題
+
+**例1: 「現金が10,000円増えた」**
+現金は資産。資産が増えたらホーム（左）。
+
+\`\`\`
+借方: 現金 10,000
+（貸方: 何かの相手勘定）
+\`\`\`
+
+**例2: 「買掛金が5,000円減った」**
+買掛金は負債。負債が増えたら右がホーム → **減ったら反対側（左）**。
+
+\`\`\`
+借方: 買掛金 5,000
+（貸方: 何かの相手勘定）
+\`\`\`
+
+**例3: 「給料を300,000円払った」**
+給料は費用。費用が増えたらホーム（左）。
+
+\`\`\`
+借方: 給料  300,000
+（貸方: 現金など）
+\`\`\`
+
+ね、機械的でしょう？「これは何分類？」「増えた？減った？」の2問だけ自問すれば、左右が決まります。
+
+### 覚え方のコツ
+
+ホームポジションを定着させる小ワザを3つ。
+
+**(1) 5分類クイック判別の自問**
+
+仕訳を書く前に、心の中でこう唱えます。
+
+> 「この勘定科目は **何分類**？ → 増えた？減った？ → ホームは左／右？」
+
+これを最初の30問くらい毎回やると、勝手に体に入ります。
+
+**(2) 「資費（しひ）は左、負純収（ふじゅんしゅう）は右」**
+
+語呂合わせ。資産＋費用 → **しひ** で借方ホーム。負債＋純資産＋収益 → **ふじゅんしゅう** で貸方ホーム。テキストや問題集ではあまり見ない自家製の語呂ですが、これが意外と覚えやすいです。
+
+**(3) 色で覚える**
+
+このサイトのドリルでは、5分類が色で分けられています（資産＝緑、負債＝ピンク、など）。色の感覚と「これは左／右」がセットになると、忘れにくくなります。
+
+### 評価勘定だけは少し特殊
+
+ほとんどの勘定はこのルールどおりですが、**評価勘定** だけ少し例外的です。
+
+> **評価勘定**: 通常の勘定の金額を補正するために「マイナス側で表示する」勘定。代表は **貸倒引当金** と **減価償却累計額**。
+
+たとえば貸倒引当金は「売掛金（資産）からあとで差し引くマイナス分」なので、売掛金の **反対側（貸方）に積み上がる** のが普通の動きです。資産マイナス側＝貸方が定位置、と覚えてください。
+
+3級ではこの2つしか出てこないので、出てきたときだけ「ああ、評価勘定の特殊ルールか」と思い出せば大丈夫です。
+
+## D. ポイント整理
+
+- ホームポジションは **資産＝左、負債・純資産・収益＝右、費用＝左**
+- 増えたらホーム、減ったら反対側、というシンプルな規則
+- 元の理屈は会計等式 **「資産＝負債＋純資産」** から導ける
+- 仕訳を書く前に「**何分類？増えた？減った？**」の3問を自問する
+- 評価勘定（貸倒引当金・減価償却累計額）だけ少し特殊
+
+## E. 関連記事
+
+- [借方・貸方の本当の意味](/articles/debit-credit) — 左右の名前の話
+- [複式簿記とはなにか](/articles/double-entry) — そもそもなぜ左右に分けるのか
+- [勘定科目とは](/articles/account-name) — 5分類の中身（具体的な科目）
+- [借方／貸方が一発でわかる！5分類で覚える簿記の基本](/articles/5-categories) — クイックリファレンス版
+- [仕訳から財務諸表まで](/articles/from-journal-to-statements) — ホームポジションがどう財務諸表に繋がるか
 `,"../../content/articles/night-before-exam.md":`---
 slug: night-before-exam
 title: 試験前日にやるべきこと完全チェックリスト
@@ -818,4 +1237,4 @@ ${this.parser.parse(e)}</blockquote>
 ${e}</tr>
 `}tablecell(e){let t=this.parser.parseInline(e.tokens),n=e.header?`th`:`td`;return(e.align?`<${n} align="${e.align}">`:`<${n}>`)+t+`</${n}>
 `}strong({tokens:e}){return`<strong>${this.parser.parseInline(e)}</strong>`}em({tokens:e}){return`<em>${this.parser.parseInline(e)}</em>`}codespan({text:e}){return`<code>${Bn(e,!0)}</code>`}br(e){return`<br>`}del({tokens:e}){return`<del>${this.parser.parseInline(e)}</del>`}link({href:e,title:t,tokens:n}){let r=this.parser.parseInline(n),i=Vn(e);if(i===null)return r;e=i;let a=`<a href="`+e+`"`;return t&&(a+=` title="`+Bn(t)+`"`),a+=`>`+r+`</a>`,a}image({href:e,title:t,text:n,tokens:r}){r&&(n=this.parser.parseInline(r,this.parser.textRenderer));let i=Vn(e);if(i===null)return Bn(n);e=i;let a=`<img src="${e}" alt="${Bn(n)}"`;return t&&(a+=` title="${Bn(t)}"`),a+=`>`,a}text(e){return`tokens`in e&&e.tokens?this.parser.parseInline(e.tokens):`escaped`in e&&e.escaped?e.text:Bn(e.text)}},Qn=class{strong({text:e}){return e}em({text:e}){return e}codespan({text:e}){return e}del({text:e}){return e}html({text:e}){return e}text({text:e}){return e}link({text:e}){return``+e}image({text:e}){return``+e}br(){return``}checkbox({raw:e}){return e}},$n=class e{options;renderer;textRenderer;constructor(e){this.options=e||kt,this.options.renderer=this.options.renderer||new Zn,this.renderer=this.options.renderer,this.renderer.options=this.options,this.renderer.parser=this,this.textRenderer=new Qn}static parse(t,n){return new e(n).parse(t)}static parseInline(t,n){return new e(n).parseInline(t)}parse(e){this.renderer.parser=this;let t=``;for(let n=0;n<e.length;n++){let r=e[n];if(this.options.extensions?.renderers?.[r.type]){let e=r,n=this.options.extensions.renderers[e.type].call({parser:this},e);if(n!==!1||![`space`,`hr`,`heading`,`code`,`table`,`blockquote`,`list`,`html`,`def`,`paragraph`,`text`].includes(e.type)){t+=n||``;continue}}let i=r;switch(i.type){case`space`:t+=this.renderer.space(i);break;case`hr`:t+=this.renderer.hr(i);break;case`heading`:t+=this.renderer.heading(i);break;case`code`:t+=this.renderer.code(i);break;case`table`:t+=this.renderer.table(i);break;case`blockquote`:t+=this.renderer.blockquote(i);break;case`list`:t+=this.renderer.list(i);break;case`checkbox`:t+=this.renderer.checkbox(i);break;case`html`:t+=this.renderer.html(i);break;case`def`:t+=this.renderer.def(i);break;case`paragraph`:t+=this.renderer.paragraph(i);break;case`text`:t+=this.renderer.text(i);break;default:{let e=`Token with "`+i.type+`" type was not found.`;if(this.options.silent)return console.error(e),``;throw Error(e)}}}return t}parseInline(e,t=this.renderer){this.renderer.parser=this;let n=``;for(let r=0;r<e.length;r++){let i=e[r];if(this.options.extensions?.renderers?.[i.type]){let e=this.options.extensions.renderers[i.type].call({parser:this},i);if(e!==!1||![`escape`,`html`,`link`,`image`,`strong`,`em`,`codespan`,`br`,`del`,`text`].includes(i.type)){n+=e||``;continue}}let a=i;switch(a.type){case`escape`:n+=t.text(a);break;case`html`:n+=t.html(a);break;case`link`:n+=t.link(a);break;case`image`:n+=t.image(a);break;case`checkbox`:n+=t.checkbox(a);break;case`strong`:n+=t.strong(a);break;case`em`:n+=t.em(a);break;case`codespan`:n+=t.codespan(a);break;case`br`:n+=t.br(a);break;case`del`:n+=t.del(a);break;case`text`:n+=t.text(a);break;default:{let e=`Token with "`+a.type+`" type was not found.`;if(this.options.silent)return console.error(e),``;throw Error(e)}}}return n}},er=class{options;block;constructor(e){this.options=e||kt}static passThroughHooks=new Set([`preprocess`,`postprocess`,`processAllTokens`,`emStrongMask`]);static passThroughHooksRespectAsync=new Set([`preprocess`,`postprocess`,`processAllTokens`]);preprocess(e){return e}postprocess(e){return e}processAllTokens(e){return e}emStrongMask(e){return e}provideLexer(e=this.block){return e?Xn.lex:Xn.lexInline}provideParser(e=this.block){return e?$n.parse:$n.parseInline}},tr=new class{defaults=Ot();options=this.setOptions;parse=this.parseMarkdown(!0);parseInline=this.parseMarkdown(!1);Parser=$n;Renderer=Zn;TextRenderer=Qn;Lexer=Xn;Tokenizer=Yn;Hooks=er;constructor(...e){this.use(...e)}walkTokens(e,t){let n=[];for(let r of e)switch(n=n.concat(t.call(this,r)),r.type){case`table`:{let e=r;for(let r of e.header)n=n.concat(this.walkTokens(r.tokens,t));for(let r of e.rows)for(let e of r)n=n.concat(this.walkTokens(e.tokens,t));break}case`list`:{let e=r;n=n.concat(this.walkTokens(e.items,t));break}default:{let e=r;this.defaults.extensions?.childTokens?.[e.type]?this.defaults.extensions.childTokens[e.type].forEach(r=>{let i=e[r].flat(1/0);n=n.concat(this.walkTokens(i,t))}):e.tokens&&(n=n.concat(this.walkTokens(e.tokens,t)))}}return n}use(...e){let t=this.defaults.extensions||{renderers:{},childTokens:{}};return e.forEach(e=>{let n={...e};if(n.async=this.defaults.async||n.async||!1,e.extensions&&(e.extensions.forEach(e=>{if(!e.name)throw Error(`extension name required`);if(`renderer`in e){let n=t.renderers[e.name];n?t.renderers[e.name]=function(...t){let r=e.renderer.apply(this,t);return r===!1&&(r=n.apply(this,t)),r}:t.renderers[e.name]=e.renderer}if(`tokenizer`in e){if(!e.level||e.level!==`block`&&e.level!==`inline`)throw Error(`extension level must be 'block' or 'inline'`);let n=t[e.level];n?n.unshift(e.tokenizer):t[e.level]=[e.tokenizer],e.start&&(e.level===`block`?t.startBlock?t.startBlock.push(e.start):t.startBlock=[e.start]:e.level===`inline`&&(t.startInline?t.startInline.push(e.start):t.startInline=[e.start]))}`childTokens`in e&&e.childTokens&&(t.childTokens[e.name]=e.childTokens)}),n.extensions=t),e.renderer){let t=this.defaults.renderer||new Zn(this.defaults);for(let n in e.renderer){if(!(n in t))throw Error(`renderer '${n}' does not exist`);if([`options`,`parser`].includes(n))continue;let r=n,i=e.renderer[r],a=t[r];t[r]=(...e)=>{let n=i.apply(t,e);return n===!1&&(n=a.apply(t,e)),n||``}}n.renderer=t}if(e.tokenizer){let t=this.defaults.tokenizer||new Yn(this.defaults);for(let n in e.tokenizer){if(!(n in t))throw Error(`tokenizer '${n}' does not exist`);if([`options`,`rules`,`lexer`].includes(n))continue;let r=n,i=e.tokenizer[r],a=t[r];t[r]=(...e)=>{let n=i.apply(t,e);return n===!1&&(n=a.apply(t,e)),n}}n.tokenizer=t}if(e.hooks){let t=this.defaults.hooks||new er;for(let n in e.hooks){if(!(n in t))throw Error(`hook '${n}' does not exist`);if([`options`,`block`].includes(n))continue;let r=n,i=e.hooks[r],a=t[r];er.passThroughHooks.has(n)?t[r]=e=>{if(this.defaults.async&&er.passThroughHooksRespectAsync.has(n))return(async()=>{let n=await i.call(t,e);return a.call(t,n)})();let r=i.call(t,e);return a.call(t,r)}:t[r]=(...e)=>{if(this.defaults.async)return(async()=>{let n=await i.apply(t,e);return n===!1&&(n=await a.apply(t,e)),n})();let n=i.apply(t,e);return n===!1&&(n=a.apply(t,e)),n}}n.hooks=t}if(e.walkTokens){let t=this.defaults.walkTokens,r=e.walkTokens;n.walkTokens=function(e){let n=[];return n.push(r.call(this,e)),t&&(n=n.concat(t.call(this,e))),n}}this.defaults={...this.defaults,...n}}),this}setOptions(e){return this.defaults={...this.defaults,...e},this}lexer(e,t){return Xn.lex(e,t??this.defaults)}parser(e,t){return $n.parse(e,t??this.defaults)}parseMarkdown(e){return(t,n)=>{let r={...n},i={...this.defaults,...r},a=this.onError(!!i.silent,!!i.async);if(this.defaults.async===!0&&r.async===!1)return a(Error(`marked(): The async option was set to true by an extension. Remove async: false from the parse options object to return a Promise.`));if(typeof t>`u`||t===null)return a(Error(`marked(): input parameter is undefined or null`));if(typeof t!=`string`)return a(Error(`marked(): input parameter is of type `+Object.prototype.toString.call(t)+`, string expected`));if(i.hooks&&(i.hooks.options=i,i.hooks.block=e),i.async)return(async()=>{let n=i.hooks?await i.hooks.preprocess(t):t,r=await(i.hooks?await i.hooks.provideLexer(e):e?Xn.lex:Xn.lexInline)(n,i),a=i.hooks?await i.hooks.processAllTokens(r):r;i.walkTokens&&await Promise.all(this.walkTokens(a,i.walkTokens));let o=await(i.hooks?await i.hooks.provideParser(e):e?$n.parse:$n.parseInline)(a,i);return i.hooks?await i.hooks.postprocess(o):o})().catch(a);try{i.hooks&&(t=i.hooks.preprocess(t));let n=(i.hooks?i.hooks.provideLexer(e):e?Xn.lex:Xn.lexInline)(t,i);i.hooks&&(n=i.hooks.processAllTokens(n)),i.walkTokens&&this.walkTokens(n,i.walkTokens);let r=(i.hooks?i.hooks.provideParser(e):e?$n.parse:$n.parseInline)(n,i);return i.hooks&&(r=i.hooks.postprocess(r)),r}catch(e){return a(e)}}}onError(e,t){return n=>{if(n.message+=`
-Please report this to https://github.com/markedjs/marked.`,e){let e=`<p>An error occurred:</p><pre>`+Bn(n.message+``,!0)+`</pre>`;return t?Promise.resolve(e):e}if(t)return Promise.reject(n);throw n}}};function j(e,t){return tr.parse(e,t)}j.options=j.setOptions=function(e){return tr.setOptions(e),j.defaults=tr.defaults,O(j.defaults),j},j.getDefaults=Ot,j.defaults=kt,j.use=function(...e){return tr.use(...e),j.defaults=tr.defaults,O(j.defaults),j},j.walkTokens=function(e,t){return tr.walkTokens(e,t)},j.parseInline=tr.parseInline,j.Parser=$n,j.parser=$n.parse,j.Renderer=Zn,j.TextRenderer=Qn,j.Lexer=Xn,j.lexer=Xn.lex,j.Tokenizer=Yn,j.Hooks=er,j.parse=j,j.options,j.setOptions,j.use,j.walkTokens,j.parseInline,$n.parse,Xn.lex;function nr({slug:e,onBack:t,onStartCta:n}){let r=w(e),i=(0,l.useMemo)(()=>r?j.parse(r.body,{async:!1}):``,[r]);if(!r)return(0,f.jsxs)(`div`,{className:`min-h-screen px-6 py-8`,children:[(0,f.jsx)(`button`,{onClick:t,className:`text-coral text-sm`,children:`← 戻る`}),(0,f.jsx)(`p`,{className:`mt-4 font-serif italic`,children:`記事が見つかりません`})]});let a=(()=>{if(r.topicIds.length===0)return[];let e=new Set,t=[];for(let n of r.topicIds)for(let r of be(n))e.has(r.id)||(e.add(r.id),t.push(r));return t})();return(0,f.jsxs)(`div`,{className:`min-h-screen`,children:[(0,f.jsx)(`header`,{className:`sticky top-0 z-20 px-5 pt-4 pb-3 backdrop-blur`,style:{background:`rgba(255,245,236,0.75)`,borderBottom:`1px solid rgba(255,255,255,0.6)`},children:(0,f.jsx)(`button`,{onClick:t,className:`text-coral text-[13px] tracking-wider`,"aria-label":`戻る`,children:`← 戻る`})}),(0,f.jsxs)(`main`,{className:`px-6 pb-32 pt-5 max-w-md mx-auto animate-rise`,children:[(0,f.jsxs)(`span`,{className:`eyebrow`,children:[rr(r.category),` · `,r.readingMinutes,` min`]}),(0,f.jsx)(`h1`,{className:`font-serif font-normal text-[32px] mt-3 leading-[1.15] tracking-[-0.015em]`,children:r.title}),r.description&&(0,f.jsx)(`p`,{className:`text-[14px] font-serif italic text-ink-soft mt-3 leading-[1.65]`,children:r.description}),(0,f.jsx)(`article`,{className:`prose-bokist mt-6`,dangerouslySetInnerHTML:{__html:i}}),a.length>0&&(0,f.jsxs)(`button`,{onClick:()=>n(a.slice(0,10),`${r.title} の例題`),className:`peach-button mt-8 w-full py-4 rounded-[18px] text-sm font-medium tracking-wider`,children:[`この記事の例題に挑戦（`,Math.min(a.length,10),`問）→`]})]})]})}function rr(e){return{"exam-overview":`試験概要`,strategy:`合格戦略`,basics:`基本`,"chapter-guide":`章解説`,pitfalls:`落とし穴`,checklist:`チェックリスト`}[e]??e}function ir(){let[e,t]=(0,l.useState)(`home`),[n,r]=(0,l.useState)({kind:`tab`});function i(e,t,n){r({kind:`quiz`,session:{questions:e,mode:t,label:n}})}function a(){r({kind:`tab`})}return n.kind===`quiz`?(0,f.jsx)(gt,{questions:n.session.questions,label:n.session.label,onExit:a,onOpenArticle:e=>r({kind:`article`,slug:e})}):n.kind===`articles`?(0,f.jsx)(Dt,{onOpenArticle:e=>r({kind:`article`,slug:e}),onBack:a}):n.kind===`article`?(0,f.jsx)(nr,{slug:n.slug,onBack:()=>r({kind:`articles`}),onStartCta:(e,t)=>i(e,`article-cta`,t)}):(0,f.jsxs)(`div`,{className:`min-h-screen`,children:[(0,f.jsxs)(`main`,{className:`max-w-md mx-auto`,children:[e===`home`&&(0,f.jsx)(me,{onOpenSettings:()=>t(`settings`),onOpenArticles:()=>r({kind:`articles`})}),e===`drill`&&(0,f.jsx)(De,{onStartSession:i}),e===`stats`&&(0,f.jsx)(ke,{}),e===`settings`&&(0,f.jsx)(ze,{})]}),(0,f.jsx)(v,{active:e,onChange:t})]})}(0,u.createRoot)(document.getElementById(`root`)).render((0,f.jsx)(l.StrictMode,{children:(0,f.jsx)(ir,{})}));
+Please report this to https://github.com/markedjs/marked.`,e){let e=`<p>An error occurred:</p><pre>`+Bn(n.message+``,!0)+`</pre>`;return t?Promise.resolve(e):e}if(t)return Promise.reject(n);throw n}}};function j(e,t){return tr.parse(e,t)}j.options=j.setOptions=function(e){return tr.setOptions(e),j.defaults=tr.defaults,O(j.defaults),j},j.getDefaults=Ot,j.defaults=kt,j.use=function(...e){return tr.use(...e),j.defaults=tr.defaults,O(j.defaults),j},j.walkTokens=function(e,t){return tr.walkTokens(e,t)},j.parseInline=tr.parseInline,j.Parser=$n,j.parser=$n.parse,j.Renderer=Zn,j.TextRenderer=Qn,j.Lexer=Xn,j.lexer=Xn.lex,j.Tokenizer=Yn,j.Hooks=er,j.parse=j,j.options,j.setOptions,j.use,j.walkTokens,j.parseInline,$n.parse,Xn.lex;function nr({slug:e,onBack:t,onStartCta:n,onOpenArticle:r}){function i(e){if(!r)return;let t=e.target.closest(`a`);if(!t)return;let n=(t.getAttribute(`href`)??``).match(/^\/articles\/([\w-]+)\/?$/);n&&(e.preventDefault(),r(n[1]),window.scrollTo({top:0,behavior:`instant`}))}let a=w(e),o=(0,l.useMemo)(()=>a?j.parse(a.body,{async:!1}):``,[a]);if(!a)return(0,f.jsxs)(`div`,{className:`min-h-screen px-6 py-8`,children:[(0,f.jsx)(`button`,{onClick:t,className:`text-coral text-sm`,children:`← 戻る`}),(0,f.jsx)(`p`,{className:`mt-4 font-serif italic`,children:`記事が見つかりません`})]});let s=(()=>{if(a.topicIds.length===0)return[];let e=new Set,t=[];for(let n of a.topicIds)for(let r of be(n))e.has(r.id)||(e.add(r.id),t.push(r));return t})();return(0,f.jsxs)(`div`,{className:`min-h-screen`,children:[(0,f.jsx)(`header`,{className:`sticky top-0 z-20 px-5 pt-4 pb-3 backdrop-blur`,style:{background:`rgba(255,245,236,0.75)`,borderBottom:`1px solid rgba(255,255,255,0.6)`},children:(0,f.jsx)(`button`,{onClick:t,className:`text-coral text-[13px] tracking-wider`,"aria-label":`戻る`,children:`← 戻る`})}),(0,f.jsxs)(`main`,{className:`px-6 pb-32 pt-5 max-w-md mx-auto animate-rise`,children:[(0,f.jsxs)(`span`,{className:`eyebrow`,children:[rr(a.category),` · `,a.readingMinutes,` min`]}),(0,f.jsx)(`h1`,{className:`font-serif font-normal text-[32px] mt-3 leading-[1.15] tracking-[-0.015em]`,children:a.title}),a.description&&(0,f.jsx)(`p`,{className:`text-[14px] font-serif italic text-ink-soft mt-3 leading-[1.65]`,children:a.description}),(0,f.jsx)(`article`,{className:`prose-bokist mt-6`,dangerouslySetInnerHTML:{__html:o},onClick:i}),s.length>0&&(0,f.jsxs)(`button`,{onClick:()=>n(s.slice(0,10),`${a.title} の例題`),className:`peach-button mt-8 w-full py-4 rounded-[18px] text-sm font-medium tracking-wider`,children:[`この記事の例題に挑戦（`,Math.min(s.length,10),`問）→`]})]})]})}function rr(e){return{"exam-overview":`試験概要`,strategy:`合格戦略`,basics:`基本`,"chapter-guide":`章解説`,pitfalls:`落とし穴`,checklist:`チェックリスト`}[e]??e}function ir(){let[e,t]=(0,l.useState)(`home`),[n,r]=(0,l.useState)({kind:`tab`});function i(e,t,n){r({kind:`quiz`,session:{questions:e,mode:t,label:n}})}function a(){r({kind:`tab`})}return n.kind===`quiz`?(0,f.jsx)(gt,{questions:n.session.questions,label:n.session.label,onExit:a,onOpenArticle:e=>r({kind:`article`,slug:e})}):n.kind===`articles`?(0,f.jsx)(Dt,{onOpenArticle:e=>r({kind:`article`,slug:e}),onBack:a}):n.kind===`article`?(0,f.jsx)(nr,{slug:n.slug,onBack:()=>r({kind:`articles`}),onStartCta:(e,t)=>i(e,`article-cta`,t),onOpenArticle:e=>r({kind:`article`,slug:e})}):(0,f.jsxs)(`div`,{className:`min-h-screen`,children:[(0,f.jsxs)(`main`,{className:`max-w-md mx-auto`,children:[e===`home`&&(0,f.jsx)(me,{onOpenSettings:()=>t(`settings`),onOpenArticles:()=>r({kind:`articles`})}),e===`drill`&&(0,f.jsx)(De,{onStartSession:i}),e===`stats`&&(0,f.jsx)(ke,{}),e===`settings`&&(0,f.jsx)(ze,{})]}),(0,f.jsx)(v,{active:e,onChange:t})]})}(0,u.createRoot)(document.getElementById(`root`)).render((0,f.jsx)(l.StrictMode,{children:(0,f.jsx)(ir,{})}));
