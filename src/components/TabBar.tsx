@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 type TabId = 'home' | 'drill' | 'stats' | 'settings'
 
 type Props = {
@@ -5,52 +7,77 @@ type Props = {
   onChange: (id: TabId) => void
 }
 
-const TABS: Array<{ id: TabId; label: string; index: string }> = [
-  { id: 'home',     label: 'ホーム', index: '01' },
-  { id: 'drill',    label: 'ドリル', index: '02' },
-  { id: 'stats',    label: '進捗',   index: '03' },
-  { id: 'settings', label: '設定',   index: '04' },
+function HomeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 11l9-7 9 7v9a2 2 0 0 1-2 2h-4v-7H9v7H5a2 2 0 0 1-2-2v-9z" />
+    </svg>
+  )
+}
+function DrillIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 4l6 6-9 9H5v-6z" />
+      <path d="M13 5l6 6" />
+    </svg>
+  )
+}
+function StatsIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 3v18h18" />
+      <path d="M18 17V9" />
+      <path d="M13 17V5" />
+      <path d="M8 17v-3" />
+    </svg>
+  )
+}
+function MoreIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="5" cy="12" r="1.6" />
+      <circle cx="12" cy="12" r="1.6" />
+      <circle cx="19" cy="12" r="1.6" />
+    </svg>
+  )
+}
+
+const TABS: Array<{ id: TabId; label: string; Icon: () => ReactNode; aria: string }> = [
+  { id: 'home',     label: 'home',  Icon: HomeIcon,  aria: 'ホーム' },
+  { id: 'drill',    label: 'drill', Icon: DrillIcon, aria: 'ドリル' },
+  { id: 'stats',    label: 'stats', Icon: StatsIcon, aria: '進捗' },
+  { id: 'settings', label: 'more',  Icon: MoreIcon,  aria: '設定' },
 ]
 
 export function TabBar({ active, onChange }: Props) {
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-paper/95 backdrop-blur border-t border-line safe-bottom z-20"
       role="tablist"
       aria-label="メインナビゲーション"
+      className="fixed left-4 right-4 bottom-3 max-w-md mx-auto z-30 safe-bottom"
     >
-      <div className="grid grid-cols-4 max-w-md mx-auto px-2 pt-2 pb-1">
+      <div
+        className="grid grid-cols-4 items-center px-1 h-16 rounded-3xl glass"
+        style={{ marginBottom: 'env(safe-area-inset-bottom)' }}
+      >
         {TABS.map((tab) => {
           const isActive = active === tab.id
+          const { Icon } = tab
           return (
             <button
               key={tab.id}
               role="tab"
               aria-selected={isActive}
-              aria-label={tab.label}
+              aria-label={tab.aria}
               onClick={() => onChange(tab.id)}
-              className="relative flex flex-col items-center pt-2 pb-2 transition-colors"
+              className={`mx-1 flex flex-col items-center justify-center gap-1 py-2 rounded-2xl transition-all duration-300 ${
+                isActive
+                  ? 'peach-button text-white'
+                  : 'text-ink-faint hover:text-ink-soft'
+              }`}
             >
-              {isActive && (
-                <span
-                  aria-hidden
-                  className="absolute top-0 left-1/2 -translate-x-1/2 w-7 h-px bg-ink animate-underline origin-center"
-                />
-              )}
-              <span
-                className={`numeral text-[10px] mb-1 transition-colors ${
-                  isActive ? 'text-ink' : 'text-ink-faint'
-                }`}
-              >
-                {tab.index}
-              </span>
-              <span
-                className={`text-[12px] tracking-wider transition-all ${
-                  isActive
-                    ? 'font-serif font-semibold text-ink'
-                    : 'font-sans text-ink-soft'
-                }`}
-              >
+              <span className="w-[18px] h-[18px]"><Icon /></span>
+              <span className="text-[10px] font-medium tracking-[0.06em] lowercase">
                 {tab.label}
               </span>
             </button>

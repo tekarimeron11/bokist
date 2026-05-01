@@ -25,7 +25,7 @@ export function AccountPicker({ value, onChange }: Props) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="px-3 py-2 rounded-xl border border-line bg-white text-sm flex-1 text-left"
+        className="px-3 py-2 rounded-[14px] border border-white/70 bg-white/60 backdrop-blur text-sm flex-1 text-left hover:bg-white/85 transition-colors"
       >
         {selected ? (
           <span>
@@ -35,26 +35,43 @@ export function AccountPicker({ value, onChange }: Props) {
             <span className="ml-2">{selected.name}</span>
           </span>
         ) : (
-          <span className="text-ink-soft">勘定科目を選ぶ</span>
+          <span className="text-ink-faint font-serif italic">勘定科目を選ぶ</span>
         )}
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-30 flex items-end" onClick={() => setOpen(false)}>
+        <div
+          className="fixed inset-0 z-40 flex items-end animate-fade-in"
+          onClick={() => setOpen(false)}
+          style={{ background: 'rgba(42,31,42,0.35)' }}
+          role="dialog"
+          aria-modal="true"
+        >
           <div
-            className="bg-white w-full max-h-[75vh] rounded-t-3xl shadow-2xl p-5 overflow-y-auto safe-bottom"
+            className="glass w-full max-h-[75vh] rounded-t-[28px] p-5 overflow-y-auto safe-bottom animate-rise"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-serif text-base">勘定科目</h3>
-              <button onClick={() => setOpen(false)} className="text-ink-soft text-sm">閉じる</button>
+              <h3 className="font-serif font-medium text-[18px]">
+                勘定科目<i className="italic font-normal text-coral">.</i>
+              </h3>
+              <button
+                onClick={() => setOpen(false)}
+                className="text-coral text-[12px] tracking-wider"
+              >
+                閉じる
+              </button>
             </div>
-            <div className="flex gap-1 mb-4 overflow-x-auto pb-1">
+            <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1 -mx-1 px-1">
               {CATEGORIES.map((c) => (
                 <button
                   key={c.id}
                   onClick={() => setCat(c.id)}
-                  className={`pill ${c.klass} ${cat === c.id ? 'ring-2 ring-ink' : 'opacity-60'}`}
+                  className={`pill ${c.klass} shrink-0 transition-all ${
+                    cat === c.id
+                      ? 'ring-2 ring-coral/40 ring-offset-1 ring-offset-transparent'
+                      : 'opacity-60 hover:opacity-90'
+                  }`}
                 >
                   {c.label}
                 </button>
@@ -68,7 +85,7 @@ export function AccountPicker({ value, onChange }: Props) {
                     onChange(a.id)
                     setOpen(false)
                   }}
-                  className="text-left px-3 py-2 rounded-xl border border-line text-sm hover:border-ink"
+                  className="text-left px-3 py-2.5 rounded-[14px] glass-row text-sm hover:bg-white/80"
                 >
                   {a.name}
                 </button>

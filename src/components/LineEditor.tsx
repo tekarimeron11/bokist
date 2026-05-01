@@ -28,29 +28,27 @@ export function LineEditor({ side, lines, onChange, disabled = false }: Props) {
 
   const sideLabel = side === 'debit' ? '借方' : '貸方'
   const sideRoman = side === 'debit' ? 'DR' : 'CR'
-  const accentBorder = side === 'debit' ? 'border-l-sage' : 'border-l-blush'
+  const accentColor = side === 'debit' ? '#5d7a4a' : '#a04d3f'
   const accentDot = side === 'debit' ? 'bg-sage' : 'bg-blush'
 
   return (
     <section
       aria-disabled={disabled}
-      className={disabled ? 'opacity-50 pointer-events-none transition-opacity duration-200' : 'transition-opacity duration-200'}
+      className={`glass-card rounded-[18px] p-4 transition-opacity duration-200 ${
+        disabled ? 'opacity-50 pointer-events-none' : ''
+      }`}
     >
-      <div className="flex items-baseline gap-2 mb-2">
+      <div className="flex items-baseline gap-2 mb-3">
         <span className={`inline-block w-1.5 h-1.5 rounded-full ${accentDot}`} aria-hidden />
-        <span className="font-display text-xl">{sideLabel}</span>
-        <span className="text-[10px] text-ink-soft tracking-wider">{sideRoman}</span>
+        <span className="font-serif italic font-medium text-[18px]" style={{ color: accentColor }}>
+          {sideLabel}
+        </span>
+        <span className="text-[10px] text-ink-faint tracking-[0.18em] uppercase">{sideRoman}</span>
       </div>
       <div className="flex flex-col gap-2">
         {lines.map((line, i) => {
-          const filled = Boolean(line.account) && Boolean(line.amountText)
           return (
-            <div
-              key={i}
-              className={`flex items-center gap-2 pl-2 border-l-4 rounded-md transition-colors ${
-                filled ? accentBorder : 'border-l-transparent'
-              }`}
-            >
+            <div key={i} className="flex items-center gap-2">
               <AccountPicker
                 value={line.account}
                 onChange={(account) => patch(i, { account })}
@@ -65,13 +63,13 @@ export function LineEditor({ side, lines, onChange, disabled = false }: Props) {
                   const n = parseYenInput(cleaned)
                   patch(i, { amountText: n ? n.toLocaleString('ja-JP') : '' })
                 }}
-                className="w-24 px-2 py-2 rounded-lg border border-line bg-white text-right text-sm font-mono"
+                className="w-24 px-2.5 py-2 rounded-[14px] border border-white/70 bg-white/60 backdrop-blur text-right text-sm tabular focus:outline-none focus:border-coral/50 focus:bg-white/85 transition-colors"
               />
               {lines.length > 1 ? (
                 <button
                   onClick={() => removeLine(i)}
                   aria-label={`${sideLabel} ${i + 1} 行目を削除`}
-                  className="text-ink-soft text-base w-7 h-7 rounded-full hover:bg-line transition-colors"
+                  className="text-ink-soft text-base w-7 h-7 rounded-full hover:bg-white/60 transition-colors"
                 >
                   ×
                 </button>
@@ -83,7 +81,7 @@ export function LineEditor({ side, lines, onChange, disabled = false }: Props) {
         })}
         <button
           onClick={addLine}
-          className="text-xs text-ink-soft border border-dashed border-line rounded-lg py-2 hover:border-ink hover:text-ink transition-colors"
+          className="text-[11.5px] text-ink-soft border border-dashed border-white/70 rounded-[14px] py-2 hover:border-coral hover:text-coral transition-colors"
         >
           + もう1つの科目を追加
         </button>

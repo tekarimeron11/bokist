@@ -76,6 +76,7 @@ export type StructuredExplanation = {
   debitWhy: string
   creditWhy: string
   takeaway: string
+  relatedSlugs?: string[]
 }
 
 export type Question = {

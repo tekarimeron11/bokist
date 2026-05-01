@@ -15,12 +15,12 @@ export type GlossaryEntry = {
 export const GLOSSARY: GlossaryEntry[] = [
   {
     term: '借方',
-    definition: '仕訳の左側のことです。資産の増加、費用の発生、負債・純資産・収益の減少を記録します。',
+    definition: '仕訳の左側に書く欄のことです。意味の「借りる」とは関係なく、単なる位置の名称です。資産が増えたとき・費用が発生したときなどはこちらに書きます。',
     category: 'basic',
   },
   {
     term: '貸方',
-    definition: '仕訳の右側のことです。負債・純資産・収益の増加、資産・費用の減少を記録します。',
+    definition: '仕訳の右側に書く欄のことです。意味の「貸す」とは関係なく、単なる位置の名称です。負債・純資産が増えたとき・収益が発生したときなどはこちらに書きます。',
     category: 'basic',
   },
   {
@@ -54,6 +54,16 @@ export const GLOSSARY: GlossaryEntry[] = [
     category: 'shouhin',
   },
   {
+    term: '買掛金',
+    definition: '商品を仕入れたときの「あとで払う約束」を表す負債のことです。ツケで仕入れた金額がここに入ります。',
+    category: 'shouhin',
+  },
+  {
+    term: '売掛金',
+    definition: '商品を売ったときの「あとでもらえる権利」を表す資産のことです。ツケで売った金額がここに入ります。',
+    category: 'shouhin',
+  },
+  {
     term: '当座借越',
     definition: '当座預金の残高を超えて小切手を振り出した場合に、不足額を銀行が立て替えてくれる仕組みです。負債として「当座借越」勘定で処理します。',
     category: 'genkin',
@@ -69,6 +79,11 @@ export const GLOSSARY: GlossaryEntry[] = [
     category: 'other',
   },
   {
+    term: '振出',
+    definition: '小切手や手形を発行して相手に渡すことを「振り出す」と言います。振り出した側はあとで支払う義務が発生します。',
+    category: 'other',
+  },
+  {
     term: '貸倒引当金',
     definition: '将来の貸倒れに備えてあらかじめ見積もり計上しておく評価勘定です。売掛金や受取手形の控除項目として表示します。',
     category: 'kessan',
@@ -81,6 +96,11 @@ export const GLOSSARY: GlossaryEntry[] = [
   {
     term: '経過勘定',
     definition: '前払・前受・未払・未収のように、決算時に費用・収益を当期に対応させるために使う勘定の総称です。',
+    category: 'kessan',
+  },
+  {
+    term: '見越し',
+    definition: '経過勘定の処理のうち、すでに発生しているのにまだ支払い／受け取りをしていない費用・収益を当期に計上することです。未払利息や未収利息などが該当します。',
     category: 'kessan',
   },
   {

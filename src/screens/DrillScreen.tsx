@@ -57,78 +57,101 @@ export function DrillScreen({ onStartSession }: Props) {
   }
 
   return (
-    <div className="px-5 pt-5 pb-32">
-      <span className="eyebrow">drill · 仕訳</span>
-      <h1 className="font-serif text-[30px] mt-3 leading-tight">仕訳ドリル</h1>
-      <p className="text-[12px] text-ink-soft mt-1.5">
-        毎日の積み重ねが合格への近道。
+    <div className="px-6 pt-6 pb-32">
+      {/* Top bar header echo */}
+      <div className="flex justify-between items-baseline pt-1.5">
+        <span className="eyebrow">Drill</span>
+        <span className="eyebrow-soft">{CHAPTERS.length} chapters</span>
+      </div>
+      <h1 className="font-serif font-normal text-[32px] leading-[1.1] tracking-[-0.015em] mt-2">
+        仕訳ドリル<i className="italic font-light text-coral">.</i>
+      </h1>
+      <p className="font-serif italic text-[13.5px] text-ink-soft mt-2.5 leading-[1.6]">
+        “毎日の積み重ねが、合格への近道。”
       </p>
 
-      {/* Paired editorial action cards — one filled, one outlined */}
-      <div className="mt-6 grid grid-cols-2 gap-3">
+      {/* Two action cards */}
+      <div className="grid grid-cols-2 gap-3 mt-6 animate-rise">
         <button
           onClick={startQuickDrill}
-          className="bg-ink text-white py-5 px-4 rounded-card text-left flex flex-col justify-between min-h-[140px] transition-transform active:scale-[0.98]"
+          className="peach-button rounded-[22px] py-5 px-4 text-left flex flex-col justify-between min-h-[140px]"
         >
           <div>
-            <span className="numeral text-[10px] text-white/60">01</span>
-            <div className="font-display text-2xl mt-2 tracking-tight italic">Quick</div>
+            <span className="text-[10px] tracking-[0.18em] uppercase font-semibold text-white/85">
+              ⚡ Quick
+            </span>
+            <div className="font-serif italic font-light text-[26px] mt-1.5 leading-none">
+              5 問
+            </div>
           </div>
           <div>
-            <div className="font-serif text-[15px]">クイック5問</div>
-            <div className="text-[11px] text-white/60 mt-0.5">2-3分で1セット</div>
+            <div className="font-serif text-[14px] text-white/95">クイックドリル</div>
+            <div className="text-[10.5px] text-white/75 tracking-wide mt-0.5">
+              2-3 min · all chapters
+            </div>
           </div>
         </button>
         <button
           onClick={startReview}
-          className="bg-paper-deep border border-line py-5 px-4 rounded-card text-left flex flex-col justify-between min-h-[140px] transition-transform active:scale-[0.98]"
+          className="glass-card rounded-[22px] py-5 px-4 text-left flex flex-col justify-between min-h-[140px]"
         >
           <div>
-            <span className="numeral text-[10px]">02</span>
-            <div className="font-display text-2xl mt-2 tracking-tight italic text-blush-deep">Review</div>
+            <span className="text-[10px] tracking-[0.18em] uppercase font-semibold text-coral-deep">
+              Review
+            </span>
+            <div className="font-serif italic font-light text-[26px] mt-1.5 leading-none text-coral-deep">
+              苦手
+            </div>
           </div>
           <div>
-            <div className="font-serif text-[15px]">苦手復習</div>
-            <div className="text-[11px] text-ink-soft mt-0.5">正答率50%未満から</div>
+            <div className="font-serif text-[14px]">苦手復習</div>
+            <div className="text-[10.5px] text-ink-faint mt-0.5 tracking-wide">
+              under 50% accuracy
+            </div>
           </div>
         </button>
       </div>
 
-      {/* Chapters TOC — magazine table-of-contents style */}
-      <div className="mt-10 flex items-baseline justify-between mb-2">
-        <span className="eyebrow">chapters</span>
-        <span className="numeral text-[11px]">{CHAPTERS.length}章</span>
+      {/* Chapters */}
+      <div className="flex justify-between items-baseline mt-9 mb-3.5 px-1">
+        <h2 className="font-serif font-medium text-[19px] tracking-[-0.01em]">
+          章を <i className="italic font-normal text-coral">えらぶ</i>
+        </h2>
+        <span className="eyebrow-soft">all chapters</span>
       </div>
-      <ul className="border-t border-line">
-        {CHAPTERS.map((ch, idx) => {
+
+      <ul className="flex flex-col gap-2.5">
+        {CHAPTERS.map((ch) => {
           const s = chapterStats(ch.id)
           const disabled = s.count === 0
           return (
             <li key={ch.id}>
               <button
                 onClick={() => startChapter(ch.id)}
-                className="w-full py-4 text-left flex items-start gap-4 border-b border-line disabled:opacity-50"
                 disabled={disabled}
+                className="w-full glass-row rounded-[18px] px-4 py-3.5 flex items-center gap-3 text-left disabled:opacity-50"
               >
-                <span className="numeral text-lg shrink-0 mt-0.5 leading-none">
-                  {String(idx + 1).padStart(2, '0')}
-                </span>
                 <div className="flex-1 min-w-0">
-                  <div className="font-serif text-[15px] leading-snug">{ch.name}</div>
-                  <div className="text-[11px] text-ink-soft mt-1 leading-relaxed">
+                  <div className="font-serif font-medium text-[15px] leading-[1.35]">
+                    {ch.name}
+                  </div>
+                  <div className="text-[11px] text-ink-soft mt-1 leading-[1.5] line-clamp-1">
                     {ch.description}
                   </div>
-                  <div className="mt-2 flex items-center gap-3 text-[10px] tracking-wider uppercase text-ink-faint">
-                    <span>{s.count}問</span>
-                    <span className="text-line-strong">·</span>
-                    <span>{s.attempts}回</span>
+                  <div className="mt-1.5 flex items-center gap-2 text-[10px] tracking-[0.14em] uppercase text-ink-faint">
+                    <span>{s.count} 問</span>
+                    <span>·</span>
+                    <span>{s.attempts} attempts</span>
                   </div>
                 </div>
-                <div className="text-right shrink-0 self-center">
-                  <div className="amount text-base text-ink">
-                    {s.rate === null ? '—' : `${s.rate}%`}
+                <div className="text-right shrink-0">
+                  <div className="font-serif text-[20px] font-medium tabular leading-none">
+                    {s.rate === null ? '—' : `${s.rate}`}
+                    {s.rate !== null && (
+                      <span className="text-[12px] text-ink-faint font-light ml-0.5">%</span>
+                    )}
                   </div>
-                  <div className="text-[9px] uppercase tracking-wider text-ink-faint mt-0.5">
+                  <div className="text-[9px] tracking-[0.18em] uppercase text-ink-faint mt-1">
                     {s.rate === null ? 'new' : 'rate'}
                   </div>
                 </div>

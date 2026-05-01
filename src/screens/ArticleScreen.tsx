@@ -8,9 +8,24 @@ type Props = {
   slug: string
   onBack: () => void
   onStartCta: (questions: Question[], label: string) => void
+  onOpenArticle?: (slug: string) => void
 }
 
-export function ArticleScreen({ slug, onBack, onStartCta }: Props) {
+export function ArticleScreen({ slug, onBack, onStartCta, onOpenArticle }: Props) {
+  function handleBodyClick(e: React.MouseEvent<HTMLElement>) {
+    if (!onOpenArticle) return
+    const target = e.target as HTMLElement
+    const a = target.closest('a')
+    if (!a) return
+    const href = a.getAttribute('href') ?? ''
+    const m = href.match(/^\/articles\/([\w-]+)\/?$/)
+    if (m) {
+      e.preventDefault()
+      onOpenArticle(m[1])
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    }
+  }
+
   const article = findArticleBySlug(slug)
   const html = useMemo(() => {
     if (!article) return ''
@@ -19,9 +34,9 @@ export function ArticleScreen({ slug, onBack, onStartCta }: Props) {
 
   if (!article) {
     return (
-      <div className="min-h-screen bg-paper px-5 py-8">
-        <button onClick={onBack} className="text-sm text-ink-soft">← 戻る</button>
-        <p className="mt-4">記事が見つかりません</p>
+      <div className="min-h-screen px-6 py-8">
+        <button onClick={onBack} className="text-coral text-sm">← 戻る</button>
+        <p className="mt-4 font-serif italic">記事が見つかりません</p>
       </div>
     )
   }
@@ -42,28 +57,38 @@ export function ArticleScreen({ slug, onBack, onStartCta }: Props) {
   })()
 
   return (
-    <div className="min-h-screen bg-paper">
-      <header className="px-5 pt-4 pb-3 sticky top-0 bg-paper/90 backdrop-blur z-10 border-b border-line">
-        <button onClick={onBack} className="text-sm text-ink-soft" aria-label="戻る">← 戻る</button>
+    <div className="min-h-screen">
+      <header
+        className="sticky top-0 z-20 px-5 pt-4 pb-3 backdrop-blur"
+        style={{ background: 'rgba(255,245,236,0.75)', borderBottom: '1px solid rgba(255,255,255,0.6)' }}
+      >
+        <button onClick={onBack} className="text-coral text-[13px] tracking-wider" aria-label="戻る">
+          ← 戻る
+        </button>
       </header>
-      <main className="px-5 pb-32 max-w-md mx-auto">
-        <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft mt-4">
-          {categoryLabel(article.category)} · {article.readingMinutes}分
-        </div>
-        <h1 className="font-serif text-2xl mt-2 leading-tight">{article.title}</h1>
+      <main className="px-6 pb-32 pt-5 max-w-md mx-auto animate-rise">
+        <span className="eyebrow">
+          {categoryLabel(article.category)} · {article.readingMinutes} min
+        </span>
+        <h1 className="font-serif font-normal text-[32px] mt-3 leading-[1.15] tracking-[-0.015em]">
+          {article.title}
+        </h1>
         {article.description && (
-          <p className="text-sm text-ink-soft mt-2 leading-relaxed">{article.description}</p>
+          <p className="text-[14px] font-serif italic text-ink-soft mt-3 leading-[1.65]">
+            {article.description}
+          </p>
         )}
         <article
           className="prose-bokist mt-6"
           dangerouslySetInnerHTML={{ __html: html }}
+          onClick={handleBodyClick}
         />
         {ctaQuestions.length > 0 && (
           <button
             onClick={() => onStartCta(ctaQuestions.slice(0, 10), `${article.title} の例題`)}
-            className="mt-8 w-full bg-ink text-white py-4 rounded-2xl text-sm font-medium"
+            className="peach-button mt-8 w-full py-4 rounded-[18px] text-sm font-medium tracking-wider"
           >
-            この記事の例題に挑戦（{Math.min(ctaQuestions.length, 10)}問）
+            この記事の例題に挑戦（{Math.min(ctaQuestions.length, 10)}問）→
           </button>
         )}
       </main>
@@ -74,10 +99,10 @@ export function ArticleScreen({ slug, onBack, onStartCta }: Props) {
 function categoryLabel(c: string): string {
   return ({
     'exam-overview': '試験概要',
-    'strategy': '合格戦略',
-    'basics': '基本',
+    'strategy':      '合格戦略',
+    'basics':        '基本',
     'chapter-guide': '章解説',
-    'pitfalls': '落とし穴',
-    'checklist': 'チェックリスト',
+    'pitfalls':      '落とし穴',
+    'checklist':     'チェックリスト',
   } as Record<string, string>)[c] ?? c
 }

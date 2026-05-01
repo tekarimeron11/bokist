@@ -59,12 +59,13 @@ function App() {
         slug={route.slug}
         onBack={() => setRoute({ kind: 'articles' })}
         onStartCta={(qs, label) => startSession(qs, 'article-cta', label)}
+        onOpenArticle={(slug) => setRoute({ kind: 'article', slug })}
       />
     )
   }
 
   return (
-    <div className="min-h-screen bg-paper">
+    <div className="min-h-screen">
       <main className="max-w-md mx-auto">
         {tab === 'home' && (
           <HomeScreen

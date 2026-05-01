@@ -52,38 +52,49 @@ export function SettingsScreen() {
   }
 
   return (
-    <div className="px-5 pt-4 pb-32">
-      <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft">Settings</div>
-      <h1 className="font-serif text-2xl mt-1">設定</h1>
+    <div className="px-6 pt-6 pb-32">
+      <div className="flex justify-between items-baseline pt-1.5">
+        <span className="eyebrow">Settings</span>
+        <span className="eyebrow-soft">more</span>
+      </div>
+      <h1 className="font-serif font-normal text-[32px] mt-2 leading-[1.1] tracking-[-0.015em]">
+        設定<i className="italic font-light text-coral">.</i>
+      </h1>
+      <p className="text-[13.5px] font-serif italic text-ink-soft mt-2.5 leading-[1.6]">
+        “大切なデータは、ご自分でも守ってあげて。”
+      </p>
 
-      <section className="mt-6 p-5 rounded-2xl bg-white border border-line">
-        <h2 className="font-serif text-base">データ管理</h2>
-        <p className="text-xs text-ink-soft mt-1 leading-relaxed">
+      <section className="glass-card rounded-[22px] p-6 mt-6">
+        <span className="eyebrow">Data</span>
+        <h2 className="font-serif font-medium text-[19px] mt-1.5">
+          データ管理
+        </h2>
+        <p className="text-[12.5px] text-ink-soft mt-2 leading-[1.7] font-serif">
           学習履歴をJSONファイルとしてバックアップできます。
-          <br />端末変更前や定期保存にどうぞ。
+          端末変更前や定期保存にどうぞ。
         </p>
-        <div className="mt-4 flex flex-col gap-2">
+        <div className="mt-5 flex flex-col gap-2.5">
           <button
             onClick={handleExport}
-            className="bg-ink text-white py-3 rounded-full text-sm font-medium"
+            className="peach-button py-3 rounded-full text-[13px] font-medium tracking-wider"
           >
             データをエクスポート
           </button>
-          <label className="bg-white border border-line text-ink py-3 rounded-full text-sm font-medium text-center cursor-pointer">
+          <label className="glass-pill py-3 rounded-full text-[13px] font-medium text-ink text-center cursor-pointer hover:bg-white/85 transition-colors">
             データをインポート
             <input type="file" accept="application/json" className="hidden" onChange={handleImport} />
           </label>
           {snapshotKey && (
             <button
               onClick={handleUndo}
-              className="text-xs text-ink-soft underline mt-2"
+              className="text-[11.5px] text-coral underline mt-1.5"
             >
               直前のインポートを取り消す
             </button>
           )}
         </div>
         {message && (
-          <div className="mt-3 text-xs text-ink-soft">{message}</div>
+          <div className="mt-4 text-[12px] text-ink-soft font-serif italic">{message}</div>
         )}
       </section>
     </div>

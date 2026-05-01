@@ -11,10 +11,10 @@ type Props = {
   credit: Entry[]
 }
 
-const INK = '#2d2a26'
-const PAPER = '#fdfaf6'
-const SAGE_SOFT = '#d9e4dd'
-const BLUSH_SOFT = '#f3e1e1'
+const INK = '#2a1f2a'
+const PAPER = 'rgba(255,255,255,0)'
+const SAGE_SOFT = '#dfead0'
+const BLUSH_SOFT = '#ffd2c8'
 
 const ROW_HEIGHT = 32
 const HEADER_HEIGHT = 48
@@ -43,7 +43,7 @@ export function TAccount({ debit, credit }: Props) {
       viewBox={`0 0 ${VIEW_WIDTH} ${totalHeight}`}
       preserveAspectRatio="xMidYMid meet"
       className="w-full max-w-full h-auto"
-      style={{ fontFamily: '"Noto Sans JP", sans-serif' }}
+      style={{ fontFamily: '"Outfit", "Noto Sans JP", sans-serif' }}
     >
       <rect x={0} y={0} width={VIEW_WIDTH} height={totalHeight} fill={PAPER} />
 
