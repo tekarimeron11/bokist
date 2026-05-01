@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { findTerm } from '../data/glossary'
 
 type Props = {
@@ -22,7 +23,7 @@ export function Term({ term, children }: Props) {
         {label}
       </button>
 
-      {open && (
+      {open && createPortal(
         <div
           className="fixed inset-0 z-40 flex items-end animate-fade-in"
           onClick={() => setOpen(false)}
@@ -60,7 +61,8 @@ export function Term({ term, children }: Props) {
               </p>
             )}
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   )

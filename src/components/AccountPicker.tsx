@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { ACCOUNTS_BY_CATEGORY, findAccount } from '../data/accounts'
 import type { AccountCategory, AccountId } from '../types'
 
@@ -39,7 +40,7 @@ export function AccountPicker({ value, onChange }: Props) {
         )}
       </button>
 
-      {open && (
+      {open && createPortal(
         <div
           className="fixed inset-0 z-40 flex items-end animate-fade-in"
           onClick={() => setOpen(false)}
@@ -98,7 +99,8 @@ export function AccountPicker({ value, onChange }: Props) {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   )
