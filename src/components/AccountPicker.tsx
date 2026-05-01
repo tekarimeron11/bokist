@@ -49,7 +49,7 @@ export function AccountPicker({ value, onChange }: Props) {
           aria-modal="true"
         >
           <div
-            className="glass w-full max-h-[75vh] rounded-t-[28px] safe-bottom animate-rise flex flex-col"
+            className="glass w-full h-[75vh] rounded-t-[28px] safe-bottom animate-rise flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* fixed header (no scroll) */}
