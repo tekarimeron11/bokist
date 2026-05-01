@@ -48,13 +48,11 @@ export function AccountPicker({ value, onChange }: Props) {
           aria-modal="true"
         >
           <div
-            className="glass w-full max-h-[75vh] rounded-t-[28px] overflow-y-auto safe-bottom animate-rise"
+            className="glass w-full max-h-[75vh] rounded-t-[28px] safe-bottom animate-rise flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div
-              className="sticky top-0 z-10 px-5 pt-5 pb-3 -mb-1"
-              style={{ background: 'rgba(255,245,236,0.92)', backdropFilter: 'blur(12px)' }}
-            >
+            {/* fixed header (no scroll) */}
+            <div className="shrink-0 px-5 pt-5 pb-3">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-serif font-medium text-[18px]">
                   勘定科目<i className="italic font-normal text-coral">.</i>
@@ -82,7 +80,8 @@ export function AccountPicker({ value, onChange }: Props) {
                 ))}
               </div>
             </div>
-            <div className="px-5 pt-2 pb-5">
+            {/* scrollable body */}
+            <div className="flex-1 min-h-0 overflow-y-auto px-5 pt-2 pb-5">
               <div className="grid grid-cols-2 gap-2">
                 {ACCOUNTS_BY_CATEGORY[cat].map((a) => (
                   <button
