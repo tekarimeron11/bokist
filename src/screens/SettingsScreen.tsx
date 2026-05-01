@@ -101,6 +101,11 @@ export function SettingsScreen({ onBack }: Props) {
           <div className="mt-4 text-[12px] text-ink-soft font-serif italic">{message}</div>
         )}
       </section>
+
+      <footer className="mt-12 text-center text-[10px] text-ink-faint tracking-[0.18em] uppercase">
+        <span className="font-serif italic text-coral mr-1.5">Luca.</span>
+        Made for Ruka · 2026
+      </footer>
       </div>
     </div>
   )

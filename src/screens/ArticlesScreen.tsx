@@ -64,7 +64,7 @@ export function ArticlesScreen({ onOpenArticle, onOpenSettings }: Props) {
     <div className="min-h-screen pb-32">
       {/* Top bar */}
       <header className="px-6 pt-6 flex items-center justify-between">
-        <div className="brand-wordmark text-[22px]">Bokist.</div>
+        <div className="brand-wordmark text-[22px]">Luca.</div>
         <button
           onClick={onOpenSettings}
           aria-label="設定"
