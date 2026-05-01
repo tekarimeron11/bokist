@@ -1,4 +1,4 @@
-# Bokist 要件定義書 v2.3
+# Bokist 要件定義書 v2.4
 
 > 日商簿記3級学習サイト
 > 主人 → 先輩（20代女性）への個人プレゼント
@@ -420,21 +420,22 @@ type Question = {
     credit: Array<{ account: AccountId, amount: number }>;
   };
   explanation: string;              // 1〜2行の解説（後方互換用・必須）
-  structured?: StructuredExplanation; // 構造化解説（§8.5 解説仕様、推奨・任意）
+  explanationStructured?: StructuredExplanation; // 構造化解説（§8.5 解説仕様、推奨・任意）
   tags?: string[];                  // ["手形", "改定対象"] など
 };
 
 type StructuredExplanation = {
-  essence:   string;  // 取引の本質（1文・50〜80字）
-  debitWhy:  string;  // 借方の理由（50〜80字）
-  creditWhy: string;  // 貸方の理由（50〜80字）
-  takeaway:  string;  // ポイント（≦30字）
+  essence:   string;        // 取引の本質（1文・50〜80字）
+  debitWhy:  string;        // 借方の理由（50〜80字）
+  creditWhy: string;        // 貸方の理由（50〜80字）
+  takeaway:  string;        // ポイント（≦30字）
+  relatedSlugs?: string[];  // 関連記事 slug（1〜3件、§7.7 順方向アルゴリズムで最優先）
 };
 ```
 
 #### 構造化解説の運用方針
-- `explanation`（既存・必須）と `structured`（新規・任意）は併存。レンダリング側は `structured` があればそちらを優先表示し、無ければ `explanation` をフォールバック表示する。
-- `structured` の各フィールド本文中には **`<Term>用語名</Term>` インラインタグ** を埋め込める（§8.5）。タグは glossary（§7.8）の `term` と完全一致する文字列のみ有効。
+- `explanation`（既存・必須）と `explanationStructured`（新規・任意）は併存。レンダリング側は `explanationStructured` があればそちらを優先表示し、無ければ `explanation` をフォールバック表示する。
+- `explanationStructured` の各フィールド本文中には **`<Term>用語名</Term>` インラインタグ** を埋め込める（§8.5）。タグは glossary（§7.8）の `term` と完全一致する文字列のみ有効。
 - 文字数バリデーション（ビルド時）：
   - `essence` / `debitWhy` / `creditWhy`: 各 30〜120字（半角換算ではなくコードポイント数）。50〜80字を推奨レンジ。
   - `takeaway`: 1〜30字。
@@ -578,6 +579,27 @@ type Article = {
 
 **不変条件**: `Article.slug` は全記事間で一意（重複禁止）。ビルド時に重複検出する。
 
+#### 記事インベントリ（v2.4 時点・14記事）
+
+| category | slug | 役割 |
+|----------|------|------|
+| exam-overview | `about-boki3` | 試験概要・申込方法（M4.1b で第3問補足追加）|
+| strategy | `score-strategy-70` | 合格スコア戦略 |
+| strategy | `night-before-exam` | 試験前日チェックリスト |
+| basics | `5-categories` | 5分類入門（M4.1b で「勘定科目とは」セクション追加）|
+| basics | `double-entry` | **M4.1** 複式簿記とはなにか |
+| basics | `debit-credit` | **M4.1** 借方・貸方の本当の意味 |
+| basics | `account-name` | **M4.1** 勘定科目とは |
+| basics | `home-position` | **M4.1** 5分類のホームポジション（深掘り版）|
+| basics | `kessan` | **M4.1** 決算とは何か |
+| basics | `furikae-aitekanjo` | **M4.1** 振替と相手勘定（topicIds: ["sonota-teisei"]）|
+| basics | `from-journal-to-statements` | **M4.1** 仕訳から財務諸表まで |
+| basics | `depreciation-meaning` | **M4.1** 減価償却の本当の意味（topicIds: ["kotei-genkashoukyaku"]）|
+| chapter-guide | `chapter-shouhin` | 商品売買解説（M4.1b で「なぜ3勘定？」段落追加）|
+| pitfalls | `prepaid-vs-accrued` | 前払/未払・仮払/立替の使い分け |
+
+`category: 'basics'` の8本（既存 `5-categories` + M4.1 新規7本）が**基礎知識体系**を構成し、解説テンプレと StructuredExplanation の `relatedSlugs` から最も頻繁に参照される。
+
 ### 7.7 記事 ↔ 問題の双方向リンク仕様
 
 #### 索引構造（アプリ初期化時に1度だけ構築）
@@ -593,21 +615,27 @@ N: 全記事数、M: 全問題数。索引はメモリ上の immutable マップ
 解いた問題 `q` に対する関連記事の取得アルゴリズム（最大3件）：
 
 ```
-1. topic 候補取得:
-   const topicCandidates = articlesByTopicId.get(q.topicId) ?? []
+1. explicit 候補取得（最優先）:
+   const explicitSlugs = q.explanationStructured?.relatedSlugs ?? []
+   各 slug を findArticleBySlug で解決し、見つかった Article のみを順序保持して採用
+   未存在 slug は silent drop（writer の typo / 未公開記事への先行参照を許容）
 2. slug 重複除去（同一 slug は1件に圧縮）
-3. 先頭から最大3件を採用（既に updatedAt 降順）
-   const result: Article[] = topicCandidates.slice(0, 3) [重複除去後]
+3. 先頭から最大3件を採用
+   const result: Article[] = (resolved explicit articles).slice(0, 3)
 4. 残り枠 N = 3 - result.length が > 0 のとき:
-   4.1 chapter 候補取得: articlesByChapterId.get(q.chapter) ?? []
+   4.1 topic 候補取得: articlesByTopicId.get(q.topicId) ?? []
    4.2 result 内の slug を除外
    4.3 N 件まで先頭から補充
-5. 全体を最大3件で truncate（不変条件として redundant、保守的に実施）
-6. 件数 0 の場合、UI に「関連記事は準備中」と表示
+5. さらに残り枠 N = 3 - result.length が > 0 のとき:
+   5.1 chapter 候補取得: articlesByChapterId.get(q.chapter) ?? []
+   5.2 result 内の slug を除外
+   5.3 N 件まで先頭から補充
+6. 全体を最大3件で truncate（不変条件として redundant、保守的に実施）
+7. 件数 0 の場合、UI に「関連記事は準備中」と表示
 ```
 
-優先順位は **topicId 一致 ＞ chapterId 一致**。
-不変条件 `Article.slug 一意` により step 2 / step 4.2 の重複除去は同一 slug 検出のみで十分。
+優先順位は **explicit relatedSlugs ＞ topicId 一致 ＞ chapterId 一致**。
+不変条件 `Article.slug 一意` により各 step の重複除去は同一 slug 検出のみで十分。
 
 #### 記事画面 (S-08) からの逆方向リンク（R-044）
 記事 `a` から練習問題への遷移：
@@ -932,4 +960,5 @@ credit: [{ account: "accounts_payable", amount: 80000 }]
 | v2.0 | 2026-05-01 | 大規模変更。詳細は下記 v2.0 内訳：<br>**(機能)** スライド機能を解説記事に置換、R-040〜R-046 を新設、§7.6 Article 型、§7.7 双方向リンク、結果画面 S-04 に関連記事セクション、画面 S-07/S-08 を追加、marked 採用<br>**(データ)** Round 2 コンテンツ生成結果 52問（26論点×2問）を反映、journals.json 確定<br>**(運用)** Q-01/Q-06 を記事化に変更、Q-05 を `tekarimeron11/bokist` に確定 |
 | v2.1 | 2026-05-01 | codex-review v2.0 反映：<br>**(blocking)** (1) R-043 関連記事検索の優先順位を topicId→chapterId→0件「準備中」へ明文化、最大3件・updatedAt 降順・重複除去のルール追加。(2) §7.7 索引構造（articlesByTopicId / articlesByChapterId / questionsByTopicId）の構築タイミング・計算量保証を契約化。(3) M2/M4 の必須/任意境界を表で再定義（記事機能は M4 必須、M2 では「準備中」表示）。<br>**(advisory)** (4) `TopicId` literal union 型を §7.7 に追加し Question/Article で共通使用＋ビルド時集合検証を要件化。(5) R-044 で `topicIds` 空配列時のCTA非表示を明記。(6) 改版履歴 v2.0 を機能/データ/運用に分割。 |
 | v2.2 | 2026-05-01 | codex-review v2.1 反映：<br>(1) §7.1 `Question.topicId` と §7.6 `Article.topicIds[]` の型契約を `string` から `TopicId` に統一（v2.1 で §7.7 に union 追加したが本文の型未更新だった）。<br>(2) §7.7 順方向アルゴリズムの順序を「候補取得→slug重複除去→3件採用→不足分のみ chapter 補充→再除去→3件 truncate」に修正、上位3件内に重複があった際の取りこぼしを解消。`Article.slug` 一意性を不変条件として §7.6 に明記。 |
-| v2.3 | 2026-05-01 | 解説体験の本格化と新デザイン採用：<br>**(機能・スキーマ)** (1) §7.1 `Question.structured?: StructuredExplanation` を新設（essence / debitWhy / creditWhy / takeaway の4要素）。`explanation` は後方互換用に残す。(2) §7.8 `GlossaryTerm` 型と `<Term>` インラインタグ参照ルール、ビルド時の孤立Term検証を新設。<br>**(UI)** (3) §8.5「解説仕様」を新設し、4要素表示モデル、用語ポップアップ（底面シート・キーボード操作・スクリーンリーダー対応）、T字勘定レンダリング（借方/貸方の左右配置、`isContra` 評価勘定の扱い、small viewport ダウングレード、figure+figcaption によるa11yサマリ）、M2/M4 のロールアウト境界を定義。<br>**(デザイン)** (4) §9.2 を全面改訂し Soft Paper / Editorial テーマを正式採用。Tailwind 拡張カラー（paper / ink / blush / sage / iris / gold / cocoa / line / seal）、フォントスタック（Marcellus + Noto Sans JP / Noto Serif JP + DM Mono）、shadow / rounded / animation トークン、`studyMode: "exam"` 時の挙動、`prefers-reduced-motion` 縮約ルールを明文化。 |
+| v2.3 | 2026-05-01 | 解説体験の本格化と新デザイン採用：<br>**(機能・スキーマ)** (1) §7.1 `Question.explanationStructured?: StructuredExplanation` を新設（essence / debitWhy / creditWhy / takeaway の4要素）。`explanation` は後方互換用に残す。(2) §7.8 `GlossaryTerm` 型と `<Term>` インラインタグ参照ルール、ビルド時の孤立Term検証を新設。<br>**(UI)** (3) §8.5「解説仕様」を新設し、4要素表示モデル、用語ポップアップ（底面シート・キーボード操作・スクリーンリーダー対応）、T字勘定レンダリング（借方/貸方の左右配置、`isContra` 評価勘定の扱い、small viewport ダウングレード、figure+figcaption によるa11yサマリ）、M2/M4 のロールアウト境界を定義。<br>**(デザイン)** (4) §9.2 を全面改訂し Soft Paper / Editorial テーマを正式採用。Tailwind 拡張カラー（paper / ink / blush / sage / iris / gold / cocoa / line / seal）、フォントスタック（Marcellus + Noto Sans JP / Noto Serif JP + DM Mono）、shadow / rounded / animation トークン、`studyMode: "exam"` 時の挙動、`prefers-reduced-motion` 縮約ルールを明文化。 |
+| v2.4 | 2026-05-01 | 主人指示「解説より先に基礎記事を充実」と Sunlit Glass デザイン採用：<br>**(機能・スキーマ)** (1) §7.1 `StructuredExplanation` に `relatedSlugs?: string[]` を新設。1〜3件の記事 slug を明示指定可能。(2) §7.7 結果画面 (S-04) 順方向アルゴリズムを「**explicit relatedSlugs ＞ topicId 一致 ＞ chapterId 一致**」の3段階に拡張。未存在 slug は silent drop（writer の typo / 先行参照の許容）。<br>**(コンテンツ)** (3) §7.6 記事数を 6 → **14** に増補（M4.1 で `double-entry` / `debit-credit` / `account-name` / `home-position` / `kessan` / `furikae-aitekanjo` / `from-journal-to-statements` / `depreciation-meaning` を追加、既存 `5-categories` / `about-boki3` / `chapter-shouhin` に最小補足）。category: 'basics' を主軸に基礎概念体系を構築。<br>**(デザイン)** (4) §9.2 を Sunlit Glass テーマに更改：ピーチ放射グラデ背景、フロステッドガラスカード、Fraunces+Outfit フォント、5分類カラーをペースト調にリチューン（sage/blush/iris/gold/cocoa）、ボトムタブを浮遊グラスピル化。<br>**(整合)** (5) v2.3 改版履歴で `Question.structured?` と表記したフィールド名を実装と一致する `Question.explanationStructured?` に訂正。 |
