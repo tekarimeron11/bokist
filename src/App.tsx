@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { TabBar, type TabId } from './components/TabBar'
-import { HomeScreen } from './screens/HomeScreen'
 import { DrillScreen } from './screens/DrillScreen'
-import { StatsScreen } from './screens/StatsScreen'
 import { SettingsScreen } from './screens/SettingsScreen'
 import { QuizScreen } from './screens/QuizScreen'
 import { ArticlesScreen } from './screens/ArticlesScreen'
@@ -18,11 +16,11 @@ type Session = {
 type Route =
   | { kind: 'tab' }
   | { kind: 'quiz'; session: Session }
-  | { kind: 'articles' }
   | { kind: 'article'; slug: string }
+  | { kind: 'settings' }
 
 function App() {
-  const [tab, setTab] = useState<TabId>('home')
+  const [tab, setTab] = useState<TabId>('articles')
   const [route, setRoute] = useState<Route>({ kind: 'tab' })
 
   function startSession(questions: Question[], mode: Session['mode'], label: string) {
@@ -44,38 +42,31 @@ function App() {
     )
   }
 
-  if (route.kind === 'articles') {
-    return (
-      <ArticlesScreen
-        onOpenArticle={(slug) => setRoute({ kind: 'article', slug })}
-        onBack={backToTab}
-      />
-    )
-  }
-
   if (route.kind === 'article') {
     return (
       <ArticleScreen
         slug={route.slug}
-        onBack={() => setRoute({ kind: 'articles' })}
+        onBack={backToTab}
         onStartCta={(qs, label) => startSession(qs, 'article-cta', label)}
         onOpenArticle={(slug) => setRoute({ kind: 'article', slug })}
       />
     )
   }
 
+  if (route.kind === 'settings') {
+    return <SettingsScreen onBack={backToTab} />
+  }
+
   return (
     <div className="min-h-screen">
       <main className="max-w-md mx-auto">
-        {tab === 'home' && (
-          <HomeScreen
-            onOpenSettings={() => setTab('settings')}
-            onOpenArticles={() => setRoute({ kind: 'articles' })}
+        {tab === 'articles' && (
+          <ArticlesScreen
+            onOpenArticle={(slug) => setRoute({ kind: 'article', slug })}
+            onOpenSettings={() => setRoute({ kind: 'settings' })}
           />
         )}
         {tab === 'drill' && <DrillScreen onStartSession={startSession} />}
-        {tab === 'stats' && <StatsScreen />}
-        {tab === 'settings' && <SettingsScreen />}
       </main>
       <TabBar active={tab} onChange={setTab} />
     </div>

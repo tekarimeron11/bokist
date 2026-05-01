@@ -14,7 +14,11 @@ function downloadJson(filename: string, json: string) {
   URL.revokeObjectURL(url)
 }
 
-export function SettingsScreen() {
+type Props = {
+  onBack: () => void
+}
+
+export function SettingsScreen({ onBack }: Props) {
   const [message, setMessage] = useState<string | null>(null)
   const [snapshotKey, setSnapshotKey] = useState<string | null>(null)
 
@@ -52,11 +56,14 @@ export function SettingsScreen() {
   }
 
   return (
-    <div className="px-6 pt-6 pb-32">
-      <div className="flex justify-between items-baseline pt-1.5">
-        <span className="eyebrow">Settings</span>
-        <span className="eyebrow-soft">more</span>
-      </div>
+    <div className="min-h-screen">
+      <header className="px-6 pt-6 pb-3 flex items-center gap-3">
+        <button onClick={onBack} aria-label="戻る" className="text-coral text-[13px] tracking-wider">
+          ← 戻る
+        </button>
+      </header>
+      <div className="px-6 pb-32">
+      <span className="eyebrow">Settings</span>
       <h1 className="font-serif font-normal text-[32px] mt-2 leading-[1.1] tracking-[-0.015em]">
         設定
       </h1>
@@ -94,6 +101,7 @@ export function SettingsScreen() {
           <div className="mt-4 text-[12px] text-ink-soft font-serif italic">{message}</div>
         )}
       </section>
+      </div>
     </div>
   )
 }
