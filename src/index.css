@@ -22,4 +22,18 @@
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .badge-asset     { background: #e8f0eb; color: #4a6b5a; }
+  .badge-liability { background: #fce8e8; color: #9b5050; }
+  .badge-equity    { background: #efe6f5; color: #6e5689; }
+  .badge-revenue   { background: #fcf2dc; color: #8a6a2c; }
+  .badge-expense   { background: #f0e7e2; color: #7a5a45; }
 }

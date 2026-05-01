@@ -1,8 +1,8 @@
-# Bokist 要件定義書 v2.0
+# Bokist 要件定義書 v2.2
 
 > 日商簿記3級学習サイト
 > 主人 → 先輩（20代女性）への個人プレゼント
-> 2026-05-01 v1 起草 → v1.1〜v1.4（codex-review 反映）→ v2.0（記事機能追加・Round 2反映） / Stella
+> 2026-05-01 v1 起草 → v1.1〜v1.4 → v2.0 → v2.1 → v2.2（codex-review v2.1 反映） / Stella
 
 ---
 
@@ -167,12 +167,12 @@ function isQuestionAvailable(q: Question, profile: SyllabusProfile, now: Date): 
 | R-040 | 解説記事を `content/articles/*.md` に Markdown で執筆し、ビルド時に HTML 変換する | 必須 |
 | R-041 | 記事はカテゴリ：(a) 試験概要・受験手続き、(b) 合格戦略、(c) 簿記の基本（5分類・借方/貸方）、(d) 各章の要点、(e) よくある落とし穴、(f) 試験前日チェックリスト の6カテゴリで提供 | 必須 |
 | R-042 | 記事一覧画面 / 記事個別画面を提供する | 必須 |
-| R-043 | **問題の結果画面**に、当該問題の `topicId` / `chapterId` で紐付く関連記事へのリンクを表示する（学習動線の中核） | 必須 |
-| R-044 | **記事個別画面**の末尾に、紐付く `topicIds` の練習問題への遷移ボタンを表示する（記事 → 問題への逆動線） | 必須 |
+| R-043 | **問題の結果画面**に、当該問題の `topicId` / `chapterId` で紐付く関連記事へのリンクを表示する（学習動線の中核）。優先順位は **topicId 一致 → chapterId 一致 → 0件で「準備中」表示**（§7.7 順方向アルゴリズム参照） | 必須 |
+| R-044 | **記事個別画面**の末尾に、紐付く `topicIds` の練習問題への遷移ボタンを表示する。`topicIds` が空配列の章解説等では CTA 非表示（§7.7 逆方向アルゴリズム参照） | 必須 |
 | R-045 | 記事のサポートライブラリは `marked`（軽量・約20KB）を採用、reveal.js は不採用 | 必須 |
-| R-046 | 記事執筆優先度：M2リリース時は最低 6記事（試験概要・合格戦略・5分類入門・借方貸方の覚え方・10章のうち頻出3章の要点・試験前日チェックリスト）を含める | 必須 |
+| R-046 | 記事執筆優先度：**M4リリース時**に最低 6記事（試験概要・合格戦略・5分類入門・借方貸方の覚え方・10章のうち頻出3章の要点・試験前日チェックリスト）を含める | 必須（M4） |
 
-> **R-040〜R-046 は v1 スコープ外**。M2（フェーズ1完了）と同時リリース、フェーズ1.5で記事追加。
+> **R-040〜R-046 は v1 スコープ外**。M4（フェーズ1.5）でリリース。M2（フェーズ1完了）では問題ドリル＋結果画面のみで、結果画面の関連記事セクションは「準備中」表示のみ。
 
 #### バックアップ・ITP対策
 | ID | 要件 | 優先度 |
@@ -225,7 +225,7 @@ function isQuestionAvailable(q: Question, profile: SyllabusProfile, now: Date): 
 | S-05 | 進捗ダッシュボード | 週次バーチャート、章別正答率、苦手論点リスト |
 | S-06 | 設定 | エクスポート/インポート、学習モード切替、シラバスプロファイル（拡張余地） |
 | S-07 | 記事一覧 | カテゴリ別の記事リスト、検索（フェーズ1.5） |
-| S-08 | 記事個別 | Markdown→HTML レンダリング、末尾に該当 topicId 問題への CTA（R-044） |
+| S-08 | 記事個別 | Markdown→HTML レンダリング、末尾に該当 `topicIds`（複数）の問題を統合した CTA（R-044・§7.7 逆方向アルゴリズム） |
 
 ---
 
@@ -406,8 +406,8 @@ bokist:settings:v1       // ユーザー設定
 type Question = {
   id: string;                       // "Q-shouhin-001"
   chapter: ChapterId;               // §7.4 のEnum
-  topic: string;                    // "三分法による仕入"
-  topicId: string;                  // "shouhin-sanbunpou-shiire"
+  topic: string;                    // "三分法による仕入"（表示用日本語名）
+  topicId: TopicId;                 // §7.7 の literal union（"shouhin-sanbunpou-shiire" 等）
   difficulty: 1 | 2 | 3;
   frequency: 1 | 2 | 3;
   syllabusVersion: "2026" | "2027"; // 主シラバス
@@ -520,12 +520,12 @@ type ArticleCategory =
   | "checklist";      // (f) 試験前日チェックリスト
 
 type Article = {
-  slug: string;             // ASCII kebab-case（URLパス）
+  slug: string;             // ASCII kebab-case（URLパス）。**全記事間で一意（不変条件）**
   title: string;            // 記事タイトル
   description?: string;     // 1行サマリ
   category: ArticleCategory;
   chapter?: ChapterId;      // 章解説の場合
-  topicIds: string[];       // 紐付ける論点（複数可、配列空でも可）
+  topicIds: TopicId[];      // §7.7 の TopicId（複数可、配列空でも可）
   body: string;             // Markdown 本文
   readingMinutes: number;   // 推定読了時間（分）
   publishedAt: string;      // ISO8601
@@ -533,19 +533,71 @@ type Article = {
 };
 ```
 
+**不変条件**: `Article.slug` は全記事間で一意（重複禁止）。ビルド時に重複検出する。
+
 ### 7.7 記事 ↔ 問題の双方向リンク仕様
 
-**結果画面 (S-04) からの順方向リンク（R-043）**：
-- 解いた問題の `topicId` で `articles` を検索
-- ヒットした記事を最大3件、関連記事として表示（並び順は `updatedAt` 降順）
-- ヒット0件のときは「関連記事は準備中」と表示
+#### 索引構造（アプリ初期化時に1度だけ構築）
+```ts
+// すべて O(N+M) で初期化、取得時 O(1) + 結果件数 k のみ
+articlesByTopicId:   Map<TopicId,   Article[]>   // updatedAt 降順で保持
+articlesByChapterId: Map<ChapterId, Article[]>   // updatedAt 降順で保持
+questionsByTopicId:  Map<TopicId,   Question[]>  // 元配列順
+```
+N: 全記事数、M: 全問題数。索引はメモリ上の immutable マップ。
 
-**記事画面 (S-08) からの逆方向リンク（R-044）**：
-- 記事の `topicIds` 配列を順に走査
-- 各 topicId に紐付く問題を1問ずつ抽出（同じ問題の重複は除く）
-- 「この記事の例題に挑戦（N問）」ボタンを末尾に表示、タップで問題ドリル開始
+#### 結果画面 (S-04) からの順方向リンク（R-043）
+解いた問題 `q` に対する関連記事の取得アルゴリズム（最大3件）：
 
-紐付けは `topicId` を主キーとする逆引きマップで O(1) アクセス。
+```
+1. topic 候補取得:
+   const topicCandidates = articlesByTopicId.get(q.topicId) ?? []
+2. slug 重複除去（同一 slug は1件に圧縮）
+3. 先頭から最大3件を採用（既に updatedAt 降順）
+   const result: Article[] = topicCandidates.slice(0, 3) [重複除去後]
+4. 残り枠 N = 3 - result.length が > 0 のとき:
+   4.1 chapter 候補取得: articlesByChapterId.get(q.chapter) ?? []
+   4.2 result 内の slug を除外
+   4.3 N 件まで先頭から補充
+5. 全体を最大3件で truncate（不変条件として redundant、保守的に実施）
+6. 件数 0 の場合、UI に「関連記事は準備中」と表示
+```
+
+優先順位は **topicId 一致 ＞ chapterId 一致**。
+不変条件 `Article.slug 一意` により step 2 / step 4.2 の重複除去は同一 slug 検出のみで十分。
+
+#### 記事画面 (S-08) からの逆方向リンク（R-044）
+記事 `a` から練習問題への遷移：
+
+```
+1. a.topicIds が空配列の場合 → CTA 非表示（章解説等のため）
+2. それ以外：
+   2.1 各 topicId について questionsByTopicId.get(topicId) を取得
+   2.2 すべて連結（重複は q.id で除去）
+   2.3 「この記事の例題に挑戦（N問）」ボタン表示、N = 連結後の件数
+   2.4 タップで問題ドリルセッション開始
+```
+
+#### 共通 `TopicId` 型
+将来の typo 検知のため、`src/types/index.ts` に literal union として定義：
+
+```ts
+export type TopicId =
+  | 'shouhin-sanbunpou-shiire' | 'shouhin-sanbunpou-uriage'
+  | 'shouhin-henpin'           | 'shouhin-credit'
+  | 'genkin-kabusoku'          | 'genkin-kogucchi' | 'genkin-tozakarikoshi'
+  | 'tegata-yakusoku'          | 'tegata-denshi'
+  | 'urikake-kessai'           | 'urikake-hikiate-settei' | 'urikake-hikiate-shiyou'
+  | 'kotei-shutoku'            | 'kotei-genkashoukyaku'   | 'kotei-baikyaku'
+  | 'kyuryou-kyuryou'          | 'kyuryou-shahoken-nouhu'
+  | 'keika-kurinobe'           | 'keika-mikoshi'
+  | 'zeikin-shouhi'            | 'zeikin-houjin'
+  | 'shihon-haitou'            | 'shihon-kabushiki'
+  | 'sonota-teisei'            | 'sonota-shouhinken'      | 'sonota-tatekae'
+```
+
+`Question.topicId` と `Article.topicIds[]` の両方でこの型を採用し、ビルド時に typo を検出。
+ビルド時バリデーションで `article.topicIds ⊆ Set(全問題の topicId)` を検証する。
 
 ---
 
@@ -648,14 +700,14 @@ credit: [{ account: "accounts_payable", amount: 80000 }]
 
 ## 11. リリース計画
 
-| マイルストーン | 内容 |
-|---------------|------|
-| M0 | 要件定義 v1.x 確定（codex-review クリア） |
-| M1 | コンテンツ生成完了（仕訳52問+解説、26論点90%網羅） |
-| M2 | フェーズ1 実装完了 |
-| M3 | GitHub Pages デプロイ・先輩に共有 |
-| M4 | 先輩フィードバック反映（フェーズ1.5） |
-| M5 | フェーズ2（第3問）実装 |
+| マイルストーン | フェーズ | 必須機能 | 任意・延期項目 |
+|---------------|---------|---------|--------------|
+| M0 | 準備 | 要件定義 v2.x 確定（codex-review クリア） | — |
+| M1 | コンテンツ | 仕訳問題52問（26論点 × 各2問） | 解説の文体磨き |
+| M2 | フェーズ1 完了 | ホーム / ドリル / 結果（解説） / 進捗 / 設定。エクスポート/インポート、PWA、採点正規化、syllabus判定 | 関連記事セクションは「準備中」表示のみ |
+| M3 | リリース | GitHub Pages デプロイ・先輩に共有 | — |
+| M4 | フェーズ1.5 | **記事機能（R-040〜R-046、最低6記事）**、結果画面に関連記事リンク、記事画面のCTA、苦手復習の重み調整 | フェーズ1.5 で +52問 |
+| M5 | フェーズ2 | 第3問（決算問題）対策 | 模擬試験モード |
 
 ---
 
@@ -703,4 +755,6 @@ credit: [{ account: "accounts_payable", amount: 80000 }]
 | v1.2 | 2026-05-01 | codex-review v1.1 反映：(1)論点数を26に統一（journal-patterns.md整合）、(2)topicId 命名規則明文化＋ASCII違反修正（kuriノベ→kurinobe）、(3)syllabusVersion値を `2026/2027` 単一仕様化＋有効性判定アルゴリズム明記、(4)インポート検証を全フィールド網羅・enum検証強化、(5)失敗パス6種を網羅表で明文化、(6)採点ルールをAccountIdベースに型整合・borrow→debit 修正。 |
 | v1.3 | 2026-05-01 | codex-review v1.2 反映：(1)R-023 の問題数を「+52問（合計104問）」に揃えて Q-03/§7.5 と整合、(2)`parseSyllabusDate` 仕様を新設し YYYY-MM-DD は JST 00:00 へ明示正規化、Invalid Date は出題候補から除外を明記、(3)失敗パス一覧にファイルサイズ超過・ファイル読込失敗・未知 AccountId を追加、再試行方針列を追加、(4)attempt 検証で `account` を勘定科目マスタ既知 AccountId のみ許可と明文化。 |
 | v1.4 | 2026-05-01 | codex-review v1.3 反映：`isQuestionAvailable` 疑似コードに `Number.isNaN(parsed.getTime())` の Invalid Date 判定を明示追加（仕様文と一致）。 |
-| v2.0 | 2026-05-01 | 主人指示で **スライド機能を解説記事に置換**。R-040〜R-046 を新設し、記事スキーマ（§7.6）・問題↔記事の双方向リンク（§7.7）・marked 採用を要件化。Round 2 コンテンツ生成結果（52問）を反映、リポジトリ名を `tekarimeron11/bokist` に確定。 |
+| v2.0 | 2026-05-01 | 大規模変更。詳細は下記 v2.0 内訳：<br>**(機能)** スライド機能を解説記事に置換、R-040〜R-046 を新設、§7.6 Article 型、§7.7 双方向リンク、結果画面 S-04 に関連記事セクション、画面 S-07/S-08 を追加、marked 採用<br>**(データ)** Round 2 コンテンツ生成結果 52問（26論点×2問）を反映、journals.json 確定<br>**(運用)** Q-01/Q-06 を記事化に変更、Q-05 を `tekarimeron11/bokist` に確定 |
+| v2.1 | 2026-05-01 | codex-review v2.0 反映：<br>**(blocking)** (1) R-043 関連記事検索の優先順位を topicId→chapterId→0件「準備中」へ明文化、最大3件・updatedAt 降順・重複除去のルール追加。(2) §7.7 索引構造（articlesByTopicId / articlesByChapterId / questionsByTopicId）の構築タイミング・計算量保証を契約化。(3) M2/M4 の必須/任意境界を表で再定義（記事機能は M4 必須、M2 では「準備中」表示）。<br>**(advisory)** (4) `TopicId` literal union 型を §7.7 に追加し Question/Article で共通使用＋ビルド時集合検証を要件化。(5) R-044 で `topicIds` 空配列時のCTA非表示を明記。(6) 改版履歴 v2.0 を機能/データ/運用に分割。 |
+| v2.2 | 2026-05-01 | codex-review v2.1 反映：<br>(1) §7.1 `Question.topicId` と §7.6 `Article.topicIds[]` の型契約を `string` から `TopicId` に統一（v2.1 で §7.7 に union 追加したが本文の型未更新だった）。<br>(2) §7.7 順方向アルゴリズムの順序を「候補取得→slug重複除去→3件採用→不足分のみ chapter 補充→再除去→3件 truncate」に修正、上位3件内に重複があった際の取りこぼしを解消。`Article.slug` 一意性を不変条件として §7.6 に明記。 |
