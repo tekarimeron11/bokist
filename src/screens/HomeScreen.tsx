@@ -1,12 +1,15 @@
 import { metaStore } from '../storage/metaStore'
+import { ARTICLES } from '../data/articles'
 
 type Props = {
   onOpenSettings: () => void
+  onOpenArticles: () => void
 }
 
-export function HomeScreen({ onOpenSettings }: Props) {
+export function HomeScreen({ onOpenSettings, onOpenArticles }: Props) {
   const days = metaStore.daysSinceLastExport()
   const showBackupBanner = days === null || days >= 7
+  const featured = ARTICLES.slice(0, 3)
 
   return (
     <div className="px-5 pt-4 pb-32">
@@ -39,13 +42,40 @@ export function HomeScreen({ onOpenSettings }: Props) {
         </button>
       )}
 
-      <div className="mt-6 p-6 rounded-2xl bg-white border border-line text-center">
-        <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft">Coming Soon</div>
-        <div className="font-display text-3xl mt-2">問題準備中</div>
-        <div className="text-xs text-ink-soft mt-2">
-          Round 2 でコンテンツ生成 → 有効化
+      <button
+        onClick={onOpenArticles}
+        className="w-full mt-4 p-4 rounded-2xl bg-white border border-line text-left flex items-center justify-between"
+      >
+        <div>
+          <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft">Articles</div>
+          <div className="font-serif text-base mt-1">解説記事を読む</div>
+          <div className="text-[10px] text-ink-soft mt-0.5">
+            {ARTICLES.length}本 · 試験概要から落とし穴まで
+          </div>
         </div>
-      </div>
+        <span className="text-xl">📖</span>
+      </button>
+
+      {featured.length > 0 && (
+        <section className="mt-6">
+          <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft mb-2 px-1">
+            Featured
+          </div>
+          <ul className="flex flex-col gap-2">
+            {featured.map((a) => (
+              <li key={a.slug}>
+                <button
+                  onClick={onOpenArticles}
+                  className="w-full text-left bg-white border border-line rounded-2xl p-3"
+                >
+                  <div className="font-serif text-sm leading-snug">{a.title}</div>
+                  <div className="text-[10px] text-ink-soft mt-1">{a.readingMinutes}分</div>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   )
 }

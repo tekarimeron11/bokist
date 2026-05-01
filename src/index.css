@@ -37,3 +37,75 @@
   .badge-revenue   { background: #fcf2dc; color: #8a6a2c; }
   .badge-expense   { background: #f0e7e2; color: #7a5a45; }
 }
+
+.prose-bokist h2 {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 1.6rem;
+  margin-bottom: 0.6rem;
+}
+.prose-bokist h3 {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+.prose-bokist p {
+  margin: 0.8rem 0;
+  line-height: 1.8;
+  font-size: 14px;
+}
+.prose-bokist ul, .prose-bokist ol {
+  padding-left: 1.4rem;
+  margin: 0.8rem 0;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.prose-bokist ul { list-style: disc; }
+.prose-bokist ol { list-style: decimal; }
+.prose-bokist blockquote {
+  border-left: 3px solid #c9a961;
+  background: #fff8e7;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  font-size: 13px;
+}
+.prose-bokist blockquote p { margin: 0.3rem 0; }
+.prose-bokist code {
+  background: #f0e7e2;
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.prose-bokist svg {
+  display: block;
+  max-width: 100%;
+  margin: 1.2rem auto;
+}
+.prose-bokist strong {
+  font-weight: 700;
+  color: #2d2a26;
+}
+.prose-bokist hr {
+  border: none;
+  border-top: 1px solid #ebe4d9;
+  margin: 1.5rem 0;
+}
+.prose-bokist table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 1rem 0;
+}
+.prose-bokist th, .prose-bokist td {
+  border: 1px solid #ebe4d9;
+  padding: 6px 8px;
+  text-align: left;
+}
+.prose-bokist th {
+  background: #faf6ee;
+  font-weight: 600;
+}

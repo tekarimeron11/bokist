@@ -1,5 +1,39 @@
 export type AccountCategory = 'asset' | 'liability' | 'equity' | 'revenue' | 'expense'
 
+export type TopicId =
+  | 'shouhin-sanbunpou-shiire' | 'shouhin-sanbunpou-uriage'
+  | 'shouhin-henpin'           | 'shouhin-credit'
+  | 'genkin-kabusoku'          | 'genkin-kogucchi' | 'genkin-tozakarikoshi'
+  | 'tegata-yakusoku'          | 'tegata-denshi'
+  | 'urikake-kessai'           | 'urikake-hikiate-settei' | 'urikake-hikiate-shiyou'
+  | 'kotei-shutoku'            | 'kotei-genkashoukyaku'   | 'kotei-baikyaku'
+  | 'kyuryou-kyuryou'          | 'kyuryou-shahoken-nouhu'
+  | 'keika-kurinobe'           | 'keika-mikoshi'
+  | 'zeikin-shouhi'            | 'zeikin-houjin'
+  | 'shihon-haitou'            | 'shihon-kabushiki'
+  | 'sonota-teisei'            | 'sonota-shouhinken' | 'sonota-tatekae'
+
+export type ArticleCategory =
+  | 'exam-overview'
+  | 'strategy'
+  | 'basics'
+  | 'chapter-guide'
+  | 'pitfalls'
+  | 'checklist'
+
+export type Article = {
+  slug: string
+  title: string
+  description?: string
+  category: ArticleCategory
+  chapter?: ChapterId
+  topicIds: TopicId[]
+  body: string
+  readingMinutes: number
+  publishedAt: string
+  updatedAt: string
+}
+
 export type AccountId = string
 
 export type Account = {
@@ -41,7 +75,7 @@ export type Question = {
   id: string
   chapter: ChapterId
   topic: string
-  topicId: string
+  topicId: TopicId
   difficulty: 1 | 2 | 3
   frequency: 1 | 2 | 3
   syllabusVersion: SyllabusVersion

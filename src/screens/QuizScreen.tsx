@@ -4,12 +4,14 @@ import { gradeJournal } from '../lib/grading'
 import { parseYenInput, formatYen } from '../lib/format'
 import { progressStore } from '../storage/progressStore'
 import { findAccount } from '../data/accounts'
+import { relatedArticles } from '../data/articles'
 import type { JournalLine, Question } from '../types'
 
 type Props = {
   questions: Question[]
   label: string
   onExit: () => void
+  onOpenArticle?: (slug: string) => void
 }
 
 type Outcome = {
@@ -19,7 +21,7 @@ type Outcome = {
 
 const emptyDraft = (): LineDraft[] => [{ account: '', amountText: '' }]
 
-export function QuizScreen({ questions, label, onExit }: Props) {
+export function QuizScreen({ questions, label, onExit, onOpenArticle }: Props) {
   const [index, setIndex] = useState(0)
   const [debit, setDebit] = useState<LineDraft[]>(emptyDraft())
   const [credit, setCredit] = useState<LineDraft[]>(emptyDraft())
@@ -146,10 +148,21 @@ export function QuizScreen({ questions, label, onExit }: Props) {
             <p className="text-sm leading-relaxed">{q.explanation}</p>
           </div>
 
-          <div className="mt-4 p-4 rounded-2xl bg-white border border-line">
-            <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft">関連記事</div>
-            <p className="text-xs text-ink-soft mt-2">準備中（フェーズ1.5で公開）</p>
-          </div>
+          <RelatedArticles
+            topicId={q.topicId}
+            chapter={q.chapter}
+            onOpen={onOpenArticle}
+          />
+
+          {q.tags && q.tags.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-1">
+              {q.tags.map((t) => (
+                <span key={t} className="pill" style={{ background: '#f5efe6', color: '#6b6660' }}>
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
 
           <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper/95 backdrop-blur border-t border-line safe-bottom">
             <div className="max-w-md mx-auto">
@@ -162,6 +175,44 @@ export function QuizScreen({ questions, label, onExit }: Props) {
             </div>
           </div>
         </div>
+      )}
+    </div>
+  )
+}
+
+function RelatedArticles({
+  topicId,
+  chapter,
+  onOpen,
+}: {
+  topicId: Question['topicId']
+  chapter: Question['chapter']
+  onOpen?: (slug: string) => void
+}) {
+  const articles = relatedArticles(topicId, chapter, 3)
+  return (
+    <div className="mt-4 p-4 rounded-2xl bg-white border border-line">
+      <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft">関連記事</div>
+      {articles.length === 0 ? (
+        <p className="text-xs text-ink-soft mt-2">準備中</p>
+      ) : (
+        <ul className="mt-2 flex flex-col gap-2">
+          {articles.map((a) => (
+            <li key={a.slug}>
+              <button
+                onClick={() => onOpen?.(a.slug)}
+                className="w-full text-left flex items-center justify-between gap-2"
+                disabled={!onOpen}
+              >
+                <div className="flex-1">
+                  <div className="text-sm font-serif">{a.title}</div>
+                  <div className="text-[10px] text-ink-soft mt-0.5">{a.readingMinutes}分</div>
+                </div>
+                <span className="text-ink-soft">→</span>
+              </button>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   )
