@@ -20,11 +20,8 @@ export function StatsScreen() {
         <span className="eyebrow-soft">your journey</span>
       </div>
       <h1 className="font-serif font-normal text-[32px] mt-2 leading-[1.1] tracking-[-0.015em]">
-        あなたの<i className="italic font-light text-coral">歩み</i>
+        進捗
       </h1>
-      <p className="text-[13.5px] font-serif italic text-ink-soft mt-2.5 leading-[1.6]">
-        “小さな一問が、いつかの自信になる。”
-      </p>
 
       {s.total === 0 ? (
         <div className="glass-card rounded-[22px] p-6 mt-6">

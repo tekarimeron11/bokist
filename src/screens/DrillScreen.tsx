@@ -64,11 +64,8 @@ export function DrillScreen({ onStartSession }: Props) {
         <span className="eyebrow-soft">{CHAPTERS.length} chapters</span>
       </div>
       <h1 className="font-serif font-normal text-[32px] leading-[1.1] tracking-[-0.015em] mt-2">
-        仕訳ドリル<i className="italic font-light text-coral">.</i>
+        仕訳ドリル
       </h1>
-      <p className="font-serif italic text-[13.5px] text-ink-soft mt-2.5 leading-[1.6]">
-        “毎日の積み重ねが、合格への近道。”
-      </p>
 
       {/* Two action cards */}
       <div className="grid grid-cols-2 gap-3 mt-6 animate-rise">

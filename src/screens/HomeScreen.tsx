@@ -34,6 +34,11 @@ function computeStreak(): number {
   return streak
 }
 
+function todayDate(): string {
+  const d = new Date()
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`
+}
+
 function computeProgress(): number {
   const attempts = progressStore.getAll()
   if (attempts.length === 0) return 0
@@ -68,17 +73,10 @@ export function HomeScreen({ onOpenSettings, onOpenArticles }: Props) {
           style={{ background: 'radial-gradient(circle, rgba(255,180,160,0.6), transparent 70%)' }}
         />
         <div className="relative">
-          <span className="eyebrow">Welcome back</span>
-          <h1 className="font-serif font-normal text-[36px] leading-[1.08] tracking-[-0.015em] mt-2.5">
-            おかえりなさい、
-            <br />
-            <i className="font-light not-italic"><span className="italic text-coral">先輩</span></i>
+          <span className="eyebrow">Today</span>
+          <h1 className="font-serif font-normal text-[32px] leading-[1.1] tracking-[-0.015em] mt-2.5">
+            {todayDate()}
           </h1>
-          <p className="font-serif italic text-[14px] text-ink-soft mt-3.5 leading-[1.55]">
-            “今日の積み重ねが、
-            <br />
-            合格までの近道です。”
-          </p>
 
           <div className="grid grid-cols-2 gap-3 mt-5">
             <div className="glass-pill rounded-2xl px-3.5 py-3">
@@ -118,10 +116,7 @@ export function HomeScreen({ onOpenSettings, onOpenArticles }: Props) {
 
       {/* Section header */}
       <div className="flex justify-between items-baseline mt-7 mb-3.5 px-1">
-        <h2 className="font-serif font-medium text-[19px] tracking-[-0.01em]">
-          解説記事を、
-          <i className="italic font-normal text-coral">すきま時間に</i>
-        </h2>
+        <h2 className="font-serif font-medium text-[19px] tracking-[-0.01em]">記事</h2>
         <button
           onClick={onOpenArticles}
           className="text-[11px] tracking-[0.16em] uppercase font-medium text-rose"

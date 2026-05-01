@@ -30,10 +30,10 @@ export function ArticlesScreen({ onOpenArticle, onBack }: Props) {
       <main className="px-6 pb-32 pt-5 max-w-md mx-auto animate-rise">
         <span className="eyebrow">Articles</span>
         <h1 className="font-serif font-normal text-[32px] mt-2 leading-[1.1] tracking-[-0.015em]">
-          解説記事を、<i className="italic font-light text-coral">すきま時間に</i>
+          記事
         </h1>
-        <p className="text-[13.5px] font-serif italic text-ink-soft mt-3 leading-[1.6]">
-          初学者向けの読み物。仕訳の例とイラスト付き。
+        <p className="text-[12px] text-ink-faint mt-2 tracking-[0.14em] uppercase">
+          {ARTICLES.length} articles
         </p>
 
         {CATEGORIES.map((cat) => {

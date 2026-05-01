@@ -58,11 +58,8 @@ export function SettingsScreen() {
         <span className="eyebrow-soft">more</span>
       </div>
       <h1 className="font-serif font-normal text-[32px] mt-2 leading-[1.1] tracking-[-0.015em]">
-        設定<i className="italic font-light text-coral">.</i>
+        設定
       </h1>
-      <p className="text-[13.5px] font-serif italic text-ink-soft mt-2.5 leading-[1.6]">
-        “大切なデータは、ご自分でも守ってあげて。”
-      </p>
 
       <section className="glass-card rounded-[22px] p-6 mt-6">
         <span className="eyebrow">Data</span>
