@@ -48,48 +48,55 @@ export function AccountPicker({ value, onChange }: Props) {
           aria-modal="true"
         >
           <div
-            className="glass w-full max-h-[75vh] rounded-t-[28px] p-5 overflow-y-auto safe-bottom animate-rise"
+            className="glass w-full max-h-[75vh] rounded-t-[28px] overflow-y-auto safe-bottom animate-rise"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-serif font-medium text-[18px]">
-                勘定科目<i className="italic font-normal text-coral">.</i>
-              </h3>
-              <button
-                onClick={() => setOpen(false)}
-                className="text-coral text-[12px] tracking-wider"
-              >
-                閉じる
-              </button>
-            </div>
-            <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1 -mx-1 px-1">
-              {CATEGORIES.map((c) => (
+            <div
+              className="sticky top-0 z-10 px-5 pt-5 pb-3 -mb-1"
+              style={{ background: 'rgba(255,245,236,0.92)', backdropFilter: 'blur(12px)' }}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-serif font-medium text-[18px]">
+                  勘定科目<i className="italic font-normal text-coral">.</i>
+                </h3>
                 <button
-                  key={c.id}
-                  onClick={() => setCat(c.id)}
-                  className={`pill ${c.klass} shrink-0 transition-all ${
-                    cat === c.id
-                      ? 'ring-2 ring-coral/40 ring-offset-1 ring-offset-transparent'
-                      : 'opacity-60 hover:opacity-90'
-                  }`}
+                  onClick={() => setOpen(false)}
+                  className="text-coral text-[12px] tracking-wider"
                 >
-                  {c.label}
+                  閉じる
                 </button>
-              ))}
+              </div>
+              <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1">
+                {CATEGORIES.map((c) => (
+                  <button
+                    key={c.id}
+                    onClick={() => setCat(c.id)}
+                    className={`pill ${c.klass} shrink-0 transition-all ${
+                      cat === c.id
+                        ? 'ring-2 ring-coral/40 ring-offset-1 ring-offset-transparent'
+                        : 'opacity-60 hover:opacity-90'
+                    }`}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              {ACCOUNTS_BY_CATEGORY[cat].map((a) => (
-                <button
-                  key={a.id}
-                  onClick={() => {
-                    onChange(a.id)
-                    setOpen(false)
-                  }}
-                  className="text-left px-3 py-2.5 rounded-[14px] glass-row text-sm hover:bg-white/80"
-                >
-                  {a.name}
-                </button>
-              ))}
+            <div className="px-5 pt-2 pb-5">
+              <div className="grid grid-cols-2 gap-2">
+                {ACCOUNTS_BY_CATEGORY[cat].map((a) => (
+                  <button
+                    key={a.id}
+                    onClick={() => {
+                      onChange(a.id)
+                      setOpen(false)
+                    }}
+                    className="text-left px-3 py-2.5 rounded-[14px] glass-row text-sm hover:bg-white/80"
+                  >
+                    {a.name}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
