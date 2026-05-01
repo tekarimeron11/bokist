@@ -73,7 +73,7 @@
         "debitWhy": "後でもらえる権利（売掛金）は資産の増加です。資産が増えたら借方（左）なので、左に「売掛金 120,000」と書きます。",
         "creditWhy": "商品を売って稼いだ¥120,000は売上（収益）の発生です。収益が増えたら貸方（右）なので、右に「売上 120,000」と書きます。",
         "takeaway": "売上は収益（右）、ツケで売れば売掛金（左）。",
-        "relatedSlugs": ["chapter-shouhin", "double-entry"]
+        "relatedSlugs": ["chapter-shouhin", "double-entry", "account-name"]
       },
       "tags": ["三分法", "掛売上"]
     },
@@ -1087,7 +1087,7 @@
         "debitWhy": "ため込んだ利益（繰越利益剰余金＝純資産）が¥220,000減ります。純資産の減少は借方（左）なので、左に「繰越利益剰余金 220,000」と書きます。",
         "creditWhy": "支払いまでに時間があるので未払配当金（負債）¥200,000、強制的にとっておく利益準備金（純資産）¥20,000の発生。負債と純資産の増加はどちらも貸方（右）に並べます。",
         "takeaway": "決議＝繰越利益剰余金から取り崩す。",
-        "relatedSlugs": ["account-name", "from-journal-to-statements"]
+        "relatedSlugs": ["account-name", "home-position"]
       },
       "tags": ["剰余金処分", "配当"]
     },
@@ -1135,7 +1135,7 @@
         "debitWhy": "払い込まれた当座預金（資産）が¥5,000,000増えます。資産が増えたら借方（左）なので、左に「当座預金 5,000,000」と書きます。",
         "creditWhy": "全額を会社の元手（資本金＝純資産）として計上します。純資産が増えたら貸方（右）なので、右に「資本金 5,000,000」と書きます。",
         "takeaway": "払込金＝資本金（純資産）に立てる。",
-        "relatedSlugs": ["account-name", "double-entry"]
+        "relatedSlugs": ["account-name", "home-position"]
       },
       "tags": ["株式発行", "設立"]
     },
