@@ -5,6 +5,9 @@ import { SettingsScreen } from './screens/SettingsScreen'
 import { QuizScreen } from './screens/QuizScreen'
 import { ArticlesScreen } from './screens/ArticlesScreen'
 import { ArticleScreen } from './screens/ArticleScreen'
+import { BigProblemListScreen } from './screens/BigProblemListScreen'
+import { BigProblemScreen } from './screens/BigProblemScreen'
+import { findBigProblem } from './data/bigProblems'
 import type { Question } from './types'
 
 type Session = {
@@ -18,6 +21,8 @@ type Route =
   | { kind: 'quiz'; session: Session }
   | { kind: 'article'; slug: string }
   | { kind: 'settings' }
+  | { kind: 'big-list' }
+  | { kind: 'big-problem'; id: string }
 
 function App() {
   const [tab, setTab] = useState<TabId>('articles')
@@ -57,6 +62,29 @@ function App() {
     return <SettingsScreen onBack={backToTab} />
   }
 
+  if (route.kind === 'big-list') {
+    return (
+      <BigProblemListScreen
+        onBack={backToTab}
+        onOpen={(id) => setRoute({ kind: 'big-problem', id })}
+      />
+    )
+  }
+
+  if (route.kind === 'big-problem') {
+    const problem = findBigProblem(route.id)
+    if (!problem) {
+      backToTab()
+      return null
+    }
+    return (
+      <BigProblemScreen
+        problem={problem}
+        onExit={() => setRoute({ kind: 'big-list' })}
+      />
+    )
+  }
+
   return (
     <div className="min-h-screen">
       <main className="max-w-md mx-auto">
@@ -66,7 +94,12 @@ function App() {
             onOpenSettings={() => setRoute({ kind: 'settings' })}
           />
         )}
-        {tab === 'drill' && <DrillScreen onStartSession={startSession} />}
+        {tab === 'drill' && (
+          <DrillScreen
+            onStartSession={startSession}
+            onOpenBigProblems={() => setRoute({ kind: 'big-list' })}
+          />
+        )}
       </main>
       <TabBar active={tab} onChange={setTab} />
     </div>

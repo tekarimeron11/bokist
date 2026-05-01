@@ -1,14 +1,17 @@
 import { CHAPTERS } from '../data/chapters'
 import { questionsByChapter, availableQuestions, pickRandom } from '../data/questions'
+import { BIG_PROBLEMS } from '../data/bigProblems'
 import { settingsStore } from '../storage/settingsStore'
 import { progressStore } from '../storage/progressStore'
+import { bigProgressStore } from '../storage/bigProgressStore'
 import type { Question } from '../types'
 
 type Props = {
   onStartSession: (questions: Question[], mode: 'chapter' | 'quick' | 'review', label: string) => void
+  onOpenBigProblems: () => void
 }
 
-export function DrillScreen({ onStartSession }: Props) {
+export function DrillScreen({ onStartSession, onOpenBigProblems }: Props) {
   const profile = settingsStore.get().syllabusProfile
 
   function startChapter(chapterId: string) {
@@ -157,6 +160,56 @@ export function DrillScreen({ onStartSession }: Props) {
           )
         })}
       </ul>
+
+      <BigProblemsSection onOpen={onOpenBigProblems} />
     </div>
+  )
+}
+
+function BigProblemsSection({ onOpen }: { onOpen: () => void }) {
+  const totalAttempts = bigProgressStore.getAll().length
+
+  return (
+    <section className="mt-10">
+      <div className="flex justify-between items-baseline mb-3.5 px-1">
+        <h2 className="font-serif font-medium text-[19px] tracking-[-0.01em]">
+          大問題 — <i className="italic font-normal text-coral">第3問対策</i>
+        </h2>
+        <span className="eyebrow-soft">{BIG_PROBLEMS.length} sets</span>
+      </div>
+
+      <button
+        onClick={onOpen}
+        className="w-full glass-card rounded-[20px] px-5 py-5 text-left flex items-start gap-4 hover:bg-white/85 transition-colors"
+      >
+        <span
+          className="font-serif italic shrink-0 flex items-center justify-center"
+          style={{
+            background: 'linear-gradient(135deg, #ffd2c0, #ffe1b2)',
+            color: '#c66454',
+            width: 44,
+            height: 44,
+            borderRadius: 14,
+            fontSize: 20,
+          }}
+        >
+          §3
+        </span>
+        <div className="flex-1 min-w-0">
+          <div className="font-serif font-medium text-[16px] leading-[1.4]">
+            大型決算問題ドリル
+          </div>
+          <p className="text-[11.5px] text-ink-soft mt-1 leading-[1.55]">
+            期末残高試算表＋決算整理事項を順番に解く本番形式
+          </p>
+          <div className="mt-2 flex items-center gap-2 text-[10px] tracking-[0.14em] uppercase text-ink-faint">
+            <span>{BIG_PROBLEMS.length} 問</span>
+            <span>·</span>
+            <span>{totalAttempts} attempts</span>
+          </div>
+        </div>
+        <span className="text-coral text-base shrink-0 mt-1">→</span>
+      </button>
+    </section>
   )
 }

@@ -1,0 +1,523 @@
+{
+  "version": 1,
+  "generatedAt": "2026-04-30T00:00:00+09:00",
+  "problems": [
+    {
+      "id": "BP-001",
+      "title": "決算 模試 vol.1（基本3点セット）",
+      "description": "売上原価・貸倒引当金・減価償却の基本3点セット。第3問入門に最適。",
+      "difficulty": 1,
+      "estimatedMinutes": 12,
+      "trialBalance": [
+        { "account": "cash",                "debit": 200000 },
+        { "account": "checking",            "debit": 350000 },
+        { "account": "accounts_receivable", "debit": 400000 },
+        { "account": "merchandise",         "debit": 50000 },
+        { "account": "equipment",           "debit": 300000 },
+        { "account": "accounts_payable",                         "credit": 280000 },
+        { "account": "allowance_doubtful",                       "credit": 1000 },
+        { "account": "accumulated_dep",                          "credit": 60000 },
+        { "account": "capital",                                  "credit": 500000 },
+        { "account": "retained_earnings",                        "credit": 79000 },
+        { "account": "sales",                                    "credit": 1200000 },
+        { "account": "purchase",            "debit": 700000 },
+        { "account": "salary",              "debit": 100000 },
+        { "account": "insurance_fee",       "debit": 18000 },
+        { "account": "comm_fee",            "debit": 2000 }
+      ],
+      "adjustments": [
+        {
+          "id": "adj-1",
+          "prompt": "期末商品棚卸高は¥80,000である。売上原価は仕入勘定で計算する。",
+          "hint": "「しーくり、くりしー」で2行書きます。期首商品を仕入へ、期末商品を繰越商品へ。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "purchase", "amount": 50000 }],
+              "credit": [{ "account": "merchandise", "amount": 50000 }]
+            },
+            {
+              "debit":  [{ "account": "merchandise", "amount": 80000 }],
+              "credit": [{ "account": "purchase", "amount": 80000 }]
+            }
+          ],
+          "explanation": "期首商品¥50,000を仕入へ振り替え（しーくり）、期末商品¥80,000を繰越商品へ振り替える（くりしー）。売上原価=50,000+700,000-80,000=¥670,000。",
+          "topicId": "kessan-uriagegenka"
+        },
+        {
+          "id": "adj-2",
+          "prompt": "売掛金の期末残高¥400,000に対して2%の貸倒引当金を差額補充法で設定する。なお、貸倒引当金の残高は¥1,000である。",
+          "hint": "必要額 − 既存残高 = 補充額。差額のみ追加計上。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "doubtful_provision", "amount": 7000 }],
+              "credit": [{ "account": "allowance_doubtful", "amount": 7000 }]
+            }
+          ],
+          "explanation": "必要額: 400,000×2%=¥8,000。既存残高¥1,000との差額¥7,000を「貸倒引当金繰入」として計上する。",
+          "topicId": "urikake-hikiate-settei"
+        },
+        {
+          "id": "adj-3",
+          "prompt": "備品（取得原価¥300,000、残存価額ゼロ、耐用年数5年）について定額法で減価償却を行う。記帳は間接法による。",
+          "hint": "年間償却額 = (取得原価 − 残存価額) ÷ 耐用年数。間接法では「減価償却累計額」を使う。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "depreciation", "amount": 60000 }],
+              "credit": [{ "account": "accumulated_dep", "amount": 60000 }]
+            }
+          ],
+          "explanation": "(300,000−0)÷5年=¥60,000。間接法なので貸方は備品本体ではなく「減価償却累計額」を使う。",
+          "topicId": "kotei-genkashoukyaku"
+        },
+        {
+          "id": "adj-4",
+          "prompt": "保険料¥18,000は当期の8月1日に向こう1年分（翌期7月末まで）を支払ったものである。決算日は3月31日。",
+          "hint": "翌期分（4月〜7月の4か月分）を前払保険料へ振り替える。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "prepaid_insurance", "amount": 6000 }],
+              "credit": [{ "account": "insurance_fee", "amount": 6000 }]
+            }
+          ],
+          "explanation": "翌期分=18,000×4/12=¥6,000を前払保険料（資産）へ振り替える。",
+          "topicId": "keika-kurinobe"
+        },
+        {
+          "id": "adj-5",
+          "prompt": "給料の当月分¥30,000が翌月払いのため未払いとなっている。",
+          "hint": "当期分の給料はまだ支払われていなくても、当期の費用として認識する。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "salary", "amount": 30000 }],
+              "credit": [{ "account": "accrued_salary", "amount": 30000 }]
+            }
+          ],
+          "explanation": "発生主義により、当期分¥30,000を給料（費用）として計上し、相手は未払給料（負債）。",
+          "topicId": "keika-mikoshi"
+        },
+        {
+          "id": "adj-6",
+          "prompt": "通信費¥2,000のうち、期末時点で未使用の郵便切手が¥500ある。貯蔵品へ振り替える。",
+          "hint": "未使用分は資産（貯蔵品）として翌期に繰り越す。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "stock_supplies", "amount": 500 }],
+              "credit": [{ "account": "comm_fee", "amount": 500 }]
+            }
+          ],
+          "explanation": "未使用の切手¥500は当期費用ではないため、通信費から貯蔵品（資産）へ振り替える。",
+          "topicId": "kessan-shoumouhin"
+        },
+        {
+          "id": "adj-7",
+          "prompt": "当期の法人税等は¥30,000と計算された。中間納付はない。",
+          "hint": "中間納付がない場合、全額が未払法人税等になる。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "corp_tax_expense", "amount": 30000 }],
+              "credit": [{ "account": "accrued_corp_tax", "amount": 30000 }]
+            }
+          ],
+          "explanation": "「法人税、住民税及び事業税」を費用計上し、未納分は未払法人税等（負債）。",
+          "topicId": "zeikin-houjin"
+        }
+      ]
+    },
+    {
+      "id": "BP-002",
+      "title": "決算 模試 vol.2（経過勘定強化）",
+      "description": "前払・前受・未払・未収の経過勘定を網羅的に練習。",
+      "difficulty": 1,
+      "estimatedMinutes": 14,
+      "trialBalance": [
+        { "account": "cash",                "debit": 150000 },
+        { "account": "checking",            "debit": 420000 },
+        { "account": "accounts_receivable", "debit": 300000 },
+        { "account": "merchandise",         "debit": 70000 },
+        { "account": "building",            "debit": 600000 },
+        { "account": "accounts_payable",                         "credit": 220000 },
+        { "account": "allowance_doubtful",                       "credit": 2000 },
+        { "account": "accumulated_dep",                          "credit": 120000 },
+        { "account": "capital",                                  "credit": 800000 },
+        { "account": "retained_earnings",                        "credit": 102000 },
+        { "account": "sales",                                    "credit": 1500000 },
+        { "account": "house_rent_income",                        "credit": 60000 },
+        { "account": "purchase",            "debit": 900000 },
+        { "account": "salary",              "debit": 200000 },
+        { "account": "insurance_fee",       "debit": 24000 },
+        { "account": "interest_income",                          "credit": 0 },
+        { "account": "accrued_interest_recv","debit": 0 },
+        { "account": "rent_income",                              "credit": 140000 }
+      ],
+      "adjustments": [
+        {
+          "id": "adj-1",
+          "prompt": "期末商品棚卸高は¥90,000である。売上原価は仕入勘定で計算する。",
+          "hint": "しーくり、くりしー。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "purchase", "amount": 70000 }],
+              "credit": [{ "account": "merchandise", "amount": 70000 }]
+            },
+            {
+              "debit":  [{ "account": "merchandise", "amount": 90000 }],
+              "credit": [{ "account": "purchase", "amount": 90000 }]
+            }
+          ],
+          "explanation": "期首¥70,000を仕入へ、期末¥90,000を繰越商品へ。",
+          "topicId": "kessan-uriagegenka"
+        },
+        {
+          "id": "adj-2",
+          "prompt": "売掛金の期末残高¥300,000に対して3%の貸倒引当金を差額補充法で設定する。引当金残高は¥2,000。",
+          "hint": "必要額 − 既存残高。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "doubtful_provision", "amount": 7000 }],
+              "credit": [{ "account": "allowance_doubtful", "amount": 7000 }]
+            }
+          ],
+          "explanation": "必要額 300,000×3%=9,000。差額 9,000−2,000=¥7,000を繰入。",
+          "topicId": "urikake-hikiate-settei"
+        },
+        {
+          "id": "adj-3",
+          "prompt": "建物（取得原価¥600,000、残存価額ゼロ、耐用年数20年）の減価償却を定額法・間接法で行う。",
+          "hint": "20年で割る。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "depreciation", "amount": 30000 }],
+              "credit": [{ "account": "accumulated_dep", "amount": 30000 }]
+            }
+          ],
+          "explanation": "600,000÷20=¥30,000。",
+          "topicId": "kotei-genkashoukyaku"
+        },
+        {
+          "id": "adj-4",
+          "prompt": "保険料¥24,000は当期7月1日に向こう1年分を支払ったもの。決算日は3月31日。翌期分を前払処理する。",
+          "hint": "4月〜6月の3か月分が翌期分。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "prepaid_insurance", "amount": 6000 }],
+              "credit": [{ "account": "insurance_fee", "amount": 6000 }]
+            }
+          ],
+          "explanation": "24,000×3/12=¥6,000を前払保険料へ。",
+          "topicId": "keika-kurinobe"
+        },
+        {
+          "id": "adj-5",
+          "prompt": "受取家賃¥60,000のうち、翌期分が¥20,000含まれている。",
+          "hint": "翌期分はまだ収益にしてはいけない。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "house_rent_income", "amount": 20000 }],
+              "credit": [{ "account": "received_rent", "amount": 20000 }]
+            }
+          ],
+          "explanation": "翌期分¥20,000を受取家賃から前受家賃（負債）へ振り替える。",
+          "topicId": "keika-kurinobe"
+        },
+        {
+          "id": "adj-6",
+          "prompt": "貸付金¥100,000（年利2%）の利息のうち、当期分6か月分が未収となっている。",
+          "hint": "100,000×2%×6/12。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "accrued_interest_recv", "amount": 1000 }],
+              "credit": [{ "account": "interest_income", "amount": 1000 }]
+            }
+          ],
+          "explanation": "100,000×2%×6/12=¥1,000を未収利息（資産）と受取利息（収益）に計上。",
+          "topicId": "keika-mikoshi"
+        },
+        {
+          "id": "adj-7",
+          "prompt": "受取地代¥140,000のうち、翌期分が¥20,000含まれている。",
+          "hint": "前受地代（負債）へ振り替える。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "rent_income", "amount": 20000 }],
+              "credit": [{ "account": "received_land_rent", "amount": 20000 }]
+            }
+          ],
+          "explanation": "翌期分¥20,000を受取地代から前受地代へ振り替える。",
+          "topicId": "keika-kurinobe"
+        }
+      ]
+    },
+    {
+      "id": "BP-003",
+      "title": "決算 模試 vol.3（消費税・現金過不足）",
+      "description": "消費税の精算、現金過不足、月割減価償却を含む応用。",
+      "difficulty": 2,
+      "estimatedMinutes": 16,
+      "trialBalance": [
+        { "account": "cash",                "debit": 95000 },
+        { "account": "cash_discrepancy",    "debit": 3000 },
+        { "account": "checking",            "debit": 500000 },
+        { "account": "accounts_receivable", "debit": 600000 },
+        { "account": "merchandise",         "debit": 120000 },
+        { "account": "equipment",           "debit": 480000 },
+        { "account": "temp_sales_tax",      "debit": 60000 },
+        { "account": "accounts_payable",                         "credit": 350000 },
+        { "account": "allowance_doubtful",                       "credit": 5000 },
+        { "account": "accumulated_dep",                          "credit": 96000 },
+        { "account": "temp_received_tax",                        "credit": 100000 },
+        { "account": "capital",                                  "credit": 800000 },
+        { "account": "retained_earnings",                        "credit": 207000 },
+        { "account": "sales",                                    "credit": 2000000 },
+        { "account": "purchase",            "debit": 1300000 },
+        { "account": "salary",              "debit": 350000 },
+        { "account": "comm_fee",            "debit": 12000 },
+        { "account": "insurance_fee",       "debit": 38000 }
+      ],
+      "adjustments": [
+        {
+          "id": "adj-1",
+          "prompt": "現金過不足¥3,000（借方残高）の原因が不明であったため、雑損として処理する。",
+          "hint": "原因不明の借方残高は雑損。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "misc_loss", "amount": 3000 }],
+              "credit": [{ "account": "cash_discrepancy", "amount": 3000 }]
+            }
+          ],
+          "explanation": "現金過不足の借方残高は「実際 < 帳簿」つまり現金が足りない状態。原因不明のため雑損（費用）に振り替える。",
+          "topicId": "genkin-kabusoku"
+        },
+        {
+          "id": "adj-2",
+          "prompt": "期末商品棚卸高は¥150,000である。売上原価は仕入勘定で計算する。",
+          "hint": "しーくり、くりしー。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "purchase", "amount": 120000 }],
+              "credit": [{ "account": "merchandise", "amount": 120000 }]
+            },
+            {
+              "debit":  [{ "account": "merchandise", "amount": 150000 }],
+              "credit": [{ "account": "purchase", "amount": 150000 }]
+            }
+          ],
+          "explanation": "期首¥120,000を仕入へ、期末¥150,000を繰越商品へ。",
+          "topicId": "kessan-uriagegenka"
+        },
+        {
+          "id": "adj-3",
+          "prompt": "売掛金の期末残高¥600,000に対して2%の貸倒引当金を差額補充法で設定する。引当金残高は¥5,000。",
+          "hint": "必要額12,000、既存5,000。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "doubtful_provision", "amount": 7000 }],
+              "credit": [{ "account": "allowance_doubtful", "amount": 7000 }]
+            }
+          ],
+          "explanation": "600,000×2%=12,000。差額12,000−5,000=¥7,000を繰入。",
+          "topicId": "urikake-hikiate-settei"
+        },
+        {
+          "id": "adj-4",
+          "prompt": "備品（取得原価¥480,000、残存価額ゼロ、耐用年数8年）の減価償却を定額法・間接法で行う。なお、備品のうち¥120,000は当期10月1日に取得しており、月割計算する。決算日は3月31日。",
+          "hint": "既存分(360,000)は1年分、新規分(120,000)は6か月分。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "depreciation", "amount": 52500 }],
+              "credit": [{ "account": "accumulated_dep", "amount": 52500 }]
+            }
+          ],
+          "explanation": "既存分: 360,000÷8=45,000。新規分: 120,000÷8×6/12=7,500。合計¥52,500。",
+          "topicId": "kotei-genkashoukyaku"
+        },
+        {
+          "id": "adj-5",
+          "prompt": "消費税を確定すること（税抜方式）。仮払消費税¥60,000、仮受消費税¥100,000。",
+          "hint": "仮受 − 仮払 = 未払消費税。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "temp_received_tax", "amount": 100000 }],
+              "credit": [
+                { "account": "temp_sales_tax", "amount": 60000 },
+                { "account": "accrued_sales_tax", "amount": 40000 }
+              ]
+            }
+          ],
+          "explanation": "仮受¥100,000を取り崩し、仮払¥60,000と相殺。差額¥40,000を未払消費税（負債）として確定。",
+          "topicId": "zeikin-shouhi"
+        },
+        {
+          "id": "adj-6",
+          "prompt": "保険料¥38,000のうち、¥9,000は翌期分の前払いである。",
+          "hint": "前払分を資産へ。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "prepaid_insurance", "amount": 9000 }],
+              "credit": [{ "account": "insurance_fee", "amount": 9000 }]
+            }
+          ],
+          "explanation": "翌期分¥9,000を前払保険料（資産）へ振り替える。",
+          "topicId": "keika-kurinobe"
+        },
+        {
+          "id": "adj-7",
+          "prompt": "通信費¥12,000のうち、未使用の切手¥1,500とハガキ¥500の合計¥2,000を貯蔵品へ振り替える。",
+          "hint": "貯蔵品(資産)へ。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "stock_supplies", "amount": 2000 }],
+              "credit": [{ "account": "comm_fee", "amount": 2000 }]
+            }
+          ],
+          "explanation": "未使用分¥2,000を通信費から貯蔵品へ振り替える。",
+          "topicId": "kessan-shoumouhin"
+        }
+      ]
+    },
+    {
+      "id": "BP-004",
+      "title": "決算 模試 vol.4（総合・難化）",
+      "description": "当座借越・現金過不足・消費税・法人税・全経過勘定を含む総合問題。",
+      "difficulty": 3,
+      "estimatedMinutes": 20,
+      "trialBalance": [
+        { "account": "cash",                "debit": 80000 },
+        { "account": "cash_discrepancy",                         "credit": 1500 },
+        { "account": "checking",                                 "credit": 50000 },
+        { "account": "accounts_receivable", "debit": 800000 },
+        { "account": "merchandise",         "debit": 200000 },
+        { "account": "building",            "debit": 1200000 },
+        { "account": "equipment",           "debit": 360000 },
+        { "account": "temp_sales_tax",      "debit": 80000 },
+        { "account": "temp_corp_tax",       "debit": 50000 },
+        { "account": "accounts_payable",                         "credit": 450000 },
+        { "account": "allowance_doubtful",                       "credit": 8000 },
+        { "account": "accumulated_dep",                          "credit": 360000 },
+        { "account": "temp_received_tax",                        "credit": 150000 },
+        { "account": "capital",                                  "credit": 1000000 },
+        { "account": "retained_earnings",                        "credit": 100500 },
+        { "account": "sales",                                    "credit": 2500000 },
+        { "account": "purchase",            "debit": 1500000 },
+        { "account": "salary",              "debit": 380000 },
+        { "account": "insurance_fee",       "debit": 36000 },
+        { "account": "comm_fee",            "debit": 14000 }
+      ],
+      "adjustments": [
+        {
+          "id": "adj-1",
+          "prompt": "当座預金勘定が貸方残高¥50,000となっている。当座借越として処理すること。",
+          "hint": "決算日に貸方残高を負債へ振り替える。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "checking", "amount": 50000 }],
+              "credit": [{ "account": "overdraft", "amount": 50000 }]
+            }
+          ],
+          "explanation": "貸方残高は「銀行から借りている」状態。当座預金を借方に戻し、当座借越（負債）を計上する。",
+          "topicId": "genkin-tozakarikoshi"
+        },
+        {
+          "id": "adj-2",
+          "prompt": "現金過不足¥1,500（貸方残高）の原因が不明であったため、雑益として処理する。",
+          "hint": "貸方残高は実際>帳簿、現金が多い→雑益。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "cash_discrepancy", "amount": 1500 }],
+              "credit": [{ "account": "misc_income", "amount": 1500 }]
+            }
+          ],
+          "explanation": "現金過不足の貸方残高は実際残高が帳簿を上回る状態。原因不明のため雑益（収益）に振り替える。",
+          "topicId": "genkin-kabusoku"
+        },
+        {
+          "id": "adj-3",
+          "prompt": "期末商品棚卸高は¥240,000である。売上原価は仕入勘定で計算する。",
+          "hint": "しーくり、くりしー。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "purchase", "amount": 200000 }],
+              "credit": [{ "account": "merchandise", "amount": 200000 }]
+            },
+            {
+              "debit":  [{ "account": "merchandise", "amount": 240000 }],
+              "credit": [{ "account": "purchase", "amount": 240000 }]
+            }
+          ],
+          "explanation": "期首¥200,000を仕入へ、期末¥240,000を繰越商品へ。",
+          "topicId": "kessan-uriagegenka"
+        },
+        {
+          "id": "adj-4",
+          "prompt": "売掛金の期末残高¥800,000に対して2%の貸倒引当金を差額補充法で設定する。引当金残高は¥8,000。",
+          "hint": "必要額16,000、既存8,000。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "doubtful_provision", "amount": 8000 }],
+              "credit": [{ "account": "allowance_doubtful", "amount": 8000 }]
+            }
+          ],
+          "explanation": "800,000×2%=16,000。差額16,000−8,000=¥8,000を繰入。",
+          "topicId": "urikake-hikiate-settei"
+        },
+        {
+          "id": "adj-5",
+          "prompt": "建物¥1,200,000は耐用年数30年、残存価額ゼロ、定額法・間接法で減価償却する。備品¥360,000は耐用年数6年、残存価額ゼロ、定額法・間接法で償却する。",
+          "hint": "建物と備品の合算で1本にまとめる。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "depreciation", "amount": 100000 }],
+              "credit": [{ "account": "accumulated_dep", "amount": 100000 }]
+            }
+          ],
+          "explanation": "建物: 1,200,000÷30=40,000。備品: 360,000÷6=60,000。合計¥100,000。",
+          "topicId": "kotei-genkashoukyaku"
+        },
+        {
+          "id": "adj-6",
+          "prompt": "消費税を確定すること（税抜方式）。仮払消費税¥80,000、仮受消費税¥150,000。",
+          "hint": "差額が未払消費税。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "temp_received_tax", "amount": 150000 }],
+              "credit": [
+                { "account": "temp_sales_tax", "amount": 80000 },
+                { "account": "accrued_sales_tax", "amount": 70000 }
+              ]
+            }
+          ],
+          "explanation": "仮受¥150,000を取り崩し、仮払¥80,000と相殺、差額¥70,000を未払消費税。",
+          "topicId": "zeikin-shouhi"
+        },
+        {
+          "id": "adj-7",
+          "prompt": "保険料¥36,000のうち¥9,000は翌期分の前払いである。",
+          "hint": "前払分を資産へ。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "prepaid_insurance", "amount": 9000 }],
+              "credit": [{ "account": "insurance_fee", "amount": 9000 }]
+            }
+          ],
+          "explanation": "翌期分¥9,000を前払保険料へ振り替える。",
+          "topicId": "keika-kurinobe"
+        },
+        {
+          "id": "adj-8",
+          "prompt": "当期の法人税等は¥130,000と計算された。中間納付額¥50,000は仮払法人税等として処理済み。",
+          "hint": "中間納付分を相殺し、未納分を未払法人税等へ。",
+          "expectedAnswerMulti": [
+            {
+              "debit":  [{ "account": "corp_tax_expense", "amount": 130000 }],
+              "credit": [
+                { "account": "temp_corp_tax", "amount": 50000 },
+                { "account": "accrued_corp_tax", "amount": 80000 }
+              ]
+            }
+          ],
+          "explanation": "費用¥130,000を計上。中間納付分¥50,000を取り崩し、差額¥80,000を未払法人税等。",
+          "topicId": "zeikin-houjin"
+        }
+      ]
+    }
+  ]
+}

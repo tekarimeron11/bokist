@@ -12,6 +12,7 @@ export const ACCOUNTS: Account[] = [
   { id: 'credit_receivable',   name: 'クレジット売掛金',  category: 'asset' },
   { id: 'electronic_receivable', name: '電子記録債権',    category: 'asset' },
   { id: 'merchandise',         name: '繰越商品',          category: 'asset' },
+  { id: 'stock_supplies',      name: '貯蔵品',            category: 'asset' },
   { id: 'gift_voucher',        name: '受取商品券',        category: 'asset' },
   { id: 'advance_payment',     name: '立替金',            category: 'asset' },
   { id: 'temp_payment',        name: '仮払金',            category: 'asset' },
@@ -50,6 +51,7 @@ export const ACCOUNTS: Account[] = [
   { id: 'capital',             name: '資本金',            category: 'equity' },
   { id: 'legal_reserve',       name: '利益準備金',        category: 'equity' },
   { id: 'retained_earnings',   name: '繰越利益剰余金',    category: 'equity' },
+  { id: 'pl_summary',          name: '損益',              category: 'equity' },
 
   // 収益
   { id: 'sales',               name: '売上',              category: 'revenue' },
@@ -75,6 +77,8 @@ export const ACCOUNTS: Account[] = [
   { id: 'corp_tax_expense',    name: '法人税、住民税及び事業税', category: 'expense' },
   { id: 'misc_loss',           name: '雑損',              category: 'expense' },
   { id: 'fixed_asset_loss',    name: '固定資産売却損',    category: 'expense' },
+  { id: 'inventory_loss',      name: '棚卸減耗損',        category: 'expense' },
+  { id: 'merchandise_eval_loss', name: '商品評価損',      category: 'expense' },
 ]
 
 export const ACCOUNTS_BY_CATEGORY = {

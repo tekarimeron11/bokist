@@ -1312,6 +1312,447 @@
         "relatedSlugs": ["furikae-aitekanjo", "account-name"]
       },
       "tags": ["仮払金精算"]
+    },
+    {
+      "id": "Q-kessan-001",
+      "chapter": "kessan",
+      "topic": "売上原価の算定",
+      "topicId": "kessan-uriagegenka",
+      "difficulty": 2,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "決算につき、売上原価を仕入勘定で算定する。期首商品棚卸高は¥30,000、期末商品棚卸高は¥50,000である。",
+      "hint": "「しーくり、くりしー」の2行。期首は仕入へ、期末は繰越商品へ。",
+      "answer": {
+        "debit": [
+          {
+            "account": "purchase",
+            "amount": 30000
+          },
+          {
+            "account": "merchandise",
+            "amount": 50000
+          }
+        ],
+        "credit": [
+          {
+            "account": "merchandise",
+            "amount": 30000
+          },
+          {
+            "account": "purchase",
+            "amount": 50000
+          }
+        ]
+      },
+      "explanation": "期首商品¥30,000を仕入勘定へ振り替え（し→くり）、期末商品¥50,000を繰越商品へ振り替える（くり→し）。これで仕入勘定の残高が当期の売上原価になる。",
+      "explanationStructured": {
+        "essence": "期首と期末の在庫を仕入勘定へ出し入れして、仕入勘定の残高を「売上原価」に組み替える決算整理です。",
+        "debitWhy": "1行目：期首にあった商品¥30,000を当期に売れた可能性があるので、繰越商品（資産）から仕入（費用）へ移すため借方に「仕入 30,000」。2行目：期末に残った商品¥50,000は売れ残りなので資産に戻すため借方に「繰越商品 50,000」。",
+        "creditWhy": "1行目：繰越商品（資産）が¥30,000減るので貸方に「繰越商品 30,000」。2行目：仕入（費用）から¥50,000を取り除くので貸方に「仕入 50,000」。",
+        "takeaway": "しーくり・くりしーで売上原価が出る。",
+        "relatedSlugs": [
+          "cost-of-goods-sold",
+          "kessan"
+        ]
+      },
+      "tags": [
+        "決算整理",
+        "売上原価",
+        "しーくりくりしー"
+      ]
+    },
+    {
+      "id": "Q-kessan-002",
+      "chapter": "kessan",
+      "topic": "売上原価の算定",
+      "topicId": "kessan-uriagegenka",
+      "difficulty": 3,
+      "frequency": 3,
+      "syllabusVersion": "2026",
+      "prompt": "甲社は決算につき、売上原価を仕入勘定で算定する。期首商品棚卸高は¥80,000、期末商品棚卸高は¥45,000であった。なお、当期の仕入総額は¥600,000であり、当期の売上原価を計算する仕訳のみ示すこと。",
+      "hint": "金額が大きくても手順は同じ。期首→仕入、期末→繰越商品の順で2行書く。",
+      "answer": {
+        "debit": [
+          {
+            "account": "purchase",
+            "amount": 80000
+          },
+          {
+            "account": "merchandise",
+            "amount": 45000
+          }
+        ],
+        "credit": [
+          {
+            "account": "merchandise",
+            "amount": 80000
+          },
+          {
+            "account": "purchase",
+            "amount": 45000
+          }
+        ]
+      },
+      "explanation": "期首商品¥80,000を仕入へ、期末商品¥45,000を繰越商品へ振り替える。仕訳後の仕入勘定残高は80,000+600,000-45,000=¥635,000となり、これが当期の売上原価となる。",
+      "explanationStructured": {
+        "essence": "金額や仕入総額が増えても、決算整理仕訳そのものは「期首を仕入へ、期末を繰越商品へ」の2行のみ。仕入勘定の残高で売上原価が確定します。",
+        "debitWhy": "1行目：期首商品¥80,000を費用扱いに移すため、借方「仕入 80,000」。2行目：期末に残った¥45,000は次期の資産に戻すため、借方「繰越商品 45,000」。",
+        "creditWhy": "1行目：もとあった繰越商品（資産）が¥80,000減るので、貸方「繰越商品 80,000」。2行目：仕入勘定から¥45,000を引き去るため、貸方「仕入 45,000」。",
+        "takeaway": "金額が変わっても2行の型は同じ。",
+        "relatedSlugs": [
+          "cost-of-goods-sold",
+          "kessan"
+        ]
+      },
+      "tags": [
+        "決算整理",
+        "売上原価",
+        "しーくりくりしー"
+      ]
+    },
+    {
+      "id": "Q-kessan-003",
+      "chapter": "kessan",
+      "topic": "棚卸減耗損",
+      "topicId": "kessan-tanaorosi",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "決算につき商品の実地棚卸を行ったところ、帳簿棚卸高¥50,000に対し実地棚卸高は¥47,000であった。差額は棚卸減耗によるものとして処理する。",
+      "hint": "減ってしまった商品（資産）を費用に振り替える。",
+      "answer": {
+        "debit": [
+          {
+            "account": "inventory_loss",
+            "amount": 3000
+          }
+        ],
+        "credit": [
+          {
+            "account": "merchandise",
+            "amount": 3000
+          }
+        ]
+      },
+      "explanation": "帳簿上¥50,000あるはずの商品が実際には¥47,000しかないので、差額¥3,000を「棚卸減耗損」として費用計上し、繰越商品を減額する。",
+      "explanationStructured": {
+        "essence": "帳簿と実地の差¥3,000ぶんの商品が、紛失・破損などで消えていた取引です。資産が減り、その分が費用になります。",
+        "debitWhy": "消えた商品は当期の費用として認識します。費用が増えたら借方なので、左に「棚卸減耗損 3,000」と書きます。",
+        "creditWhy": "繰越商品（資産）が¥3,000ぶん減ります。資産が減ったら貸方なので、右に「繰越商品 3,000」と書きます。",
+        "takeaway": "なくなった分は棚卸減耗損（費用）に。",
+        "relatedSlugs": [
+          "inventory-evaluation",
+          "kessan"
+        ]
+      },
+      "tags": [
+        "決算整理",
+        "棚卸減耗損"
+      ]
+    },
+    {
+      "id": "Q-kessan-004",
+      "chapter": "kessan",
+      "topic": "棚卸減耗損・商品評価損",
+      "topicId": "kessan-tanaorosi",
+      "difficulty": 3,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "決算につき、A商店の商品の帳簿棚卸高は¥80,000（数量100個・原価@¥800）であったが、実地棚卸の結果、実地数量は95個、正味売却価額は@¥780であった。棚卸減耗損および商品評価損を計上する。",
+      "hint": "減耗（数量差）と評価損（価額差）を分けて計算する。減耗→評価損の順。",
+      "answer": {
+        "debit": [
+          {
+            "account": "inventory_loss",
+            "amount": 4000
+          },
+          {
+            "account": "merchandise_eval_loss",
+            "amount": 1900
+          }
+        ],
+        "credit": [
+          {
+            "account": "merchandise",
+            "amount": 5900
+          }
+        ]
+      },
+      "explanation": "棚卸減耗損=（100個-95個）×@¥800=¥4,000。商品評価損=95個×（@¥800-@¥780）=¥1,900。合計¥5,900だけ繰越商品が減少する。",
+      "explanationStructured": {
+        "essence": "数量が5個減っていた分（棚卸減耗）と、残った95個の売値が下がった分（評価損）を、それぞれ別々に費用計上する取引です。",
+        "debitWhy": "減耗は5個×@¥800=¥4,000を「棚卸減耗損」、評価損は95個×@¥20=¥1,900を「商品評価損」として、両方とも費用なので借方に並べて書きます。",
+        "creditWhy": "繰越商品（資産）が¥4,000+¥1,900=¥5,900ぶん減るので、貸方に「繰越商品 5,900」とまとめて書きます。",
+        "takeaway": "減耗→評価損の順、合計分だけ商品が減る。",
+        "relatedSlugs": [
+          "inventory-evaluation",
+          "kessan"
+        ]
+      },
+      "tags": [
+        "決算整理",
+        "棚卸減耗損",
+        "商品評価損"
+      ]
+    },
+    {
+      "id": "Q-kessan-005",
+      "chapter": "kessan",
+      "topic": "貯蔵品への振替",
+      "topicId": "kessan-shoumouhin",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "決算日において、購入時に通信費として処理していた郵便切手のうち¥4,000が未使用であった。これを貯蔵品勘定へ振り替える。",
+      "hint": "未使用分は次期に持ち越す資産。費用から資産へ振り替える。",
+      "answer": {
+        "debit": [
+          {
+            "account": "stock_supplies",
+            "amount": 4000
+          }
+        ],
+        "credit": [
+          {
+            "account": "comm_fee",
+            "amount": 4000
+          }
+        ]
+      },
+      "explanation": "未使用の郵便切手は次期以降に使う資産なので、費用「通信費」を取り消して資産「貯蔵品」へ振り替える。",
+      "explanationStructured": {
+        "essence": "買ったときに費用にしてしまった切手のうち、まだ使っていない¥4,000ぶんを資産へ戻す決算整理です。",
+        "debitWhy": "貯蔵品（資産）が¥4,000増えます。資産が増えたら借方なので、左に「貯蔵品 4,000」と書きます。",
+        "creditWhy": "通信費（費用）として計上していた¥4,000を取り消します。費用が減ったら貸方なので、右に「通信費 4,000」と書きます。",
+        "takeaway": "未使用の切手・印紙は貯蔵品へ。",
+        "relatedSlugs": [
+          "supplies-stock",
+          "kessan"
+        ]
+      },
+      "tags": [
+        "決算整理",
+        "貯蔵品",
+        "通信費"
+      ]
+    },
+    {
+      "id": "Q-kessan-006",
+      "chapter": "kessan",
+      "topic": "貯蔵品の再振替",
+      "topicId": "kessan-shoumouhin",
+      "difficulty": 3,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "期首にあたり、前期末に貯蔵品勘定へ振り替えていた郵便切手¥4,000について、再振替仕訳を行う。",
+      "hint": "期首の再振替は前期末仕訳をそっくり逆向きに。",
+      "answer": {
+        "debit": [
+          {
+            "account": "comm_fee",
+            "amount": 4000
+          }
+        ],
+        "credit": [
+          {
+            "account": "stock_supplies",
+            "amount": 4000
+          }
+        ]
+      },
+      "explanation": "前期末に貯蔵品へ振り替えた切手を、期首に再び費用「通信費」へ戻す。これで当期使用時に二重計上を避けられる。",
+      "explanationStructured": {
+        "essence": "前期末に資産扱いにした切手を、期首に元の費用へ戻す処理です。前期末の仕訳をそっくり裏返します。",
+        "debitWhy": "通信費（費用）として処理し直すため、借方に「通信費 4,000」と書きます。費用が増えたら借方、のルール通りです。",
+        "creditWhy": "資産だった貯蔵品を取り消します。資産が減ったら貸方なので、右に「貯蔵品 4,000」と書きます。",
+        "takeaway": "再振替＝決算仕訳の逆向き。",
+        "relatedSlugs": [
+          "supplies-stock",
+          "kessan"
+        ]
+      },
+      "tags": [
+        "再振替",
+        "貯蔵品",
+        "通信費"
+      ]
+    },
+    {
+      "id": "Q-kessan-007",
+      "chapter": "kessan",
+      "topic": "損益振替（収益）",
+      "topicId": "kessan-songshi-furikae",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "決算につき、収益勘定の残高を損益勘定へ振り替える。売上勘定の残高は¥800,000、受取利息勘定の残高は¥5,000である。",
+      "hint": "収益は通常貸方残高。借方に書いて消し、相手勘定に損益を立てる。",
+      "answer": {
+        "debit": [
+          {
+            "account": "sales",
+            "amount": 800000
+          },
+          {
+            "account": "interest_income",
+            "amount": 5000
+          }
+        ],
+        "credit": [
+          {
+            "account": "pl_summary",
+            "amount": 805000
+          }
+        ]
+      },
+      "explanation": "収益勘定（貸方残高）を借方に書いてゼロにし、合計額¥805,000を損益勘定の貸方に集める。これで当期の収益総額が損益勘定に集約される。",
+      "explanationStructured": {
+        "essence": "売上などの収益勘定をすべて「損益」という箱に移して、来期に残高を持ち越さないようにリセットする決算振替です。",
+        "debitWhy": "売上¥800,000と受取利息¥5,000は普段は貸方に積み上がっているので、これを取り消すため逆側の借方に並べて書きます。",
+        "creditWhy": "取り消した合計¥805,000は「損益」勘定の貸方に集めます。これで損益勘定の貸方には当期の収益総額が並びます。",
+        "takeaway": "収益は損益の貸方へ集める。",
+        "relatedSlugs": [
+          "closing-balance-transfer",
+          "kessan"
+        ]
+      },
+      "tags": [
+        "決算振替",
+        "損益振替",
+        "収益"
+      ]
+    },
+    {
+      "id": "Q-kessan-008",
+      "chapter": "kessan",
+      "topic": "損益振替（費用）",
+      "topicId": "kessan-songshi-furikae",
+      "difficulty": 3,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "決算につき、費用勘定の残高を損益勘定へ振り替える。仕入勘定の残高は¥500,000、給料勘定の残高は¥120,000、減価償却費の残高は¥30,000である。",
+      "hint": "費用は通常借方残高。貸方に書いて消し、相手勘定に損益を立てる。",
+      "answer": {
+        "debit": [
+          {
+            "account": "pl_summary",
+            "amount": 650000
+          }
+        ],
+        "credit": [
+          {
+            "account": "purchase",
+            "amount": 500000
+          },
+          {
+            "account": "salary",
+            "amount": 120000
+          },
+          {
+            "account": "depreciation",
+            "amount": 30000
+          }
+        ]
+      },
+      "explanation": "費用勘定（借方残高）を貸方に書いてゼロにし、合計¥650,000を損益勘定の借方に集める。損益勘定の貸方には収益、借方には費用が並ぶ。",
+      "explanationStructured": {
+        "essence": "費用勘定をすべて「損益」勘定の借方に集める決算振替です。これで損益勘定上に「貸方=収益・借方=費用」の構造ができあがります。",
+        "debitWhy": "費用合計¥500,000+¥120,000+¥30,000=¥650,000を、損益勘定の借方に立てます。借方に積み上がった費用が、貸方に積み上がった収益と差引かれます。",
+        "creditWhy": "それぞれの費用勘定（借方残高）を取り消すため、逆側の貸方に「仕入 500,000」「給料 120,000」「減価償却費 30,000」と並べて書きます。",
+        "takeaway": "費用は損益の借方へ集める。",
+        "relatedSlugs": [
+          "closing-balance-transfer",
+          "kessan"
+        ]
+      },
+      "tags": [
+        "決算振替",
+        "損益振替",
+        "費用"
+      ]
+    },
+    {
+      "id": "Q-kessan-009",
+      "chapter": "kessan",
+      "topic": "繰越利益剰余金への振替（当期純利益）",
+      "topicId": "kessan-kuriostsuekirieki",
+      "difficulty": 2,
+      "frequency": 2,
+      "syllabusVersion": "2026",
+      "prompt": "決算につき、損益勘定で算定した当期純利益¥155,000を繰越利益剰余金勘定へ振り替える。",
+      "hint": "利益が出た→損益の借方に書いて、相手は繰越利益剰余金。",
+      "answer": {
+        "debit": [
+          {
+            "account": "pl_summary",
+            "amount": 155000
+          }
+        ],
+        "credit": [
+          {
+            "account": "retained_earnings",
+            "amount": 155000
+          }
+        ]
+      },
+      "explanation": "収益>費用で当期純利益が出た場合、損益勘定の貸方残高を借方で打ち消し、純資産「繰越利益剰余金」を増加させる。",
+      "explanationStructured": {
+        "essence": "当期1年間で稼いだ利益¥155,000を、来期へ持ち越す純資産「繰越利益剰余金」に積み上げる最後の決算振替です。",
+        "debitWhy": "損益勘定の貸方残高（収益−費用の差額）を打ち消すため、借方に「損益 155,000」と書きます。これで損益勘定はゼロにリセットされます。",
+        "creditWhy": "繰越利益剰余金（純資産）が¥155,000増えます。純資産が増えたら貸方なので、右に「繰越利益剰余金 155,000」と書きます。",
+        "takeaway": "当期純利益は繰越利益剰余金へ加算。",
+        "relatedSlugs": [
+          "closing-balance-transfer",
+          "kessan"
+        ]
+      },
+      "tags": [
+        "決算振替",
+        "当期純利益",
+        "繰越利益剰余金"
+      ]
+    },
+    {
+      "id": "Q-kessan-010",
+      "chapter": "kessan",
+      "topic": "繰越利益剰余金への振替（当期純損失）",
+      "topicId": "kessan-kuriostsuekirieki",
+      "difficulty": 3,
+      "frequency": 1,
+      "syllabusVersion": "2026",
+      "prompt": "決算につき、損益勘定で算定した当期純損失¥40,000を繰越利益剰余金勘定へ振り替える。",
+      "hint": "損失が出た→損益の貸方に書いて、相手は繰越利益剰余金（取り崩し）。",
+      "answer": {
+        "debit": [
+          {
+            "account": "retained_earnings",
+            "amount": 40000
+          }
+        ],
+        "credit": [
+          {
+            "account": "pl_summary",
+            "amount": 40000
+          }
+        ]
+      },
+      "explanation": "費用>収益で当期純損失が出た場合、損益勘定の借方残高を貸方で打ち消し、純資産「繰越利益剰余金」を減少（取り崩し）させる。",
+      "explanationStructured": {
+        "essence": "当期は赤字で¥40,000の損失が出たので、これまで積み上げた繰越利益剰余金を取り崩して埋め合わせる決算振替です。",
+        "debitWhy": "繰越利益剰余金（純資産）が¥40,000減ります。純資産が減ったら借方なので、左に「繰越利益剰余金 40,000」と書きます。",
+        "creditWhy": "損益勘定の借方残高（費用−収益の差額）を打ち消すため、貸方に「損益 40,000」と書きます。これで損益勘定はゼロにリセットされます。",
+        "takeaway": "当期純損失は繰越利益剰余金から取り崩す。",
+        "relatedSlugs": [
+          "closing-balance-transfer",
+          "kessan"
+        ]
+      },
+      "tags": [
+        "決算振替",
+        "当期純損失",
+        "繰越利益剰余金"
+      ]
     }
   ]
 }

@@ -12,6 +12,11 @@ export type TopicId =
   | 'zeikin-shouhi'            | 'zeikin-houjin'
   | 'shihon-haitou'            | 'shihon-kabushiki'
   | 'sonota-teisei'            | 'sonota-shouhinken' | 'sonota-tatekae'
+  | 'kessan-uriagegenka'
+  | 'kessan-tanaorosi'
+  | 'kessan-shoumouhin'
+  | 'kessan-songshi-furikae'
+  | 'kessan-kuriostsuekirieki'
 
 export type ArticleCategory =
   | 'exam-overview'
@@ -55,6 +60,7 @@ export type ChapterId =
   | 'zeikin'
   | 'shihon'
   | 'sonota'
+  | 'kessan'
 
 export type Chapter = {
   id: ChapterId
@@ -144,4 +150,54 @@ export type ExportPayload = {
   meta: Meta
   progress: ProgressStore
   settings: Settings
+}
+
+// ─────────────────────────────────────────────────────────
+// M5.A2 — 大型決算問題（第3問対策）
+// ─────────────────────────────────────────────────────────
+
+export type FinancialAdjustmentItem = {
+  id: string
+  prompt: string
+  hint?: string
+  expectedAnswer?: {
+    debit: JournalLine[]
+    credit: JournalLine[]
+  }
+  expectedAnswerMulti?: Array<{
+    debit: JournalLine[]
+    credit: JournalLine[]
+  }>
+  explanation: string
+  topicId?: TopicId
+}
+
+export type TrialBalanceRow = {
+  account: AccountId
+  debit?: number
+  credit?: number
+}
+
+export type BigProblem = {
+  id: string
+  title: string
+  description?: string
+  difficulty: 1 | 2 | 3
+  trialBalance: TrialBalanceRow[]
+  adjustments: FinancialAdjustmentItem[]
+  estimatedMinutes: number
+}
+
+export type BigProblemAttempt = {
+  id: string
+  problemId: string
+  startedAt: string
+  finishedAt?: string
+  answers: Record<string, Array<{ debit: JournalLine[]; credit: JournalLine[] }>>
+  results: Record<string, boolean>
+}
+
+export type BigProgressStore = {
+  version: 1
+  attempts: BigProblemAttempt[]
 }

@@ -133,6 +133,31 @@ export const GLOSSARY: GlossaryEntry[] = [
     definition: '減価償却で、固定資産そのものを直接減らさず「減価償却累計額」という評価勘定で控除する記帳方法です。3級ではこの方法を使います。',
     category: 'kotei',
   },
+  {
+    term: '売上原価',
+    definition: '売れた商品の仕入れにかかった金額。「売上原価＝期首商品＋当期仕入−期末商品」で求めます。',
+    category: 'kessan',
+  },
+  {
+    term: '棚卸減耗（たなおろしげんもう）',
+    definition: '帳簿上の在庫数より実際の在庫数が少ない時の差額。万引き・破損・紛失などが原因です。',
+    category: 'kessan',
+  },
+  {
+    term: '商品評価損',
+    definition: '商品の市場価値が原価より下がった時の差額。決算で正味売却価額まで価値を切り下げます。',
+    category: 'kessan',
+  },
+  {
+    term: '損益振替（そんえきふりかえ）',
+    definition: '決算で当期の収益・費用を全部「損益」勘定に集めて、最終利益を計算する処理のこと。',
+    category: 'kessan',
+  },
+  {
+    term: '貯蔵品（ちょぞうひん）',
+    definition: '期末時点で未使用の収入印紙・切手・ハガキなどを資産として計上する勘定。',
+    category: 'kessan',
+  },
 ]
 
 export function findTerm(term: string): GlossaryEntry | undefined {

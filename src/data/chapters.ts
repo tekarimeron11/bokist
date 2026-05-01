@@ -11,4 +11,5 @@ export const CHAPTERS: Chapter[] = [
   { id: 'zeikin',   name: '消費税・法人税',    order: 8, description: '税抜方式、中間納付' },
   { id: 'shihon',   name: '資本・剰余金',      order: 9, description: '株式発行、配当' },
   { id: 'sonota',   name: 'その他',            order: 10, description: '訂正仕訳、商品券、立替・仮払' },
+  { id: 'kessan',   name: '決算整理',          order: 11, description: '売上原価、棚卸減耗、貯蔵品、損益振替' },
 ]
