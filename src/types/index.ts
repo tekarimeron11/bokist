@@ -71,6 +71,13 @@ export type JournalLine = {
   amount: number
 }
 
+export type StructuredExplanation = {
+  essence: string
+  debitWhy: string
+  creditWhy: string
+  takeaway: string
+}
+
 export type Question = {
   id: string
   chapter: ChapterId
@@ -88,6 +95,7 @@ export type Question = {
     credit: JournalLine[]
   }
   explanation: string
+  explanationStructured?: StructuredExplanation
   tags?: string[]
 }
 

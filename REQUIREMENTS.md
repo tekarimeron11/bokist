@@ -1,8 +1,8 @@
-# Bokist 要件定義書 v2.2
+# Bokist 要件定義書 v2.3
 
 > 日商簿記3級学習サイト
 > 主人 → 先輩（20代女性）への個人プレゼント
-> 2026-05-01 v1 起草 → v1.1〜v1.4 → v2.0 → v2.1 → v2.2（codex-review v2.1 反映） / Stella
+> 2026-05-01 v1 起草 → v1.1〜v1.4 → v2.0 → v2.1 → v2.2 → v2.3（解説スキーマ拡張・用語ポップアップ・T字勘定・Soft Paper デザイン採用） / Stella
 
 ---
 
@@ -419,10 +419,53 @@ type Question = {
     debit: Array<{ account: AccountId, amount: number }>;
     credit: Array<{ account: AccountId, amount: number }>;
   };
-  explanation: string;              // 1〜2行の解説
+  explanation: string;              // 1〜2行の解説（後方互換用・必須）
+  structured?: StructuredExplanation; // 構造化解説（§8.5 解説仕様、推奨・任意）
   tags?: string[];                  // ["手形", "改定対象"] など
 };
+
+type StructuredExplanation = {
+  essence:   string;  // 取引の本質（1文・50〜80字）
+  debitWhy:  string;  // 借方の理由（50〜80字）
+  creditWhy: string;  // 貸方の理由（50〜80字）
+  takeaway:  string;  // ポイント（≦30字）
+};
 ```
+
+#### 構造化解説の運用方針
+- `explanation`（既存・必須）と `structured`（新規・任意）は併存。レンダリング側は `structured` があればそちらを優先表示し、無ければ `explanation` をフォールバック表示する。
+- `structured` の各フィールド本文中には **`<Term>用語名</Term>` インラインタグ** を埋め込める（§8.5）。タグは glossary（§7.8）の `term` と完全一致する文字列のみ有効。
+- 文字数バリデーション（ビルド時）：
+  - `essence` / `debitWhy` / `creditWhy`: 各 30〜120字（半角換算ではなくコードポイント数）。50〜80字を推奨レンジ。
+  - `takeaway`: 1〜30字。
+  - 範囲逸脱はビルドエラー（`scripts/validate-content.ts` で検出）。
+- 同一テンプレ内で同じ用語が複数回登場する場合、`<Term>` タグは **最初の1回のみ** 適用する（読みづらさ回避）。ビルド時に2回目以降のタグ化を検出して警告。
+
+### 7.8 用語集（Glossary）スキーマ
+
+`<Term>` タグの参照先となる用語マスタ。`src/data/glossary.ts` に literal union として定義。
+
+```ts
+export type GlossaryTerm = {
+  term: string;           // 表示名（例: "三分法"）。<Term>のテキストと完全一致
+  reading?: string;       // ふりがな（任意）。例: "さんぶんぽう"
+  definition: string;     // 初学者向け定義（1〜2文・最大160字）
+  category?:              // 任意の分類タグ
+    | "principle"         // 原理・考え方（例: 三分法、発生主義）
+    | "account"           // 勘定科目の補足（例: 買掛金、貸倒引当金）
+    | "method"            // 処理方法（例: 差額補充法、間接法）
+    | "instrument";       // 具体的な道具・媒介（例: 他人振出小切手、商品券）
+  relatedTopicIds?: TopicId[];  // 関連論点（任意。任意のCTA表示に利用）
+};
+
+export type GlossaryTermName = string;  // ビルド時に literal union として narrow（後述）
+```
+
+**ビルド時バリデーション**:
+1. `term` の重複禁止（全 GlossaryTerm 内で一意）。
+2. `definition` の最大長 160 文字。
+3. すべての `Question.structured.<field>` に含まれる `<Term>X</Term>` の `X` が、`GlossaryTerm.term` の集合に含まれること（孤立Termを禁止）。違反時はビルドエラー。
+4. `glossary.ts` から `GlossaryTermName = "三分法" | "掛け" | ...` の literal union 型を自動生成（`scripts/build-glossary-types.ts`）し、`<Term>` レンダラに型レベル制約を与える（任意・MVPでは省略可）。
 
 ### 7.2 勘定科目マスタ
 ```ts
@@ -641,6 +684,88 @@ credit: [{ account: "accounts_payable", amount: 80000 }]
 
 学習効果を上げるため、**正規化前のユーザー入力も `attempts.answer` にそのまま記録**（不正解時のフィードバック分析用）。採点判定そのものは正規化後の比較で行う。
 
+### 8.5 解説仕様（結果画面 S-04）
+
+結果画面に表示する解説は、初学者が「読んだのに意味がわからない」状態に陥らないことを最優先する。本仕様は §7.1 `Question.structured`（StructuredExplanation）の表示・操作・検証を定義する。
+
+#### 8.5.1 4要素表示モデル
+1問の解説は **4ブロック** で構成する：
+
+| ブロック | 見出し（UI） | フィールド | 推奨字数 |
+|---------|------------|----------|---------|
+| 取引の本質 | どんな取引？ | `essence`   | 50〜80字 |
+| 借方の理由 | 借方の理由   | `debitWhy`  | 50〜80字 |
+| 貸方の理由 | 貸方の理由   | `creditWhy` | 50〜80字 |
+| ポイント   | ポイント     | `takeaway`  | ≦30字 |
+
+- **ブロック間の縦余白** は等間隔（推奨 12〜16px）。各ブロックは **paper-warm** 背景の小カード or 区切り線で分離する。
+- `essence` には借方・貸方という用語を出さない。`debitWhy` / `creditWhy` で初出させる（読者の認知負荷を下げる）。
+- `takeaway` は **font-display（Marcellus + Noto Serif JP）** で1.1〜1.2倍サイズ、左に小さな印章モチーフ（`shadow-seal` 風）を添えてもよい。
+
+#### 8.5.2 用語ポップアップ仕様（`<Term>` タグ）
+
+`structured` の各フィールド本文中に埋め込まれた `<Term>用語名</Term>` を、レンダリング時に **インタラクティブな用語チップ** に変換する。
+
+##### 表示
+- ベース文字列に **下線（dotted underline 1px、color: `cocoa`）** を付与し、ポインタカーソルを変える。
+- スクリーンリーダー向けに `<button>` 要素として実装し、`aria-describedby` で説明領域を関連づける。`role="button"`、`tabindex="0"` を担保。
+- `prefers-reduced-motion: reduce` 時はアニメーション無効。
+
+##### インタラクション
+- **タップ / クリック / Enter / Space** でポップオーバー開閉（トグル）。
+- ポップオーバーは画面下端から **底面シート（bottom sheet, 高さ自動）** で出現。背景は `paper-deep`、文字は `ink`。
+- ポップオーバーの内容：
+  1. 用語名（h3、`font-serif`）
+  2. ふりがな（小さく `ink-faint`、`reading` がある場合のみ）
+  3. 定義（`definition`、本文 14px）
+  4. 関連論点リンク（`relatedTopicIds` がある場合、`pill` 形式で最大3件）
+  5. 閉じるボタン（右上 ×）
+- 閉じる手段：背景タップ / × ボタン / Esc キー / 別の `<Term>` タップ（自動的に新しい用語へ差し替え）。
+
+##### グルーピング
+- 同一画面内で同じ用語を複数回タップしても、表示する内容は同じ（毎回 fresh に開く）。
+- ただし `structured` 1セット内では `<Term>` タグ化は **最初の1回のみ**（§7.1 ルール）。2回目以降は素のテキスト。
+
+##### フォールバック
+- `<Term>X</Term>` の `X` が glossary に存在しない場合（ビルド検証を通り抜けた場合の保険）、レンダラは **タグを除去した素のテキスト** を表示し、`console.warn` でログ出力。クラッシュしない。
+
+#### 8.5.3 T字勘定（T-account）レンダリング
+
+仕訳の構造を視覚化するため、結果画面の解説直下に **T字勘定の図** を表示する。これは **正解仕訳のみ** を可視化する読み物的補助で、入力UIではない。
+
+##### 表示要件
+- 各勘定科目について、横に並ぶ **T字** を1つ描画する。形式：
+
+```
+        勘定科目名
+       ┌──────────┐
+       │   ¥xxx   │  ← 借方残高側
+   ────┼──────────┼────
+       │          │  ← 貸方残高側
+       └──────────┘
+```
+
+- **借方科目**（資産・費用）は左側に金額を、**貸方科目**（負債・純資産・収益）は右側に金額を表示する。仕訳1行に対して該当する側へ「+¥金額」を立てるアニメーションを順次実行（`anim-slide-up` 220ms / 行ごと60msスタガー）。
+- 評価勘定（`isContra: true`、貸倒引当金・減価償却累計額）は通常の貸方扱い（資産のマイナスを貸方に立てる挙動）で描画。
+- 借方ライン・貸方ラインを **§8.4 の正規化適用後** に描画する（同一勘定の合算後）。
+- 色味は `sage`（借方）と `blush`（貸方）で薄く塗り分け、文字は `ink`、罫線は `line-strong`。
+
+##### 文字・寸法
+- 勘定科目名: `font-serif`、太字、14px、`ink`。
+- 金額: `font-ledger`（DM Mono）、13px、右揃え、`tabular-nums`。
+- T字の幅は最大 200px、高さ 56px を上限。複数勘定がある場合は横スクロール可（`overflow-x-auto`、最低タッチターゲット幅 56px）。
+
+##### 簡略表示（small viewport）
+- 画面幅 360px 未満では T字図を **横並び表ライン1本** のシンプル描画にダウングレード（折り畳み式の disclosure に格納）。
+
+##### アクセシビリティ
+- T字図には `<figure>` + `<figcaption>` を使い、`aria-label` に「{勘定科目名}: 借方 ¥X / 貸方 ¥Y」のテキストサマリを必ず添える。スクリーンリーダーは図ではなくこの要約を読み上げる。
+
+#### 8.5.4 段階的ロールアウト
+- **M2（フェーズ1完了）**: 4要素表示（8.5.1）と T字勘定（8.5.3）を実装。`<Term>` タグはビルド検証のみ通し、UI 上では下線スタイルのみ・タップ無効でフォールバック（無タグテキスト同等）。
+- **M4（フェーズ1.5）**: `<Term>` ポップオーバー（8.5.2）と glossary（§7.8）を本格稼働。記事機能と同タイミング。
+- 各 `Question.structured` は M2 リリース時に全52問で必須化。M2 の `<Term>` タグは「将来用にマークアップは入れておくが押せない」状態を許容する。
+
 ---
 
 ## 9. 非機能要件
@@ -652,11 +777,60 @@ credit: [{ account: "accounts_payable", amount: 80000 }]
 - オフラインでも問題を解ける（静的アセットのみキャッシュ）
 
 ### 9.2 デザイン
-- モバイルファースト（iPhone 14: 390×844 基準）
-- カラー: ウォームベージュ + ダスティピンク + セージグリーン
-- フォント: Noto Sans JP / Noto Serif JP / DM Serif Display
-- 配色は5分類（資産/負債/純資産/収益/費用）でカラーコード化
-- 学習モード: 色分けあり / 本番寄せモード: 色分け薄め（R-012）
+
+#### 9.2.1 全体方針 — Soft Paper / Editorial
+- モバイルファースト（iPhone 14: 390×844 基準）。max-width 448px の中央揃え。
+- **テーマ名**: Soft Paper（紙の温度感のあるエディトリアルスタイル）。レイアウトは雑誌の目次・印刷物に近い佇まい。
+- 余白は広め（章カードの上下 padding 16〜20px、画面の左右パディング 20px）。
+- 数字・金額は **tabular-nums** を強制。和文と欧文（数字）を混在させる箇所では和文側を `font-sans`、数字側を `font-ledger`（DM Mono）で書き分ける。
+
+#### 9.2.2 カラーパレット（Tailwind 拡張色）
+
+| トークン | 用途 | 値 |
+|---------|------|---|
+| `paper.DEFAULT` | 既定背景 | `#fdfaf6` |
+| `paper.deep`    | カード背景・差別化背景 | `#f7f1e6` |
+| `paper.warm`    | アクセント背景 | `#f3ebd9` |
+| `ink.DEFAULT`   | 主要テキスト | `#2d2a26` |
+| `ink.soft`      | 二次テキスト | `#5a544c` |
+| `ink.faint`     | キャプション・補助 | `#8b8275` |
+| `blush.DEFAULT` | 貸方アクセント / 注意系 | `#c98a8a` |
+| `blush.soft` / `blush.deep` | バックアップバナー等 | `#f3e1e1` / `#8a4a4a` |
+| `sage.DEFAULT`  | 借方アクセント / 成功系 | `#5a7d6f` |
+| `sage.soft` / `sage.deep` | T字勘定の借方・正答ステップ | `#d9e4dd` / `#3a5a4d` |
+| `iris.*` / `gold.*` / `cocoa.*` | カテゴリ補助・引用枠 | `#7a6593` / `#b08a3e` / `#7a5a45` 系 |
+| `line.DEFAULT` / `line.strong` | 罫線・区切り | `#ebe4d9` / `#c9bfae` |
+| `seal` | スタンプ・印章モチーフ | `#a83838` |
+
+**5分類バッジ**（`badge-asset` / `liability` / `equity` / `revenue` / `expense`）は §6.x の独立クラスで定義し、上記パレットに含めない（タスク的な分類色のため）。
+
+#### 9.2.3 タイポグラフィ
+- `font-sans`: Noto Sans JP（300/400/500/700）。本文・UI ラベルの既定。
+- `font-serif`: Noto Serif JP（500/700）。見出し・取引文の本文。
+- `font-display`: Marcellus →（fallback）Noto Serif JP。雑誌的な大見出し・数字エンブレム。
+- `font-ledger`: DM Mono → JetBrains Mono → ui-monospace。金額・T字勘定・通し番号。
+- 小書きスタイル: `eyebrow`（10px / letter-spacing 0.22em / uppercase）、`micro`（11px）。両方ともセクションラベルや小カテゴリ表示に使う。
+
+#### 9.2.4 レイアウト・コンポーネント
+- **paper-card**: `bg-paper-deep`、`border border-line`、`rounded-card`（0.75rem）、`shadow-paper`。情報カードの基本形。
+- **shadow-paper**: `0 1px 0 rgba(45,42,38,0.04), 0 8px 24px -12px rgba(45,42,38,0.10)`。紙の影に近い柔らかな2段影。
+- **shadow-press**: ボタン押下感（凹み）。`0 1px 0 rgba(45,42,38,0.06)`。
+- **shadow-seal**: 正答時のスタンプ演出に使用（`stamp` アニメと併用）。
+- **rounded-card / rounded-field / rounded-sheet**: 0.75 / 0.5 / 1.5 rem。カード・フォーム・ボトムシート用に使い分け。
+- **grid-bg**: 背景にうっすら `line` カラーのドット格子（22×22px）。設定画面など補助用途のみ。
+
+#### 9.2.5 アニメーション
+- `reveal` (0.5s) / `stamp` (0.45s) / `underline` (0.4s) / `pulse-soft` (1.6s loop) を Tailwind の `animation` 拡張で定義。
+- `prefers-reduced-motion: reduce` 時、`reveal` / `stamp` / `pulse-soft` は **transform を消した opacity のみ** に縮約、または完全停止させる（CSS メディアクエリで上書き）。
+- スタッガ表示は **60〜80ms 間隔** を上限とする（連打感を出さない）。
+
+#### 9.2.6 学習モード切替（R-012 と整合）
+- `studyMode: "guided"` 時は本仕様のフルカラー（資産/負債/純資産/収益/費用バッジ可視・<Term> 下線可視）。
+- `studyMode: "exam"` 時はバッジを `badge-*` の彩度を 70% 程度に落とし、`<Term>` の dotted underline を非表示にして本番試験 UI に寄せる。色分けがゼロにはならないが、視認的な誘導を控える。
+
+#### 9.2.7 アクセシビリティ補強
+- すべての非テキスト UI（T字勘定、印章、バッジ）に **テキスト等価表現** を `aria-label` または `<figcaption>` で付与する（§9.4 と整合）。
+- 数字の **OpenType `palt`**（プロポーショナルメトリクス）は和文ボディに適用、欧文数字には適用しない（読み間違い防止）。
 
 ### 9.3 性能
 - 初回ロード 3秒以内（4G想定）
@@ -758,3 +932,4 @@ credit: [{ account: "accounts_payable", amount: 80000 }]
 | v2.0 | 2026-05-01 | 大規模変更。詳細は下記 v2.0 内訳：<br>**(機能)** スライド機能を解説記事に置換、R-040〜R-046 を新設、§7.6 Article 型、§7.7 双方向リンク、結果画面 S-04 に関連記事セクション、画面 S-07/S-08 を追加、marked 採用<br>**(データ)** Round 2 コンテンツ生成結果 52問（26論点×2問）を反映、journals.json 確定<br>**(運用)** Q-01/Q-06 を記事化に変更、Q-05 を `tekarimeron11/bokist` に確定 |
 | v2.1 | 2026-05-01 | codex-review v2.0 反映：<br>**(blocking)** (1) R-043 関連記事検索の優先順位を topicId→chapterId→0件「準備中」へ明文化、最大3件・updatedAt 降順・重複除去のルール追加。(2) §7.7 索引構造（articlesByTopicId / articlesByChapterId / questionsByTopicId）の構築タイミング・計算量保証を契約化。(3) M2/M4 の必須/任意境界を表で再定義（記事機能は M4 必須、M2 では「準備中」表示）。<br>**(advisory)** (4) `TopicId` literal union 型を §7.7 に追加し Question/Article で共通使用＋ビルド時集合検証を要件化。(5) R-044 で `topicIds` 空配列時のCTA非表示を明記。(6) 改版履歴 v2.0 を機能/データ/運用に分割。 |
 | v2.2 | 2026-05-01 | codex-review v2.1 反映：<br>(1) §7.1 `Question.topicId` と §7.6 `Article.topicIds[]` の型契約を `string` から `TopicId` に統一（v2.1 で §7.7 に union 追加したが本文の型未更新だった）。<br>(2) §7.7 順方向アルゴリズムの順序を「候補取得→slug重複除去→3件採用→不足分のみ chapter 補充→再除去→3件 truncate」に修正、上位3件内に重複があった際の取りこぼしを解消。`Article.slug` 一意性を不変条件として §7.6 に明記。 |
+| v2.3 | 2026-05-01 | 解説体験の本格化と新デザイン採用：<br>**(機能・スキーマ)** (1) §7.1 `Question.structured?: StructuredExplanation` を新設（essence / debitWhy / creditWhy / takeaway の4要素）。`explanation` は後方互換用に残す。(2) §7.8 `GlossaryTerm` 型と `<Term>` インラインタグ参照ルール、ビルド時の孤立Term検証を新設。<br>**(UI)** (3) §8.5「解説仕様」を新設し、4要素表示モデル、用語ポップアップ（底面シート・キーボード操作・スクリーンリーダー対応）、T字勘定レンダリング（借方/貸方の左右配置、`isContra` 評価勘定の扱い、small viewport ダウングレード、figure+figcaption によるa11yサマリ）、M2/M4 のロールアウト境界を定義。<br>**(デザイン)** (4) §9.2 を全面改訂し Soft Paper / Editorial テーマを正式採用。Tailwind 拡張カラー（paper / ink / blush / sage / iris / gold / cocoa / line / seal）、フォントスタック（Marcellus + Noto Sans JP / Noto Serif JP + DM Mono）、shadow / rounded / animation トークン、`studyMode: "exam"` 時の挙動、`prefers-reduced-motion` 縮約ルールを明文化。 |

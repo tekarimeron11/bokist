@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { LineEditor, type LineDraft } from '../components/LineEditor'
+import { TAccount } from '../components/TAccount'
+import { Term } from '../components/Term'
 import { gradeJournal } from '../lib/grading'
-import { parseYenInput, formatYen } from '../lib/format'
+import { parseYenInput } from '../lib/format'
 import { progressStore } from '../storage/progressStore'
 import { findAccount } from '../data/accounts'
 import { relatedArticles } from '../data/articles'
-import type { JournalLine, Question } from '../types'
+import { findTerm } from '../data/glossary'
+import type { JournalLine, Question, StructuredExplanation } from '../types'
 
 type Props = {
   questions: Question[]
@@ -17,9 +20,16 @@ type Props = {
 type Outcome = {
   correct: boolean
   user: { debit: JournalLine[]; credit: JournalLine[] }
+  durationMs: number
 }
 
+type Step = 1 | 2 | 3
+
 const emptyDraft = (): LineDraft[] => [{ account: '', amountText: '' }]
+
+function isLineFilled(d: LineDraft): boolean {
+  return Boolean(d.account) && Boolean(d.amountText) && parseYenInput(d.amountText.replace(/,/g, '')) > 0
+}
 
 export function QuizScreen({ questions, label, onExit, onOpenArticle }: Props) {
   const [index, setIndex] = useState(0)
@@ -32,6 +42,12 @@ export function QuizScreen({ questions, label, onExit, onOpenArticle }: Props) {
   const total = questions.length
   const isLast = index >= total - 1
 
+  const debitHasOne = debit.some(isLineFilled)
+  const creditHasOne = credit.some(isLineFilled)
+
+  const step: Step = outcome ? 3 : !debitHasOne ? 1 : 2
+  const canSubmit = debitHasOne && creditHasOne
+
   function toLines(draft: LineDraft[]): JournalLine[] {
     return draft
       .map((d) => ({ account: d.account, amount: parseYenInput(d.amountText.replace(/,/g, '')) }))
@@ -39,23 +55,25 @@ export function QuizScreen({ questions, label, onExit, onOpenArticle }: Props) {
   }
 
   function handleSubmit() {
+    if (!canSubmit) return
     const userDebit = toLines(debit)
     const userCredit = toLines(credit)
     const correct = gradeJournal(
       { debit: userDebit, credit: userCredit },
       q.answer,
     )
+    const durationMs = Date.now() - startedAt
     progressStore.append({
       id: crypto.randomUUID(),
       questionId: q.id,
       chapter: q.chapter,
       correct,
       answeredAt: new Date().toISOString(),
-      durationMs: Date.now() - startedAt,
+      durationMs,
       hintUsed: false,
       answer: { debit: userDebit, credit: userCredit },
     })
-    setOutcome({ correct, user: { debit: userDebit, credit: userCredit } })
+    setOutcome({ correct, user: { debit: userDebit, credit: userCredit }, durationMs })
   }
 
   function next() {
@@ -72,52 +90,74 @@ export function QuizScreen({ questions, label, onExit, onOpenArticle }: Props) {
 
   return (
     <div className="min-h-screen bg-paper">
-      <header className="px-5 pt-4 pb-2 flex items-center gap-3 sticky top-0 bg-paper z-10">
-        <button onClick={onExit} aria-label="閉じる" className="text-lg">←</button>
-        <div className="flex-1">
-          <div className="h-1.5 rounded-full bg-line overflow-hidden">
-            <div
-              className="h-full bg-sage rounded-full"
-              style={{ width: `${((index + (outcome ? 1 : 0)) / total) * 100}%` }}
-            />
-          </div>
+      {/* Editorial sticky header — hairline progress, numeral counter */}
+      <header className="px-5 pt-4 pb-3 flex items-center gap-3 sticky top-0 bg-paper/95 backdrop-blur z-10 border-b border-line">
+        <button
+          onClick={onExit}
+          aria-label="閉じる"
+          className="font-display text-xl w-7 h-7 leading-none text-ink"
+        >
+          ←
+        </button>
+        <div className="flex-1 relative">
+          <div className="h-px bg-line" />
+          <div
+            className="absolute left-0 top-1/2 -translate-y-1/2 h-0.5 bg-ink rounded-full transition-[width] duration-300"
+            style={{ width: `${((index + (outcome ? 1 : 0)) / total) * 100}%` }}
+          />
         </div>
-        <div className="text-[11px] text-ink-soft">
-          {index + 1} / {total}
+        <div className="numeral text-[11px]">
+          {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
         </div>
       </header>
 
       {!outcome ? (
-        <div className="px-5 pb-32 pt-2">
-          <div className="flex gap-2 mt-2">
-            <span className="pill badge-asset" style={{ background: '#d9e4dd', color: '#6b8e7f' }}>
-              {label}
-            </span>
-            <span className="pill" style={{ background: '#f5efe6', color: '#6b6660' }}>
-              {q.topic}
-            </span>
-          </div>
-          <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft mt-4">
-            Transaction
-          </div>
-          <p className="font-serif text-lg leading-relaxed mt-2">{q.prompt}</p>
+        <div className="px-5 pb-32 pt-4 animate-reveal">
+          <StepBar step={step} />
 
-          <div className="mt-6 grid grid-cols-1 gap-6">
-            <LineEditor side="debit" lines={debit} onChange={setDebit} />
-            <LineEditor side="credit" lines={credit} onChange={setCredit} />
+          <div className="flex gap-1.5 mt-5 flex-wrap">
+            <span className="pill badge-asset">{label}</span>
+            <span className="pill badge-neutral">{q.topic}</span>
           </div>
+
+          <div className="mt-6 flex items-baseline gap-3">
+            <span className="numeral text-3xl leading-none">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            <span className="eyebrow">transaction</span>
+          </div>
+          <p className="font-serif text-[18px] leading-[1.8] mt-3">{q.prompt}</p>
+
+          <div className="mt-7 grid grid-cols-1 gap-7">
+            <LineEditor side="debit" lines={debit} onChange={setDebit} />
+            <LineEditor side="credit" lines={credit} onChange={setCredit} disabled={!debitHasOne} />
+          </div>
+
+          {!debitHasOne && (
+            <p className="text-micro text-ink-soft mt-4 italic" role="status">
+              まず借方の科目と金額を1行入力してください。
+            </p>
+          )}
 
           <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper/95 backdrop-blur border-t border-line safe-bottom">
-            <div className="max-w-md mx-auto flex items-center gap-2">
+            <div className="max-w-md mx-auto flex items-center gap-3">
               {q.hint && (
-                <details className="flex-1">
-                  <summary className="text-xs text-ink-soft cursor-pointer">💡 ヒント</summary>
-                  <p className="text-xs mt-1">{q.hint}</p>
+                <details className="flex-1 min-w-0">
+                  <summary className="text-micro text-ink-soft cursor-pointer select-none link-underline inline-block">
+                    ヒントを見る
+                  </summary>
+                  <p className="text-xs mt-2 text-ink-soft leading-relaxed">{q.hint}</p>
                 </details>
               )}
               <button
                 onClick={handleSubmit}
-                className="bg-ink text-white px-7 py-3 rounded-full text-sm font-medium ml-auto"
+                disabled={!canSubmit}
+                aria-disabled={!canSubmit}
+                className={`ml-auto px-7 py-3 rounded-full text-sm font-medium tracking-wider transition-all ${
+                  canSubmit
+                    ? 'bg-ink text-white shadow-press hover:bg-ink-soft active:scale-95'
+                    : 'bg-line text-ink-faint cursor-not-allowed'
+                }`}
               >
                 答え合わせ
               </button>
@@ -125,57 +165,258 @@ export function QuizScreen({ questions, label, onExit, onOpenArticle }: Props) {
           </div>
         </div>
       ) : (
-        <div className="px-5 pb-32 pt-2">
-          <div className={`mt-2 p-5 rounded-2xl ${outcome.correct ? 'bg-sage-soft' : 'bg-blush-soft'}`}>
-            <div className="font-display text-3xl">{outcome.correct ? '正解' : '不正解'}</div>
-            <p className="text-xs text-ink-soft mt-1">{q.topic}</p>
-          </div>
+        <ResultSection
+          q={q}
+          outcome={outcome}
+          isLast={isLast}
+          onNext={next}
+          onOpenArticle={onOpenArticle}
+        />
+      )}
+    </div>
+  )
+}
 
-          <div className="mt-6">
-            <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft">Correct</div>
-            <JournalDisplay journal={q.answer} />
-          </div>
-
-          {!outcome.correct && (
-            <div className="mt-4">
-              <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft">Your answer</div>
-              <JournalDisplay journal={outcome.user} />
+function StepBar({ step }: { step: Step }) {
+  const steps: Array<{ id: Step; label: string; index: string }> = [
+    { id: 1, label: '借方', index: '01' },
+    { id: 2, label: '貸方', index: '02' },
+    { id: 3, label: '答え合わせ', index: '03' },
+  ]
+  return (
+    <ol className="flex items-center gap-2" aria-label="進行状況">
+      {steps.map((s, i) => {
+        const active = step === s.id
+        const done = step > s.id
+        return (
+          <li key={s.id} className="flex items-center gap-2">
+            <div
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] tracking-wide transition-colors ${
+                active
+                  ? 'bg-ink text-white'
+                  : done
+                    ? 'bg-sage-soft text-sage-deep'
+                    : 'bg-paper-deep text-ink-faint border border-line'
+              }`}
+              aria-current={active ? 'step' : undefined}
+            >
+              <span className={`numeral text-[10px] leading-none ${active ? 'text-white/70' : ''}`}>
+                {s.index}
+              </span>
+              <span className="font-medium">{s.label}</span>
             </div>
-          )}
+            {i < steps.length - 1 && (
+              <span className={`w-2.5 h-px ${done ? 'bg-sage' : 'bg-line'}`} aria-hidden />
+            )}
+          </li>
+        )
+      })}
+    </ol>
+  )
+}
 
-          <div className="mt-6 p-4 rounded-2xl bg-white border border-line">
-            <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft mb-2">解説</div>
-            <p className="text-sm leading-relaxed">{q.explanation}</p>
+function ResultSection({
+  q,
+  outcome,
+  isLast,
+  onNext,
+  onOpenArticle,
+}: {
+  q: Question
+  outcome: Outcome
+  isLast: boolean
+  onNext: () => void
+  onOpenArticle?: (slug: string) => void
+}) {
+  const seconds = Math.max(1, Math.round(outcome.durationMs / 1000))
+  const structured: StructuredExplanation | undefined = q.explanationStructured
+
+  return (
+    <div className="px-5 pb-32 pt-4 animate-reveal">
+      {/* 朱印 ink-seal moment — signature aesthetic */}
+      <div className="relative paper-card-deep px-5 py-8 text-center overflow-hidden">
+        <svg
+          aria-hidden
+          className="absolute inset-0 w-full h-full opacity-[0.05] pointer-events-none"
+          viewBox="0 0 200 200"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <line x1="100" y1="20" x2="100" y2="180" stroke="currentColor" strokeWidth="1.5" />
+          <line x1="20" y1="64" x2="180" y2="64" stroke="currentColor" strokeWidth="1.5" />
+        </svg>
+        <div className="relative">
+          <div className="ink-seal mx-auto animate-stamp">
+            {outcome.correct ? '正解' : '再考'}
           </div>
-
-          <RelatedArticles
-            topicId={q.topicId}
-            chapter={q.chapter}
-            onOpen={onOpenArticle}
-          />
-
-          {q.tags && q.tags.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-1">
-              {q.tags.map((t) => (
-                <span key={t} className="pill" style={{ background: '#f5efe6', color: '#6b6660' }}>
-                  {t}
-                </span>
-              ))}
-            </div>
-          )}
-
-          <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper/95 backdrop-blur border-t border-line safe-bottom">
-            <div className="max-w-md mx-auto">
-              <button
-                onClick={next}
-                className="w-full bg-ink text-white py-3 rounded-full text-sm font-medium"
-              >
-                {isLast ? '完了' : '次の問題 →'}
-              </button>
-            </div>
+          <p
+            className="font-serif text-[15px] mt-5 text-ink tracking-wide animate-reveal"
+            style={{ animationDelay: '0.25s' }}
+          >
+            {outcome.correct ? 'よくできました。' : 'もう一度仕訳を確認しましょう。'}
+          </p>
+          <div className="mt-3 flex items-center justify-center gap-4 text-[11px] text-ink-soft tracking-wider">
+            <span>{q.topic}</span>
+            <span className="w-1 h-1 rounded-full bg-line-strong" aria-hidden />
+            <span className="amount">{seconds}s</span>
           </div>
         </div>
+      </div>
+
+      <section className="mt-8">
+        <div className="flex items-baseline justify-between mb-3">
+          <span className="eyebrow">correct journal</span>
+          <span className="numeral text-[10px]">正解仕訳</span>
+        </div>
+        <div className="paper-card p-3 overflow-x-auto">
+          <TAccount
+            debit={q.answer.debit.map((l) => ({ accountId: l.account, amount: l.amount }))}
+            credit={q.answer.credit.map((l) => ({ accountId: l.account, amount: l.amount }))}
+          />
+        </div>
+      </section>
+
+      {!outcome.correct && (
+        <section className="mt-6">
+          <div className="flex items-baseline justify-between mb-3">
+            <span className="eyebrow text-blush-deep">your answer</span>
+            <span className="numeral text-[10px] text-blush-deep">あなたの解答</span>
+          </div>
+          <UserAnswerCompare user={outcome.user} />
+        </section>
       )}
+
+      {structured ? (
+        <StructuredExplanationView data={structured} />
+      ) : (
+        <section className="mt-7 paper-card p-5">
+          <div className="flex items-baseline justify-between mb-3">
+            <span className="eyebrow">解説</span>
+            <span className="numeral text-[10px]">commentary</span>
+          </div>
+          <p className="text-[14px] leading-[1.85] text-ink">{q.explanation}</p>
+        </section>
+      )}
+
+      <TermChips q={q} />
+      <RelatedArticles topicId={q.topicId} chapter={q.chapter} onOpen={onOpenArticle} />
+
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper/95 backdrop-blur border-t border-line safe-bottom">
+        <div className="max-w-md mx-auto">
+          <button
+            onClick={onNext}
+            className="w-full bg-ink text-white py-3.5 rounded-full text-sm font-medium tracking-wider shadow-press hover:bg-ink-soft transition-all active:scale-[0.98]"
+          >
+            {isLast ? '完了する' : '次の問題  →'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function StructuredExplanationView({ data }: { data: StructuredExplanation }) {
+  const blocks: Array<{ eyebrow: string; jpLabel: string; title: string; body: string; accent: string }> = [
+    { eyebrow: 'essence',  jpLabel: '01', title: '取引の本質', body: data.essence,   accent: 'border-l-ink' },
+    { eyebrow: 'debit',    jpLabel: '02', title: '借方の理由', body: data.debitWhy,  accent: 'border-l-sage' },
+    { eyebrow: 'credit',   jpLabel: '03', title: '貸方の理由', body: data.creditWhy, accent: 'border-l-blush' },
+    { eyebrow: 'take away',jpLabel: '04', title: 'ポイント',   body: data.takeaway,  accent: 'border-l-gold' },
+  ]
+  return (
+    <section className="mt-7 flex flex-col gap-2.5">
+      <div className="flex items-baseline justify-between mb-1">
+        <span className="eyebrow">commentary</span>
+        <span className="numeral text-[10px]">解説</span>
+      </div>
+      {blocks.map((b) => (
+        <article
+          key={b.eyebrow}
+          className={`paper-card border-l-2 ${b.accent} p-4`}
+        >
+          <div className="flex items-baseline gap-2.5">
+            <span className="numeral text-[11px]">{b.jpLabel}</span>
+            <span className="eyebrow !before:hidden" style={{ ['--tw-content' as string]: 'none' } as React.CSSProperties}>
+              {b.eyebrow}
+            </span>
+          </div>
+          <h4 className="font-serif text-[15px] mt-1.5">{b.title}</h4>
+          <p className="text-[14px] leading-[1.8] mt-2 text-ink">{b.body}</p>
+        </article>
+      ))}
+    </section>
+  )
+}
+
+function TermChips({ q }: { q: Question }) {
+  const candidates = useMemo(() => collectTermCandidates(q), [q])
+  if (candidates.length === 0) return null
+  return (
+    <section className="mt-6">
+      <div className="flex items-baseline justify-between mb-2">
+        <span className="eyebrow">用語</span>
+        <span className="numeral text-[10px]">glossary</span>
+      </div>
+      <ul className="flex flex-wrap gap-1.5">
+        {candidates.map((t) => (
+          <li key={t}>
+            <Term term={t}>
+              <span className="pill bg-paper-deep text-ink hover:bg-line transition-colors border border-line">
+                {t}
+              </span>
+            </Term>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+function collectTermCandidates(q: Question): string[] {
+  const seen = new Set<string>()
+  const push = (t: string) => {
+    if (findTerm(t) && !seen.has(t)) seen.add(t)
+  }
+  q.tags?.forEach(push)
+  const haystack = [
+    q.explanation,
+    q.explanationStructured?.essence,
+    q.explanationStructured?.debitWhy,
+    q.explanationStructured?.creditWhy,
+    q.explanationStructured?.takeaway,
+  ]
+    .filter((s): s is string => Boolean(s))
+    .join(' ')
+  ;['借方', '貸方', '相手勘定', '諸掛り', '仕入諸掛り', '振替', '諸口', '三分法', '当座借越', '貸倒引当金', '差額補充法', '経過勘定', '決算整理', '法人税等', '減価償却', '間接法', '電子記録債権', '受取手形', '仮払消費税', '仮受消費税']
+    .forEach((t) => {
+      if (haystack.includes(t)) push(t)
+    })
+  return Array.from(seen)
+}
+
+function UserAnswerCompare({ user }: { user: { debit: JournalLine[]; credit: JournalLine[] } }) {
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      <SideList title="借方" sub="DR" lines={user.debit} accent="border-l-sage" />
+      <SideList title="貸方" sub="CR" lines={user.credit} accent="border-l-blush" />
+    </div>
+  )
+}
+
+function SideList({ title, sub, lines, accent }: { title: string; sub: string; lines: JournalLine[]; accent: string }) {
+  return (
+    <div className={`paper-card border-l-2 ${accent} p-3`}>
+      <div className="flex items-baseline gap-1.5 mb-2">
+        <span className="font-display text-[15px] leading-none">{title}</span>
+        <span className="numeral text-[9px] tracking-[0.2em] text-ink-soft">{sub}</span>
+      </div>
+      <ul className="text-[12px] space-y-1.5">
+        {lines.map((l, i) => (
+          <li key={i} className="flex justify-between gap-2 items-baseline">
+            <span className="truncate">{findAccount(l.account)?.name ?? l.account}</span>
+            <span className="amount text-ink-soft">¥{l.amount.toLocaleString('ja-JP')}</span>
+          </li>
+        ))}
+        {lines.length === 0 && <li className="text-ink-faint">—</li>}
+      </ul>
     </div>
   )
 }
@@ -191,60 +432,35 @@ function RelatedArticles({
 }) {
   const articles = relatedArticles(topicId, chapter, 3)
   return (
-    <div className="mt-4 p-4 rounded-2xl bg-white border border-line">
-      <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft">関連記事</div>
+    <section className="mt-6 paper-card p-5">
+      <div className="flex items-baseline justify-between mb-2">
+        <span className="eyebrow">関連記事</span>
+        <span className="numeral text-[10px]">read more</span>
+      </div>
       {articles.length === 0 ? (
-        <p className="text-xs text-ink-soft mt-2">準備中</p>
+        <p className="text-[12px] text-ink-soft mt-2">準備中</p>
       ) : (
-        <ul className="mt-2 flex flex-col gap-2">
-          {articles.map((a) => (
+        <ul className="mt-1 flex flex-col">
+          {articles.map((a, i) => (
             <li key={a.slug}>
               <button
                 onClick={() => onOpen?.(a.slug)}
-                className="w-full text-left flex items-center justify-between gap-2"
+                className="w-full text-left py-2.5 flex items-start gap-3 border-t border-line first:border-t-0 group"
                 disabled={!onOpen}
               >
-                <div className="flex-1">
-                  <div className="text-sm font-serif">{a.title}</div>
-                  <div className="text-[10px] text-ink-soft mt-0.5">{a.readingMinutes}分</div>
+                <span className="numeral text-[12px] shrink-0 mt-0.5">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="text-[13.5px] font-serif leading-snug group-hover:underline decoration-ink-soft">{a.title}</div>
+                  <div className="text-[10px] text-ink-soft mt-1 tracking-wider">{a.readingMinutes}分</div>
                 </div>
-                <span className="text-ink-soft">→</span>
+                <span className="font-display text-ink-faint mt-0.5">→</span>
               </button>
             </li>
           ))}
         </ul>
       )}
-    </div>
-  )
-}
-
-function JournalDisplay({ journal }: { journal: { debit: JournalLine[]; credit: JournalLine[] } }) {
-  return (
-    <div className="grid grid-cols-2 gap-2 mt-2">
-      <div className="bg-white border border-line rounded-2xl p-3">
-        <div className="font-display text-sm mb-2">借方</div>
-        <ul className="text-xs space-y-1">
-          {journal.debit.map((l, i) => (
-            <li key={i} className="flex justify-between">
-              <span>{findAccount(l.account)?.name ?? l.account}</span>
-              <span className="font-mono text-ink-soft">{formatYen(l.amount)}</span>
-            </li>
-          ))}
-          {journal.debit.length === 0 && <li className="text-ink-soft">—</li>}
-        </ul>
-      </div>
-      <div className="bg-white border border-line rounded-2xl p-3">
-        <div className="font-display text-sm mb-2">貸方</div>
-        <ul className="text-xs space-y-1">
-          {journal.credit.map((l, i) => (
-            <li key={i} className="flex justify-between">
-              <span>{findAccount(l.account)?.name ?? l.account}</span>
-              <span className="font-mono text-ink-soft">{formatYen(l.amount)}</span>
-            </li>
-          ))}
-          {journal.credit.length === 0 && <li className="text-ink-soft">—</li>}
-        </ul>
-      </div>
-    </div>
+    </section>
   )
 }

@@ -57,53 +57,80 @@ export function DrillScreen({ onStartSession }: Props) {
   }
 
   return (
-    <div className="px-5 pt-4 pb-32">
-      <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft">Drill</div>
-      <h1 className="font-serif text-2xl mt-1">仕訳ドリル</h1>
+    <div className="px-5 pt-5 pb-32">
+      <span className="eyebrow">drill · 仕訳</span>
+      <h1 className="font-serif text-[30px] mt-3 leading-tight">仕訳ドリル</h1>
+      <p className="text-[12px] text-ink-soft mt-1.5">
+        毎日の積み重ねが合格への近道。
+      </p>
 
-      <div className="mt-5 grid grid-cols-2 gap-2">
+      {/* Paired editorial action cards — one filled, one outlined */}
+      <div className="mt-6 grid grid-cols-2 gap-3">
         <button
           onClick={startQuickDrill}
-          className="card-btn bg-ink text-white py-4 rounded-2xl text-left px-4"
+          className="bg-ink text-white py-5 px-4 rounded-card text-left flex flex-col justify-between min-h-[140px] transition-transform active:scale-[0.98]"
         >
-          <div className="text-lg">⚡️</div>
-          <div className="font-serif text-sm mt-1">クイック5問</div>
-          <div className="text-[10px] opacity-70 mt-0.5">通学・通勤の2-3分用</div>
+          <div>
+            <span className="numeral text-[10px] text-white/60">01</span>
+            <div className="font-display text-2xl mt-2 tracking-tight italic">Quick</div>
+          </div>
+          <div>
+            <div className="font-serif text-[15px]">クイック5問</div>
+            <div className="text-[11px] text-white/60 mt-0.5">2-3分で1セット</div>
+          </div>
         </button>
         <button
           onClick={startReview}
-          className="card-btn bg-blush-soft py-4 rounded-2xl text-left px-4 text-ink"
+          className="bg-paper-deep border border-line py-5 px-4 rounded-card text-left flex flex-col justify-between min-h-[140px] transition-transform active:scale-[0.98]"
         >
-          <div className="text-lg">🎯</div>
-          <div className="font-serif text-sm mt-1">苦手復習</div>
-          <div className="text-[10px] opacity-70 mt-0.5">正答率50%未満から</div>
+          <div>
+            <span className="numeral text-[10px]">02</span>
+            <div className="font-display text-2xl mt-2 tracking-tight italic text-blush-deep">Review</div>
+          </div>
+          <div>
+            <div className="font-serif text-[15px]">苦手復習</div>
+            <div className="text-[11px] text-ink-soft mt-0.5">正答率50%未満から</div>
+          </div>
         </button>
       </div>
 
-      <div className="text-[10px] tracking-[0.2em] uppercase text-ink-soft mt-8 mb-2 px-1">
-        Chapters
+      {/* Chapters TOC — magazine table-of-contents style */}
+      <div className="mt-10 flex items-baseline justify-between mb-2">
+        <span className="eyebrow">chapters</span>
+        <span className="numeral text-[11px]">{CHAPTERS.length}章</span>
       </div>
-      <ul className="flex flex-col gap-2">
-        {CHAPTERS.map((ch) => {
+      <ul className="border-t border-line">
+        {CHAPTERS.map((ch, idx) => {
           const s = chapterStats(ch.id)
+          const disabled = s.count === 0
           return (
             <li key={ch.id}>
               <button
                 onClick={() => startChapter(ch.id)}
-                className="w-full bg-white border border-line rounded-2xl p-4 text-left flex items-center justify-between"
-                disabled={s.count === 0}
+                className="w-full py-4 text-left flex items-start gap-4 border-b border-line disabled:opacity-50"
+                disabled={disabled}
               >
-                <div>
-                  <div className="font-serif text-base">{ch.name}</div>
-                  <div className="text-[11px] text-ink-soft mt-0.5">
-                    {ch.description} · {s.count}問
+                <span className="numeral text-lg shrink-0 mt-0.5 leading-none">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="font-serif text-[15px] leading-snug">{ch.name}</div>
+                  <div className="text-[11px] text-ink-soft mt-1 leading-relaxed">
+                    {ch.description}
+                  </div>
+                  <div className="mt-2 flex items-center gap-3 text-[10px] tracking-wider uppercase text-ink-faint">
+                    <span>{s.count}問</span>
+                    <span className="text-line-strong">·</span>
+                    <span>{s.attempts}回</span>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-xs text-ink-soft">
-                    {s.rate === null ? '未挑戦' : `${s.rate}%`}
+                <div className="text-right shrink-0 self-center">
+                  <div className="amount text-base text-ink">
+                    {s.rate === null ? '—' : `${s.rate}%`}
                   </div>
-                  <div className="text-[10px] text-ink-soft mt-0.5">{s.attempts}回</div>
+                  <div className="text-[9px] uppercase tracking-wider text-ink-faint mt-0.5">
+                    {s.rate === null ? 'new' : 'rate'}
+                  </div>
                 </div>
               </button>
             </li>

@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@500;700&family=DM+Serif+Display&display=swap');
 
 @layer base {
   html, body, #root {
@@ -10,68 +10,204 @@
   }
   body {
     @apply bg-paper text-ink font-sans antialiased;
-    font-feature-settings: "palt";
+    font-feature-settings: "palt", "kern";
+  }
+  /* Tabular numerals globally for ledger-feel amounts */
+  .amount, .numeral, [data-numeral] {
+    font-variant-numeric: tabular-nums lining-nums;
   }
 }
 
-@layer utilities {
-  .grid-bg {
-    background-image: radial-gradient(circle, theme('colors.line') 1px, transparent 1px);
-    background-size: 22px 22px;
+@layer components {
+  /* Editorial eyebrow with hairline rule */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 uppercase text-ink-soft;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    line-height: 1.2;
   }
-  .safe-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
+  .eyebrow::before {
+    content: '';
+    width: 18px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.45;
+    flex: none;
   }
+
+  /* Paper card — flat, with hairline border + soft press shadow */
+  .paper-card {
+    @apply bg-white border border-line/70 rounded-card;
+    box-shadow: 0 1px 0 rgba(45,42,38,0.03);
+  }
+  .paper-card-deep {
+    @apply bg-paper-deep border border-line rounded-card;
+  }
+
+  /* Index numerals (e.g. 01, 02) for chapter list / TOC */
+  .numeral {
+    @apply font-display text-ink-faint;
+    font-feature-settings: "tnum", "lnum";
+  }
+
+  /* Ink seal — for 正解 / 再考 stamp on result */
+  .ink-seal {
+    @apply font-serif inline-flex items-center justify-center;
+    color: theme('colors.seal');
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    width: 96px;
+    height: 96px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    transform: rotate(-3deg);
+    background: rgba(253, 250, 246, 0.6);
+  }
+
+  /* Ledger amount — tabular numerals, slab feel */
+  .amount {
+    @apply font-ledger;
+    font-feature-settings: "tnum", "lnum";
+  }
+
+  /* Pill — refined */
   .pill {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     padding: 3px 10px;
-    border-radius: 999px;
+    border-radius: 9999px;
     font-size: 11px;
     font-weight: 500;
+    letter-spacing: 0.02em;
   }
-  .badge-asset     { background: #e8f0eb; color: #4a6b5a; }
-  .badge-liability { background: #fce8e8; color: #9b5050; }
-  .badge-equity    { background: #efe6f5; color: #6e5689; }
-  .badge-revenue   { background: #fcf2dc; color: #8a6a2c; }
-  .badge-expense   { background: #f0e7e2; color: #7a5a45; }
+
+  /* 5-category badges (refined contrast) */
+  .badge-asset     { background: theme('colors.sage.soft');  color: theme('colors.sage.deep'); }
+  .badge-liability { background: theme('colors.blush.soft'); color: theme('colors.blush.deep'); }
+  .badge-equity    { background: theme('colors.iris.soft');  color: theme('colors.iris.deep'); }
+  .badge-revenue   { background: theme('colors.gold.soft');  color: theme('colors.gold.deep'); }
+  .badge-expense   { background: theme('colors.cocoa.soft'); color: theme('colors.cocoa.deep'); }
+  .badge-neutral   { background: theme('colors.paper.warm'); color: theme('colors.ink.soft'); }
+
+  /* Magazine-style section divider */
+  .rule {
+    height: 1px;
+    background: theme('colors.line.DEFAULT');
+  }
+  .rule-strong {
+    height: 1px;
+    background: theme('colors.line.strong');
+  }
+
+  /* Underline link */
+  .link-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .link-underline:hover::after { transform: scaleX(1); }
 }
 
+@layer utilities {
+  /* Graph-paper grid background (used selectively, e.g. behind editor) */
+  .grid-paper {
+    background-image:
+      linear-gradient(rgba(201,191,174,0.18) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,191,174,0.18) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: -1px -1px;
+  }
+
+  /* Ledger ruled-line background (subtle horizontal rules) */
+  .ruled {
+    background-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(2rem - 1px),
+      rgba(201,191,174,0.22) calc(2rem - 1px),
+      rgba(201,191,174,0.22) 2rem,
+      transparent 2rem
+    );
+    background-size: 100% 2rem;
+  }
+
+  .grid-bg {
+    background-image: radial-gradient(circle, theme('colors.line.DEFAULT') 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ============================================================
+ * Article prose styles (refined)
+ * ============================================================ */
 .prose-bokist h2 {
   font-family: 'Noto Serif JP', serif;
-  font-size: 18px;
-  font-weight: 600;
-  margin-top: 1.6rem;
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 2rem;
   margin-bottom: 0.6rem;
+  letter-spacing: -0.01em;
+  position: relative;
+  padding-left: 0.9rem;
+}
+.prose-bokist h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  bottom: 0.45em;
+  width: 3px;
+  background: #2d2a26;
 }
 .prose-bokist h3 {
   font-family: 'Noto Serif JP', serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
-  margin-top: 1.2rem;
+  margin-top: 1.4rem;
   margin-bottom: 0.4rem;
+  color: #2d2a26;
 }
 .prose-bokist p {
-  margin: 0.8rem 0;
-  line-height: 1.8;
-  font-size: 14px;
+  margin: 0.85rem 0;
+  line-height: 1.85;
+  font-size: 14.5px;
+  color: #2d2a26;
 }
 .prose-bokist ul, .prose-bokist ol {
   padding-left: 1.4rem;
-  margin: 0.8rem 0;
-  font-size: 14px;
-  line-height: 1.8;
+  margin: 0.85rem 0;
+  font-size: 14.5px;
+  line-height: 1.85;
 }
 .prose-bokist ul { list-style: disc; }
 .prose-bokist ol { list-style: decimal; }
+.prose-bokist ul li::marker { color: #b08a3e; }
+.prose-bokist ol li::marker { color: #5a544c; font-family: 'Marcellus', serif; }
 .prose-bokist blockquote {
-  border-left: 3px solid #c9a961;
-  background: #fff8e7;
-  padding: 0.8rem 1rem;
-  margin: 1rem 0;
-  border-radius: 8px;
-  font-size: 13px;
+  border-left: 2px solid #b08a3e;
+  background: #fcf2dc;
+  padding: 0.85rem 1rem;
+  margin: 1.1rem 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 13.5px;
+  color: #4a3a25;
 }
 .prose-bokist blockquote p { margin: 0.3rem 0; }
 .prose-bokist code {
@@ -79,11 +215,12 @@
   padding: 0.1em 0.4em;
   border-radius: 4px;
   font-size: 0.9em;
+  font-family: 'DM Mono', ui-monospace, monospace;
 }
 .prose-bokist svg {
   display: block;
   max-width: 100%;
-  margin: 1.2rem auto;
+  margin: 1.3rem auto;
 }
 .prose-bokist strong {
   font-weight: 700;
@@ -91,21 +228,24 @@
 }
 .prose-bokist hr {
   border: none;
-  border-top: 1px solid #ebe4d9;
-  margin: 1.5rem 0;
+  height: 1px;
+  background: #ebe4d9;
+  margin: 1.8rem 0;
 }
 .prose-bokist table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
-  margin: 1rem 0;
+  margin: 1.1rem 0;
+  font-variant-numeric: tabular-nums;
 }
 .prose-bokist th, .prose-bokist td {
   border: 1px solid #ebe4d9;
-  padding: 6px 8px;
+  padding: 7px 9px;
   text-align: left;
 }
 .prose-bokist th {
-  background: #faf6ee;
+  background: #f7f1e6;
   font-weight: 600;
+  font-family: 'Noto Serif JP', serif;
 }
